@@ -277,7 +277,7 @@ Diesen Snapshot solltest du länger aufbewahren. Egal was du in Teil B anstellst
 | `The connection to the server k3s:6443 was refused` | k3s läuft nicht: in der VM `sudo systemctl status k3s` und `sudo journalctl -u k3s -n 50` |
 | `error: open /home/…/.kube/config: permission denied` | `chmod 600 ~/.kube/config` und prüfen, dass die Datei dir gehört |
 | `kubectl top node` → `metrics not available yet` | 1–2 Minuten warten |
-| Pods hängen in `ContainerCreating` | Hat die VM Internet? In der VM `curl -sI https://ghcr.io | head -1` ausführen, das sollte eine `HTTP`-Zeile ausgeben |
+| Pods hängen in `ContainerCreating` | Hat die VM Internet? In der VM `curl -sI https://ghcr.io \| head -1` ausführen, das sollte eine `HTTP`-Zeile ausgeben |
 | Du hast `ufw` aktiviert und nichts geht mehr | Für dieses Tutorial `sudo ufw disable`. Im Heimnetz schützt dich der Router, und von außen ist nur Tailscale erreichbar |
 
 **Komplett neu anfangen?** Snapshot `vor-k3s` zurückspielen, oder in der VM `/usr/local/bin/k3s-uninstall.sh` ausführen.
