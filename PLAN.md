@@ -45,11 +45,12 @@ erreichbar **über Tailscale**, zu Hause auch direkt für den **Smart-TV**.
   mehrere Streams gleichzeitig). Kein AV1 – das ist für einen Heimserver aber kein Nachteil. Bonus: Die GPU kann später per
   *Time-Slicing* auch mit Immich (Gesichtserkennung) geteilt werden.
 - **Ältere Ryzen-Plattform:** IOMMU/AMD-Vi muss im BIOS aktiviert werden, und bei älteren Boards (B350/X370) können die
-  IOMMU-Gruppen ungünstig sein. Kapitel 01 enthält deshalb einen Check vorab.
+  IOMMU-Gruppen ungünstig sein. Kapitel 02 enthält deshalb direkt nach der Installation einen Check.
 - **Nur eine 500-GB-HDD:** Proxmox, VM und Medien teilen sich eine Platte.
   - Die Medien kommen auf eine **eigene virtuelle Disk** der VM (`/data`). Die lässt sich später per Klick auf eine
     neue Platte verschieben („Move Disk“) und wird aus den VM-Backups ausgeklammert.
-  - Realistische Aufteilung: ca. 30 GB Proxmox, 60 GB VM-System, **ca. 350 GB Medien** (grob 70–100 Filme in 1080p).
+  - Realistische Aufteilung: ca. 40 GB Proxmox, 60 GB VM-System, **ca. 300 GB Medien** (grob 60–80 Filme in 1080p),
+    der Rest bleibt als Puffer für Snapshots frei (ein volles LVM-Thin-Pool legt alle VMs lahm).
   - Eine HDD ist für VMs langsam, aber ausreichend. **Empfohlenes Upgrade** (im Tutorial als Tipp): eine günstige SSD für
     Proxmox + VM, die HDD dann komplett für Medien. Das Tutorial beschreibt den Umzug.
   - Backups brauchen ein zweites Ziel (USB-Platte o. Ä.).
@@ -97,7 +98,7 @@ erreichbar **über Tailscale**, zu Hause auch direkt für den **Smart-TV**.
 │  │  system:  sealed-secrets  nvidia-device-plugin  (optional: monitoring)                      │ │
 │  │                                                                                             │ │
 │  │  Disk 1 (~60 GB):  Ubuntu + /var/lib/rancher/k3s/storage (App-Konfigurationen) → Backup     │ │
-│  │  Disk 2 (~350 GB): /data  (Medien + Downloads)                                 → kein Backup │ │
+│  │  Disk 2 (~300 GB): /data  (Medien + Downloads)                                 → kein Backup │ │
 │  └─────────────────────────────────────────────────────────────────────────────────────────────┘ │
 │  vzdump-Backups der VM → USB-Platte                                                              │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -141,7 +142,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 |---|---------|--------|
 | 00 | Einführung | Was ist ein Homelab, was bauen wir, wie liest man das Tutorial, Kubernetes in 5 Minuten, Glossar |
 | 01 | Voraussetzungen | Hardware-Check (RAM, Platte), **BIOS: SVM + IOMMU aktivieren**, Werkzeuge auf dem eigenen Rechner, Tailscale- und GitHub-Account, USB-Platte für Backups |
-| 02 | Proxmox installieren | USB-Stick erstellen, Installation auf die HDD, Web-Oberfläche, Paketquellen & Updates, Speicheraufteilung |
+| 02 | Proxmox installieren | USB-Stick erstellen, Installation auf die HDD, Web-Oberfläche, Paketquellen & Updates, Speicheraufteilung, **IOMMU-Gruppen prüfen** |
 | 03 | Tailscale auf Proxmox | Proxmox ins Tailnet aufnehmen, damit die Web-UI von unterwegs erreichbar ist |
 | 04 | Die Kubernetes-VM | VM anlegen (**q35, UEFI, CPU `host`**, RAM), Ubuntu installieren, feste IP, SSH-Key, **zweite Disk für `/data`** anlegen und mounten, Ordnerstruktur |
 | 05 | k3s installieren | k3s installieren, VM ins Tailnet, `kubectl` vom eigenen Rechner über Tailscale, Snapshot „frischer Cluster“ |
@@ -213,12 +214,14 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 
 Jede Phase wird als eigener Commit/PR umgesetzt.
 
+**Status:** Phase 1 ✅ umgesetzt.
+
 ---
 
-## 7. Noch offen (nicht blockierend – bis zur Antwort gelten die Annahmen)
+## 7. Offene Fragen (alle geklärt)
 
-| Frage | Annahme bis dahin |
+| Frage | Antwort |
 |-------|-------------------|
-| **RAM** des Desktops? | 16 GB → VM bekommt 12 GB. Bei 8 GB: Immich/Paperless werden optional, VM bekommt 6 GB. |
-| Genaues **Ryzen-Modell / Mainboard**? | Ryzen 5 1600/2600 auf B350/B450 → IOMMU-Check in Kapitel 01 |
-| **Modelljahr** des Samsung-TVs? | Ab ca. 2020 → Jellyfin-App verfügbar; bei älteren Modellen wird der Sideload-Weg beschrieben |
+| ~~RAM des Desktops?~~ | ✅ 16 GB → VM bekommt 12 GB |
+| ~~Ryzen-Modell / Mainboard?~~ | ✅ Ryzen 5 1600/2600-Klasse auf B350/B450 → IOMMU-Check in Kapitel 02 |
+| ~~Modelljahr des Samsung-TVs?~~ | ✅ Neueres Modell → Jellyfin-App aus dem App-Store; Sideload nur als Hinweis |
