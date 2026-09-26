@@ -295,4 +295,4 @@ Tailscale. In **Teil B** lernst du, wie man eigene Apps in diesen Cluster bringt
 
 ---
 
-⬅️ **Zurück:** [04 – Die Kubernetes-VM](04-kubernetes-vm.md) · ➡️ **Weiter:** 06 – Erster Pod *(folgt in Phase 2)*
+⬅️ **Zurück:** [04 – Die Kubernetes-VM](04-kubernetes-vm.md) · ➡️ **Weiter:** [06 – Erster Pod](06-erster-pod.md)

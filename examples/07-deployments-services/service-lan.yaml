@@ -1,0 +1,15 @@
+# Kapitel 07: Derselbe whoami-Dienst, zusätzlich im Heimnetz erreichbar.
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami-lan
+  namespace: lernen
+  labels:
+    app: whoami
+spec:
+  type: LoadBalancer              # k3s (ServiceLB) öffnet den Port auf der IP der VM
+  selector:
+    app: whoami
+  ports:
+    - port: 8080                  # http://<VM-IP>:8080 (Port 80 belegt bereits Traefik)
+      targetPort: 80

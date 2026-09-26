@@ -30,8 +30,13 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin
 | 04 | [Die Kubernetes-VM](docs/04-kubernetes-vm.md) |
 | 05 | [k3s installieren](docs/05-k3s-installieren.md) |
 
-### Teil B – Kubernetes-Grundlagen 🚧
-06 Erster Pod · 07 Deployments & Services · 08 Konfiguration & Daten · 09 Helm
+### Teil B – Kubernetes-Grundlagen ✅
+| # | Kapitel |
+|---|---------|
+| 06 | [Erster Pod](docs/06-erster-pod.md) |
+| 07 | [Deployments & Services](docs/07-deployments-services.md) |
+| 08 | [Konfiguration & Daten](docs/08-konfiguration-daten.md) |
+| 09 | [Helm](docs/09-helm.md) |
 
 ### Teil C – Das Homelab-Herz 🚧
 10 Tailscale Operator · 11 Jellyfin · 12 Jellyfin auf dem Samsung-TV · 13 GitOps mit Argo CD ·

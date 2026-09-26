@@ -1,0 +1,13 @@
+# Kapitel 06: Ein einzelner Pod, deklarativ beschrieben.
+apiVersion: v1          # Welche Version der Kubernetes-API dieses Objekt beschreibt
+kind: Pod               # Was für ein Objekt: ein Pod
+metadata:
+  name: nginx           # Name des Pods (muss im Namespace eindeutig sein)
+  labels:
+    app: nginx          # Etikett, über das man Pods später wiederfindet
+spec:                   # Der Soll-Zustand: was im Pod laufen soll
+  containers:
+    - name: nginx                 # Name des Containers im Pod
+      image: nginx:1.30           # Image von Docker Hub, mit fester Version
+      ports:
+        - containerPort: 80       # Port, auf dem nginx im Container lauscht

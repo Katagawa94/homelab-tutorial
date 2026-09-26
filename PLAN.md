@@ -214,7 +214,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 
 Jede Phase wird als eigener Commit/PR umgesetzt.
 
-**Status:** Phase 1 ✅ umgesetzt.
+**Status:** Phase 1 ✅ · Phase 2 ✅
 
 ---
 

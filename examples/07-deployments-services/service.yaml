@@ -1,0 +1,15 @@
+# Kapitel 07: Ein Service gibt den whoami-Pods eine feste Adresse im Cluster.
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+  namespace: lernen
+  labels:
+    app: whoami
+spec:
+  type: ClusterIP                 # nur innerhalb des Clusters erreichbar (Standard)
+  selector:
+    app: whoami                   # leitet an alle Pods mit diesem Label weiter
+  ports:
+    - port: 80                    # Port des Services
+      targetPort: 80              # Port im Container

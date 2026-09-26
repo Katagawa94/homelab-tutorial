@@ -1,0 +1,17 @@
+# Kapitel 08: Eine ConfigMap mit dem Inhalt einer Webseite.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webseite
+  namespace: lernen
+data:
+  # Jeder Eintrag unter "data" wird später zu einer Datei im Container.
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="de">
+      <head><meta charset="utf-8"><title>Mein Homelab</title></head>
+      <body style="font-family: sans-serif; text-align: center; margin-top: 20vh;">
+        <h1>🏠 Hallo aus meinem Homelab!</h1>
+        <p>Dieser Text kommt aus einer ConfigMap.</p>
+      </body>
+    </html>

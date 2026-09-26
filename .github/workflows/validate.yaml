@@ -1,0 +1,23 @@
+name: Validierung
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  manifeste:
+    name: YAML & Kubernetes-Manifeste
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: yamllint
+        run: |
+          pip install --quiet yamllint
+          yamllint -c .yamllint.yaml .
+
+      - name: kubeconform
+        run: |
+          curl -sSL https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz | tar xz
+          # Helm-Values sind keine Kubernetes-Manifeste und werden übersprungen.
+          ./kubeconform -strict -summary -ignore-filename-pattern 'values\.yaml$' examples/

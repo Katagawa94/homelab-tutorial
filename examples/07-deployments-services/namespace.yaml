@@ -1,0 +1,5 @@
+# Kapitel 07: Ein eigener Namespace für alle Lern-Beispiele aus Teil B.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lernen
