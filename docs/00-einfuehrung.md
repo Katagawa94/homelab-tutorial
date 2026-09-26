@@ -147,7 +147,13 @@ nicht nur einen Server hinstellen.
 - [15 – GPU an die VM durchreichen](15-gpu-passthrough.md)
 - [16 – GPU in Kubernetes](16-gpu-kubernetes.md)
 
-### Teil D – *arr-Stack mit Proton VPN *(folgt)*
+### Teil D – *arr-Stack mit Proton VPN
+- [17 – Wie der *arr-Stack zusammenspielt](17-arr-ueberblick.md)
+- [18 – qBittorrent + Proton VPN](18-qbittorrent-vpn.md)
+- [19 – Prowlarr](19-prowlarr.md)
+- [20 – Sonarr & Radarr](20-sonarr-radarr.md)
+- [21 – Bazarr & Seerr](21-bazarr-seerr.md)
+
 ### Teil E – Weitere Apps *(folgt)*
 ### Teil F – Betrieb: Backup, Updates, Troubleshooting *(folgt)*
 ### Teil G – Ausbau *(folgt)*

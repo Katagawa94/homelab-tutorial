@@ -1,0 +1,14 @@
+# Kapitel 21: seerr im Cluster unter http://seerr:5055 (aus dem Namespace media)
+apiVersion: v1
+kind: Service
+metadata:
+  name: seerr
+  labels:
+    app: seerr
+spec:
+  selector:
+    app: seerr
+  ports:
+    - name: http
+      port: 5055
+      targetPort: http

@@ -335,4 +335,4 @@ In **Teil D** kommt der *arr-Stack dazu, mit qBittorrent hinter Proton VPN.
 
 ---
 
-⬅️ **Zurück:** [15 – GPU an die VM durchreichen](15-gpu-passthrough.md) · ➡️ **Weiter:** 17 – Wie der *arr-Stack zusammenspielt *(folgt in Phase 4)*
+⬅️ **Zurück:** [15 – GPU an die VM durchreichen](15-gpu-passthrough.md) · ➡️ **Weiter:** [17 – Wie der *arr-Stack zusammenspielt](17-arr-ueberblick.md)

@@ -1,0 +1,14 @@
+# Kapitel 19: prowlarr im Cluster unter http://prowlarr:9696 (aus dem Namespace media)
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+  labels:
+    app: prowlarr
+spec:
+  selector:
+    app: prowlarr
+  ports:
+    - name: http
+      port: 9696
+      targetPort: http

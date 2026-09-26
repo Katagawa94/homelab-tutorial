@@ -14,7 +14,7 @@ erreichbar **über Tailscale**, zu Hause auch direkt für den **Smart-TV**.
 | Kubernetes lernen | Konzepte (Pod, Deployment, Service, Ingress, PV/PVC, ConfigMap, Secret, Namespace, Helm, GitOps) werden *beim Bauen* erklärt, nicht als Theorieblock vorab. |
 | Einsteigerfreundlich | Keine Vorkenntnisse in Kubernetes nötig. Befehle zum Kopieren, erwartete Ausgaben, Checkpoints, Troubleshooting, Glossar. |
 | Medienserver | Jellyfin, abspielbar auf Smart-TV, Handy, Laptop, mit **Hardware-Transcoding über die NVIDIA-GPU** |
-| Medien-Automatisierung | *arr-Stack (Prowlarr, Sonarr, Radarr, Bazarr, qBittorrent, Jellyseerr) |
+| Medien-Automatisierung | *arr-Stack (Prowlarr, Sonarr, Radarr, Bazarr, qBittorrent, Seerr) |
 | Weitere Apps | Dashboard, Passwortmanager, Fotos, Dokumente, Uptime-Monitoring (erweiterbar) |
 | Sicherer Zugriff | Von unterwegs nur über Tailscale mit HTTPS (`https://jellyfin.<tailnet>.ts.net`). Kein offener Port im Router. |
 | Reproduzierbar | Der gesamte Cluster-Zustand liegt in diesem Git-Repo (GitOps). Proxmox-Snapshots erlauben gefahrloses Ausprobieren. |
@@ -93,7 +93,7 @@ erreichbar **über Tailscale**, zu Hause auch direkt für den **Smart-TV**.
 │  │  tailscale-operator ─► ein Tailscale-Ingress pro App (HTTPS, MagicDNS)                      │ │
 │  │  argocd  ◄── synchronisiert ── GitHub: homelab-tutorial/kubernetes/                         │ │
 │  │                                                                                             │ │
-│  │  media:   jellyfin  jellyseerr  sonarr  radarr  prowlarr  bazarr  qbittorrent                │ │
+│  │  media:   jellyfin  seerr  sonarr  radarr  prowlarr  bazarr  qbittorrent                │ │
 │  │  apps:    homepage  vaultwarden  immich  paperless-ngx  uptime-kuma                          │ │
 │  │  system:  sealed-secrets  nvidia-device-plugin  (optional: monitoring)                      │ │
 │  │                                                                                             │ │
@@ -181,7 +181,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 | 18 | qBittorrent + Proton VPN | Proton-VPN-Abo (Plus, P2P + Port-Forwarding nötig; der Gratis-Plan erlaubt kein P2P), WireGuard-Konfiguration erzeugen, Gluetun als Sidecar, Kill-Switch testen (IP-Check im Pod), weitergeleiteten Port automatisch in qBittorrent setzen | Sidecar-Container, gemeinsames Netzwerk im Pod, `securityContext`/`NET_ADMIN`, Sealed Secret |
 | 19 | Prowlarr | Indexer zentral verwalten | Service-zu-Service-Kommunikation, Cluster-DNS |
 | 20 | Sonarr & Radarr | Serien & Filme, Anbindung an qBittorrent & Jellyfin, Qualitätsprofile passend zur kleinen Platte | – |
-| 21 | Bazarr & Jellyseerr | Untertitel, Wunschliste für Familie/Mitbewohner | – |
+| 21 | Bazarr & Seerr | Untertitel, Wunschliste für Familie/Mitbewohner | – |
 
 ### Teil E – Weitere Apps (kurz, gleiches Muster)
 | # | App | Zweck |
@@ -220,7 +220,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 
 Jede Phase wird als eigener Commit/PR umgesetzt.
 
-**Status:** Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅
+**Status:** Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · Phase 4 ✅
 
 ---
 

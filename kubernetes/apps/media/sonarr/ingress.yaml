@@ -1,0 +1,15 @@
+# Kapitel 20: sonarr im Tailnet unter https://sonarr.<tailnet>.ts.net
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sonarr
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: sonarr
+      port:
+        number: 8989
+  tls:
+    - hosts:
+        - sonarr

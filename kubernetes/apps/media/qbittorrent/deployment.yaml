@@ -1,0 +1,126 @@
+# Kapitel 18: qBittorrent, dessen gesamter Internetverkehr durch Proton VPN läuft.
+#
+# Ein Pod, zwei Container, EIN gemeinsames Netzwerk:
+#   gluetun      baut die VPN-Verbindung auf und sperrt alles andere (Kill-Switch)
+#   qbittorrent  sieht nur das Netzwerk, das Gluetun ihm lässt
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+  labels:
+    app: qbittorrent
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate                # nie zwei VPN-Verbindungen gleichzeitig
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      initContainers:
+        # "Nativer Sidecar": ein initContainer mit restartPolicy Always startet VOR
+        # qBittorrent und läuft die ganze Zeit mit. qBittorrent startet erst, wenn
+        # die startupProbe von Gluetun erfolgreich war, also das VPN steht.
+        - name: gluetun
+          image: qmcgaw/gluetun:v3.41.3
+          restartPolicy: Always
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]  # darf Netzwerk und Firewall des Pods verändern
+          envFrom:
+            - secretRef:
+                name: gluetun-protonvpn   # WIREGUARD_PRIVATE_KEY
+          env:
+            - name: TZ
+              value: Europe/Berlin
+            - name: VPN_SERVICE_PROVIDER
+              value: protonvpn
+            - name: VPN_TYPE
+              value: wireguard
+            - name: SERVER_COUNTRIES
+              value: Netherlands,Switzerland
+            - name: PORT_FORWARD_ONLY     # nur Server, die P2P und Port-Forwarding erlauben
+              value: "on"
+            - name: VPN_PORT_FORWARDING   # Proton gibt uns einen Port für eingehende Verbindungen
+              value: "on"
+            # Den von Proton zugeteilten Port automatisch in qBittorrent eintragen
+            # (Beispiel aus der Gluetun-Dokumentation)
+            - name: VPN_PORT_FORWARDING_UP_COMMAND
+              value: >-
+                /bin/sh -c 'wget -O- -nv --retry-connrefused --post-data
+                "json={\"listen_port\":{{PORT}},\"current_network_interface\":\"{{VPN_INTERFACE}}\",\"random_port\":false,\"upnp\":false}"
+                http://127.0.0.1:8080/api/v2/app/setPreferences'
+            - name: VPN_PORT_FORWARDING_DOWN_COMMAND
+              value: >-
+                /bin/sh -c 'wget -O- -nv --retry-connrefused --post-data
+                "json={\"listen_port\":0,\"current_network_interface\":\"lo\"}"
+                http://127.0.0.1:8080/api/v2/app/setPreferences'
+            # Kubernetes-Netze (Pods 10.42.x.x, Services 10.43.x.x) an der VPN-Firewall vorbeilassen,
+            # sonst erreichen Sonarr, Radarr und der Tailscale-Proxy die Weboberfläche nicht.
+            - name: FIREWALL_OUTBOUND_SUBNETS
+              value: 10.42.0.0/16,10.43.0.0/16
+            - name: FIREWALL_INPUT_PORTS
+              value: "8080"
+          lifecycle:
+            postStart:            # Aufräumen nach einem unsauberen Neustart (Gluetun-Doku: Kubernetes)
+              exec:
+                command: ["/bin/sh", "-c", "(ip rule del table 51820; ip -6 rule del table 51820) || true"]
+          startupProbe:
+            exec:
+              command: ["/gluetun-entrypoint", "healthcheck"]
+            periodSeconds: 5
+            failureThreshold: 60  # bis zu 5 Minuten Zeit für den VPN-Aufbau
+          livenessProbe:
+            exec:
+              command: ["/gluetun-entrypoint", "healthcheck"]
+            periodSeconds: 30
+            failureThreshold: 5
+          resources:
+            requests:
+              cpu: 20m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+      containers:
+        - name: qbittorrent
+          image: lscr.io/linuxserver/qbittorrent:5.2.3
+          envFrom:
+            - configMapRef:
+                name: media-env   # PUID, PGID, UMASK, TZ
+          env:
+            - name: WEBUI_PORT
+              value: "8080"
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: data
+              mountPath: /data
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 2Gi
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: qbittorrent-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: media-data

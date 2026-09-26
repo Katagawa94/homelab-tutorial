@@ -1,0 +1,14 @@
+# Kapitel 20: radarr im Cluster unter http://radarr:7878 (aus dem Namespace media)
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  labels:
+    app: radarr
+spec:
+  selector:
+    app: radarr
+  ports:
+    - name: http
+      port: 7878
+      targetPort: http

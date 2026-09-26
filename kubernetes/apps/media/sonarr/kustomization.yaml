@@ -1,0 +1,9 @@
+# Kapitel 20: Sonarr verwaltet Serien.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: media
+resources:
+  - pvc-config.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
