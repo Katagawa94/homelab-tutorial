@@ -30,7 +30,9 @@ erreichbar **über Tailscale**, zu Hause auch direkt für den **Smart-TV**.
 | Medien | lokal auf der Platte |
 | Eigener Rechner | NixOS. Die Werkzeuge (`kubectl`, `helm`, `k9s`, `kubeseal`, `tailscale` …) werden als **installiert vorausgesetzt**. Als Bonus gibt es eine `flake.nix` mit `devShell` (`nix develop`). |
 | Zielgruppe | Einsteiger |
-| Clients | Smart-TV (zu Hause), Laptop/Handy (auch unterwegs) |
+| VM-Betriebssystem | Ubuntu Server (bestätigt) |
+| Clients | **Samsung Smart-TV (Tizen)** zu Hause, Laptop/Handy (auch unterwegs) |
+| VPN für Downloads | **Proton VPN** (noch kein Abo vorhanden) |
 | *arr-Stack | gewünscht |
 
 ### Was die Hardware für den Plan bedeutet
@@ -64,7 +66,8 @@ erreichbar **über Tailscale**, zu Hause auch direkt für den **Smart-TV**.
 | Pakete | **Helm** (+ etwas Kustomize) | Standard im K8s-Ökosystem | – |
 | GitOps | **Argo CD** | Anschauliche Web-UI, man *sieht*, was Kubernetes tut | Flux |
 | Zugriff von unterwegs | **Tailscale Kubernetes Operator** | Jede App bekommt einen eigenen Namen im Tailnet und automatisch HTTPS | Tailscale nur auf dem Host + Traefik |
-| Zugriff zu Hause (Smart-TV) | k3s **ServiceLB** (`LoadBalancer`) → `http://<VM-IP>:8096` | Der TV braucht kein Tailscale. Funktioniert mit jeder Jellyfin-TV-App | Traefik mit lokalem DNS-Namen (Ausblick) |
+| Zugriff zu Hause (Samsung-TV) | k3s **ServiceLB** (`LoadBalancer`) → `http://<VM-IP>:8096` | Auf Samsung Tizen gibt es kein Tailscale, der TV verbindet sich daher direkt im Heimnetz | Traefik mit lokalem DNS-Namen (Ausblick) |
+| VPN für qBittorrent | **Gluetun** als Sidecar im qBittorrent-Pod, **Proton VPN per WireGuard** mit Port-Forwarding | Nur der Download-Traffic läuft durchs VPN, Kill-Switch inklusive. Der WireGuard-Schlüssel liegt als Sealed Secret im Repo | anderer Gluetun-kompatibler Anbieter (z. B. Mullvad, AirVPN) |
 | Medien-Speicher | **Zweite virtuelle Disk** der VM, ext4, gemountet als `/data` | Funktioniert mit nur einer physischen Platte, lässt sich später auf eine neue Platte verschieben und aus Backups ausschließen | Disk-Passthrough (sobald eine eigene Medienplatte existiert), NFS |
 | Storage im Cluster | `local-path` (App-Konfigurationen), **statisches PV** auf `/data` (Medien + Downloads) | Man lernt PV/PVC an einem echten Fall | Longhorn (Multi-Node) |
 | Ordnerstruktur | `/data/media/{movies,tv}`, `/data/downloads` auf **einer** Disk | Hardlinks funktionieren, also kein doppelter Speicherplatz durch den *arr-Stack | – |
@@ -156,7 +159,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 |---|---------|--------|--------------|
 | 10 | Tailscale Operator | OAuth-Client anlegen, Operator per Helm, erster Dienst im Tailnet mit HTTPS | Operator, CRD, IngressClass |
 | 11 | Jellyfin | Jellyfin mit eigenen Manifesten, `/data/media` einbinden, Bibliotheken anlegen, Erreichbarkeit per Tailscale **und** im LAN | Deployment mit PVCs, Probes, Resources |
-| 12 | Jellyfin auf dem Smart-TV | Jellyfin-App auf dem TV, Verbindung über LAN-IP, Direct Play vs. Transcoding, Hinweise für Android-/Apple-TV (dort gibt es auch Tailscale) | – |
+| 12 | Jellyfin auf dem Samsung-TV | Jellyfin-App für Tizen installieren (App-Store bzw. Sideload, je nach Modelljahr), Verbindung über LAN-IP, feste IP per DHCP-Reservierung im Router, Direct Play vs. Transcoding: Samsung-TVs können u. a. **kein DTS-Audio** und keine Bild-Untertitel (PGS) → Jellyfin wandelt um, später mit GPU-Unterstützung | – |
 | 13 | GitOps mit Argo CD | Argo CD installieren, dieses Repo verbinden, App-of-Apps, Jellyfin „umziehen“ | GitOps, Reconciliation, Drift |
 | 14 | Secrets im Git | Sealed Secrets einrichten, Tailscale-OAuth-Secret verschlüsselt ins Repo | Controller, Verschlüsselung |
 | 15 | GPU an die VM durchreichen | IOMMU prüfen, `vfio` einrichten, RTX 2070 Super per PCIe-Passthrough an die VM, NVIDIA-Treiber + Container Toolkit in der VM, `nvidia-smi` | – |
@@ -168,7 +171,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 | # | Kapitel | Inhalt | K8s-Konzepte |
 |---|---------|--------|--------------|
 | 17 | Wie der *arr-Stack zusammenspielt | Überblick, Ordnerstruktur, Hardlinks, Benutzer/Rechte (PUID/PGID), Speicherplatz im Blick behalten (500 GB!) | ein Volume in mehreren Pods |
-| 18 | qBittorrent | Download-Client, optional mit VPN (Gluetun als Sidecar) | Sidecar-Container, `securityContext` |
+| 18 | qBittorrent + Proton VPN | Proton-VPN-Abo (Plus, P2P + Port-Forwarding nötig; der Gratis-Plan erlaubt kein P2P), WireGuard-Konfiguration erzeugen, Gluetun als Sidecar, Kill-Switch testen (IP-Check im Pod), weitergeleiteten Port automatisch in qBittorrent setzen | Sidecar-Container, gemeinsames Netzwerk im Pod, `securityContext`/`NET_ADMIN`, Sealed Secret |
 | 19 | Prowlarr | Indexer zentral verwalten | Service-zu-Service-Kommunikation, Cluster-DNS |
 | 20 | Sonarr & Radarr | Serien & Filme, Anbindung an qBittorrent & Jellyfin, Qualitätsprofile passend zur kleinen Platte | – |
 | 21 | Bazarr & Jellyseerr | Untertitel, Wunschliste für Familie/Mitbewohner | – |
@@ -218,6 +221,4 @@ Jede Phase wird als eigener Commit/PR umgesetzt.
 |-------|-------------------|
 | **RAM** des Desktops? | 16 GB → VM bekommt 12 GB. Bei 8 GB: Immich/Paperless werden optional, VM bekommt 6 GB. |
 | Genaues **Ryzen-Modell / Mainboard**? | Ryzen 5 1600/2600 auf B350/B450 → IOMMU-Check in Kapitel 01 |
-| **Smart-TV**-System (Samsung, LG, Android/Google TV, Fire TV, Apple TV)? | Zugriff über LAN-IP, das funktioniert mit allen |
-| **VPN-Anbieter** für qBittorrent? | Gluetun-Sidecar wird als optional beschrieben |
-| **NixOS** nur auf dem eigenen Rechner? | Ja, die VM läuft mit Ubuntu |
+| **Modelljahr** des Samsung-TVs? | Ab ca. 2020 → Jellyfin-App verfügbar; bei älteren Modellen wird der Sideload-Weg beschrieben |
