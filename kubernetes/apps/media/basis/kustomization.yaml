@@ -5,3 +5,4 @@ resources:
   - namespace.yaml
   - pv-data.yaml
   - pvc-data.yaml
+  - configmap-env.yaml

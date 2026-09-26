@@ -1,0 +1,11 @@
+# Kapitel 18: qBittorrent hinter Proton VPN (Gluetun als Sidecar)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: media
+resources:
+  - pvc-config.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+# Das Secret "gluetun-protonvpn" (WireGuard-Schlüssel) liegt verschlüsselt in
+# kubernetes/secrets/media/gluetun-protonvpn.yaml (Kapitel 18).

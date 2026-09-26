@@ -1,0 +1,14 @@
+# Kapitel 20: sonarr im Cluster unter http://sonarr:8989 (aus dem Namespace media)
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  labels:
+    app: sonarr
+spec:
+  selector:
+    app: sonarr
+  ports:
+    - name: http
+      port: 8989
+      targetPort: http

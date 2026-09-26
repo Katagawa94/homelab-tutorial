@@ -30,6 +30,8 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **SSH** – Verschlüsselte Verbindung, um auf einem anderen Rechner Befehle einzugeben.
 - **SSH-Key** – Ein Schlüsselpaar statt eines Passworts für SSH. Der *öffentliche* Teil kommt auf den Server, der *private* bleibt auf deinem Rechner.
 - **VPN** – Verschlüsselter Tunnel zwischen Geräten oder ins Internet.
+- **Kill-Switch** – Sperre, die jeden Internetverkehr blockiert, sobald das VPN ausfällt. Bei uns übernimmt das Gluetuns Firewall.
+- **Port-Forwarding (VPN)** – Der VPN-Anbieter leitet einen Port von außen zu dir weiter. So können andere Teilnehmer dich erreichen, was Downloads beschleunigt. Bei Proton heißt die Technik *NAT-PMP*.
 - **WireGuard** – Modernes, schnelles VPN-Protokoll. Tailscale und Proton VPN nutzen es.
 - **Tailscale** – Dienst, der deine Geräte über WireGuard zu einem privaten Netz verbindet, egal wo sie gerade sind. Ports im Router müssen dafür nicht geöffnet werden.
 - **Tailnet** – Dein privates Tailscale-Netz, also alle deine Geräte zusammen.
@@ -81,6 +83,7 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **RuntimeClass** – Name für eine Art, Container zu starten. `nvidia` startet Container mit Zugriff auf die GPU.
 - **Container Toolkit (NVIDIA)** – Software auf dem Node, die Treiber und GPU-Geräte in Container bringt.
 - **Device Plugin** – Programm (meist als DaemonSet), das Kubernetes spezielle Hardware wie GPUs als Ressource meldet.
+- **Nativer Sidecar** – Ein Sidecar, der als `initContainer` mit `restartPolicy: Always` definiert ist. Er startet **vor** der Haupt-App und läuft die ganze Zeit mit.
 - **Sidecar** – Ein zusätzlicher Container im selben Pod, der der Haupt-App hilft, z. B. Gluetun als VPN für qBittorrent.
 - **GitOps** – Arbeitsweise, bei der der Soll-Zustand des Clusters in einem Git-Repository steht. Ein Werkzeug gleicht den Cluster automatisch daran an.
 - **Argo CD** – Das GitOps-Werkzeug in diesem Tutorial, mit Weboberfläche.
@@ -98,5 +101,7 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **NVENC / NVDEC** – Die Video-Encoder und -Decoder in NVIDIA-Grafikkarten. Sie machen Transcoding schnell und sparsam.
 - **Codec** – Verfahren zur Kompression von Video (H.264, HEVC …) oder Audio (AAC, DTS …).
 - ***arr-Stack** – Sammelname für Sonarr, Radarr, Prowlarr, Bazarr & Co. Sie verwalten und organisieren Serien und Filme automatisch.
+- **Indexer** – Eine Suchquelle für Downloads. Prowlarr verwaltet sie zentral für Sonarr und Radarr.
+- **Seeding** – Eine fertig geladene Datei weiter mit anderen teilen. Dafür muss sie in `/data/downloads` liegen bleiben.
 - **Hardlink** – Zwei Dateinamen, die auf *dieselben* Daten auf der Platte zeigen. So belegt eine Datei in `downloads/` und `media/` nur einmal Platz.
 - **PUID / PGID** – Benutzer- und Gruppen-Nummer, unter der eine App Dateien anlegt. Sie muss zu den Rechten auf `/data` passen.

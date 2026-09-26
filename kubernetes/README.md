@@ -35,3 +35,7 @@ scripts/validate.sh
 | `argocd.yaml` | 13 |
 | `sealed-secrets.yaml`, `secrets.yaml` | 14 |
 | `nvidia-device-plugin.yaml` | 16 |
+| `qbittorrent.yaml` | 18 (braucht das SealedSecret `secrets/media/gluetun-protonvpn.yaml`) |
+| `prowlarr.yaml` | 19 |
+| `sonarr.yaml`, `radarr.yaml` | 20 |
+| `bazarr.yaml`, `seerr.yaml` | 21 |

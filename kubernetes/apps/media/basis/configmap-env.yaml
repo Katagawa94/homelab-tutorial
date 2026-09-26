@@ -1,0 +1,12 @@
+# Kapitel 17: Gemeinsame Einstellungen für alle Medien-Apps.
+# Wird in den Deployments per "envFrom" als Umgebungsvariablen eingebunden.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: media-env
+  namespace: media
+data:
+  PUID: "1000"                    # Benutzer-Nummer, dem /data gehört (Kapitel 04)
+  PGID: "1000"                    # Gruppen-Nummer
+  UMASK: "002"                    # neue Dateien: für Besitzer und Gruppe schreibbar
+  TZ: Europe/Berlin

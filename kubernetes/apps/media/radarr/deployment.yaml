@@ -1,0 +1,55 @@
+# Kapitel 20: Radarr verwaltet Filme.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  labels:
+    app: radarr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate                # SQLite-Datenbank: nie zwei Pods gleichzeitig
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      containers:
+        - name: radarr
+          image: lscr.io/linuxserver/radarr:6.4.4
+          envFrom:
+            - configMapRef:
+                name: media-env   # PUID, PGID, UMASK, TZ (aus kubernetes/apps/media/basis)
+          ports:
+            - name: http
+              containerPort: 7878
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: data
+              mountPath: /data        # dieselbe Platte, derselbe Pfad wie bei allen Medien-Apps
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: radarr-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: media-data

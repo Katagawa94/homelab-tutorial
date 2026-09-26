@@ -1,0 +1,14 @@
+# Kapitel 21: bazarr im Cluster unter http://bazarr:6767 (aus dem Namespace media)
+apiVersion: v1
+kind: Service
+metadata:
+  name: bazarr
+  labels:
+    app: bazarr
+spec:
+  selector:
+    app: bazarr
+  ports:
+    - name: http
+      port: 6767
+      targetPort: http

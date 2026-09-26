@@ -1,0 +1,14 @@
+# Kapitel 19: Einstellungen und Datenbank von prowlarr.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prowlarr-config
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false   # Argo CD darf diesen PVC nie löschen
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

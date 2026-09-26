@@ -49,8 +49,14 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin
 | 15 | [GPU an die VM durchreichen](docs/15-gpu-passthrough.md) |
 | 16 | [GPU in Kubernetes](docs/16-gpu-kubernetes.md) |
 
-### Teil D – *arr-Stack 🚧
-17 Wie der *arr-Stack zusammenspielt · 18 qBittorrent + Proton VPN · 19 Prowlarr · 20 Sonarr & Radarr · 21 Bazarr & Jellyseerr
+### Teil D – *arr-Stack ✅
+| # | Kapitel |
+|---|---------|
+| 17 | [Wie der *arr-Stack zusammenspielt](docs/17-arr-ueberblick.md) |
+| 18 | [qBittorrent + Proton VPN](docs/18-qbittorrent-vpn.md) |
+| 19 | [Prowlarr](docs/19-prowlarr.md) |
+| 20 | [Sonarr & Radarr](docs/20-sonarr-radarr.md) |
+| 21 | [Bazarr & Seerr](docs/21-bazarr-seerr.md) |
 
 ### Teil E – Weitere Apps 🚧
 22 Homepage · 23 Vaultwarden · 24 Immich · 25 Paperless-ngx · 26 Uptime Kuma

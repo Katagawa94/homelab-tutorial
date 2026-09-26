@@ -1,0 +1,54 @@
+# Kapitel 21: Seerr: Wunschliste für Filme und Serien, mit Anbindung an Jellyfin.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seerr
+  labels:
+    app: seerr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate                # SQLite-Datenbank: nie zwei Pods gleichzeitig
+  selector:
+    matchLabels:
+      app: seerr
+  template:
+    metadata:
+      labels:
+        app: seerr
+    spec:
+      securityContext:
+        runAsUser: 1000           # Seerr läuft als Benutzer "node" (1000)
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: seerr
+          image: seerr/seerr:v3.4.1
+          env:
+            - name: TZ
+              value: Europe/Berlin
+          ports:
+            - name: http
+              containerPort: 5055
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: seerr-config
