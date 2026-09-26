@@ -2,8 +2,8 @@
 
 Dieses Dokument ist der Fahrplan für das Repository. Ziel ist ein **Schritt-für-Schritt-Tutorial für Einsteiger**,
 mit dem man auf einem **alten Desktop-Rechner** ein eigenes Homelab aufsetzt und dabei **Kubernetes von Grund auf lernt**.
-Am Ende laufen Jellyfin, der *arr-Stack und weitere Self-Hosted-Apps im Cluster – von unterwegs erreichbar
-**über Tailscale**, zu Hause auch direkt für den **Smart-TV**.
+Am Ende laufen Jellyfin (mit GPU-Transcoding), der *arr-Stack und weitere Self-Hosted-Apps im Cluster – von unterwegs
+erreichbar **über Tailscale**, zu Hause auch direkt für den **Smart-TV**.
 
 ---
 
@@ -13,7 +13,7 @@ Am Ende laufen Jellyfin, der *arr-Stack und weitere Self-Hosted-Apps im Cluster 
 |------|----------|
 | Kubernetes lernen | Konzepte (Pod, Deployment, Service, Ingress, PV/PVC, ConfigMap, Secret, Namespace, Helm, GitOps) werden *beim Bauen* erklärt, nicht als Theorieblock vorab. |
 | Einsteigerfreundlich | Keine Vorkenntnisse in Kubernetes nötig. Befehle zum Kopieren, erwartete Ausgaben, Checkpoints, Troubleshooting, Glossar. |
-| Medienserver | Jellyfin mit Medien auf der lokalen Platte, abspielbar auf Smart-TV, Handy, Laptop |
+| Medienserver | Jellyfin, abspielbar auf Smart-TV, Handy, Laptop, mit **Hardware-Transcoding über die NVIDIA-GPU** |
 | Medien-Automatisierung | *arr-Stack (Prowlarr, Sonarr, Radarr, Bazarr, qBittorrent, Jellyseerr) |
 | Weitere Apps | Dashboard, Passwortmanager, Fotos, Dokumente, Uptime-Monitoring (erweiterbar) |
 | Sicherer Zugriff | Von unterwegs nur über Tailscale mit HTTPS (`https://jellyfin.<tailnet>.ts.net`). Kein offener Port im Router. |
@@ -21,15 +21,36 @@ Am Ende laufen Jellyfin, der *arr-Stack und weitere Self-Hosted-Apps im Cluster 
 
 ---
 
-## 2. Rahmenbedingungen (aus den Antworten)
+## 2. Rahmenbedingungen
 
-- **Hardware:** vorhandener alter Desktop-PC
-- **Unterbau:** **Proxmox VE** auf dem Desktop, Kubernetes läuft in einer **VM**
-- **Medien:** auf einer Festplatte im Desktop
-- **Eigener Rechner:** NixOS. Das Tutorial geht davon aus, dass die Werkzeuge (`kubectl`, `helm`, `k9s`, `kubeseal`, `tailscale` …) **bereits installiert** sind. Es gibt nur eine kurze Werkzeugliste und als Bonus eine `flake.nix` mit einer `devShell` (`nix develop`). Installationsanleitungen für andere Betriebssysteme gibt es nicht, nur Links.
-- **Zielgruppe:** Einsteiger
-- **Smart-TV** soll Jellyfin nutzen können
-- ***arr-Stack** ist gewünscht
+| Thema | Stand |
+|-------|-------|
+| Hardware | Alter Desktop-PC: **AMD Ryzen 5 (ältere Generation)**, **NVIDIA RTX 2070 Super**, **500 GB HDD** |
+| Unterbau | **Proxmox VE** auf dem Desktop, Kubernetes läuft in einer **VM** |
+| Medien | lokal auf der Platte |
+| Eigener Rechner | NixOS. Die Werkzeuge (`kubectl`, `helm`, `k9s`, `kubeseal`, `tailscale` …) werden als **installiert vorausgesetzt**. Als Bonus gibt es eine `flake.nix` mit `devShell` (`nix develop`). |
+| Zielgruppe | Einsteiger |
+| Clients | Smart-TV (zu Hause), Laptop/Handy (auch unterwegs) |
+| *arr-Stack | gewünscht |
+
+### Was die Hardware für den Plan bedeutet
+
+- **Ryzen 5 ohne integrierte Grafik** (außer bei „G“-Modellen): Die RTX 2070 Super ist die einzige Grafikkarte.
+  Wird sie an die VM durchgereicht, hat Proxmox **kein Bild mehr am Monitor**. Das ist kein Problem, denn Proxmox wird ohnehin
+  über die Web-Oberfläche bedient. Das Tutorial weist aber deutlich darauf hin und macht den GPU-Schritt erst,
+  wenn alles andere läuft.
+- **RTX 2070 Super (Turing, NVENC 7. Gen.):** hervorragend für Jellyfin-Transcoding (H.264/HEVC inkl. 10-Bit HDR→SDR-Tonemapping,
+  mehrere Streams gleichzeitig). Kein AV1 – das ist für einen Heimserver aber kein Nachteil. Bonus: Die GPU kann später per
+  *Time-Slicing* auch mit Immich (Gesichtserkennung) geteilt werden.
+- **Ältere Ryzen-Plattform:** IOMMU/AMD-Vi muss im BIOS aktiviert werden, und bei älteren Boards (B350/X370) können die
+  IOMMU-Gruppen ungünstig sein. Kapitel 01 enthält deshalb einen Check vorab.
+- **Nur eine 500-GB-HDD:** Proxmox, VM und Medien teilen sich eine Platte.
+  - Die Medien kommen auf eine **eigene virtuelle Disk** der VM (`/data`). Die lässt sich später per Klick auf eine
+    neue Platte verschieben („Move Disk“) und wird aus den VM-Backups ausgeklammert.
+  - Realistische Aufteilung: ca. 30 GB Proxmox, 60 GB VM-System, **ca. 350 GB Medien** (grob 70–100 Filme in 1080p).
+  - Eine HDD ist für VMs langsam, aber ausreichend. **Empfohlenes Upgrade** (im Tutorial als Tipp): eine günstige SSD für
+    Proxmox + VM, die HDD dann komplett für Medien. Das Tutorial beschreibt den Umzug.
+  - Backups brauchen ein zweites Ziel (USB-Platte o. Ä.).
 
 ---
 
@@ -37,20 +58,20 @@ Am Ende laufen Jellyfin, der *arr-Stack und weitere Self-Hosted-Apps im Cluster 
 
 | Bereich | Wahl | Warum (einsteigerfreundlich) | Alternativen (im Tutorial erwähnt) |
 |---------|------|------------------------------|-----------------------------------|
-| Hypervisor | **Proxmox VE** | Web-Oberfläche, **Snapshots vor jedem Kapitel**, einfache VM-Backups | direkt auf Blech installieren |
-| VM-Betriebssystem | **Ubuntu Server 24.04 LTS** | Am meisten Anleitungen im Netz, Fehler lassen sich leicht googeln | Debian, NixOS, Talos |
-| Kubernetes | **k3s** (Single-Node) | Ein Befehl zur Installation, vollwertiges Kubernetes, bringt Traefik, ServiceLB und local-path gleich mit | k0s, MicroK8s, kubeadm |
+| Hypervisor | **Proxmox VE** | Web-Oberfläche, **Snapshots vor jedem Kapitel**, einfache VM-Backups, PCIe-Passthrough für die GPU | direkt auf Blech installieren |
+| VM | **Ubuntu Server 24.04 LTS**, Maschinentyp **q35 + UEFI (OVMF)**, CPU-Typ `host`, 4–8 vCPUs | q35/UEFI von Anfang an, damit das GPU-Passthrough später ohne Neuinstallation klappt. Ubuntu hat die meisten Anleitungen und die offiziellen NVIDIA-Treiberpakete | Debian, NixOS, Talos |
+| Kubernetes | **k3s** (Single-Node) | Ein Befehl zur Installation, vollwertiges Kubernetes, bringt Traefik, ServiceLB und local-path mit, **erkennt die NVIDIA-Runtime automatisch** | k0s, MicroK8s, kubeadm |
 | Pakete | **Helm** (+ etwas Kustomize) | Standard im K8s-Ökosystem | – |
 | GitOps | **Argo CD** | Anschauliche Web-UI, man *sieht*, was Kubernetes tut | Flux |
 | Zugriff von unterwegs | **Tailscale Kubernetes Operator** | Jede App bekommt einen eigenen Namen im Tailnet und automatisch HTTPS | Tailscale nur auf dem Host + Traefik |
 | Zugriff zu Hause (Smart-TV) | k3s **ServiceLB** (`LoadBalancer`) → `http://<VM-IP>:8096` | Der TV braucht kein Tailscale. Funktioniert mit jeder Jellyfin-TV-App | Traefik mit lokalem DNS-Namen (Ausblick) |
-| Medien-Platte | Physische Platte per **Disk-Passthrough** an die VM, gemountet als `/data` | Die Platte bleibt ein normales ext4-Laufwerk und die Daten überleben einen VM-Neuaufbau | virtuelle Disk auf der Platte, NFS |
+| Medien-Speicher | **Zweite virtuelle Disk** der VM, ext4, gemountet als `/data` | Funktioniert mit nur einer physischen Platte, lässt sich später auf eine neue Platte verschieben und aus Backups ausschließen | Disk-Passthrough (sobald eine eigene Medienplatte existiert), NFS |
 | Storage im Cluster | `local-path` (App-Konfigurationen), **statisches PV** auf `/data` (Medien + Downloads) | Man lernt PV/PVC an einem echten Fall | Longhorn (Multi-Node) |
-| Ordnerstruktur | `/data/media/{movies,tv}`, `/data/downloads` auf **einer** Platte | Hardlinks funktionieren, also kein doppelter Speicherplatz durch den *arr-Stack | – |
+| Ordnerstruktur | `/data/media/{movies,tv}`, `/data/downloads` auf **einer** Disk | Hardlinks funktionieren, also kein doppelter Speicherplatz durch den *arr-Stack | – |
+| GPU | **PCIe-Passthrough** der RTX 2070 Super in die VM → NVIDIA-Treiber + Container Toolkit in der VM → **NVIDIA Device Plugin** im Cluster | Standardweg, Jellyfin fordert die GPU wie CPU/RAM als Ressource an (`nvidia.com/gpu: 1`) | NVIDIA GPU Operator (mehr Automatik, schwerer zu verstehen) |
 | Secrets | **Sealed Secrets** | Verschlüsselte Secrets dürfen ins Git-Repo | SOPS + age |
-| Backup | **Proxmox vzdump** (ganze VM inkl. App-Konfigurationen) auf zweite Platte/USB | Ein Klick in der Web-UI, Restore leicht zu testen. Die Medien werden bewusst separat behandelt. | Velero, restic |
+| Backup | **Proxmox vzdump** der VM-Systemdisk (inkl. aller App-Konfigurationen) auf USB-Platte | Ein Klick in der Web-UI, Restore leicht zu testen. Die Medien-Disk ist ausgenommen. | Velero, restic |
 | Monitoring | Uptime Kuma (einfach), optional kube-prometheus-stack | Einsteiger zuerst mit dem einfachen Werkzeug | Netdata |
-| Hardware-Transcoding | **optionales Fortgeschrittenen-Kapitel** (GPU-Passthrough in die VM) | Hängt stark von der Hardware ab. Smart-TVs spielen meist direkt ab (Direct Play). | – |
 | Updates | Renovate Bot | Erstellt automatisch PRs für neue Versionen | manuell |
 
 ### Zielbild
@@ -60,22 +81,23 @@ Am Ende laufen Jellyfin, der *arr-Stack und weitere Self-Hosted-Apps im Cluster 
                                                                   │ https://jellyfin.<tailnet>.ts.net
   Zu Hause:  Smart-TV ──── LAN ── http://192.168.x.y:8096 ──┐     │
                                                             ▼     ▼
-┌─────────────────────────── Alter Desktop-PC: Proxmox VE ───────────────────────────┐
-│  Tailscale (Zugriff auf Proxmox-Web-UI von unterwegs)                               │
-│                                                                                    │
-│  ┌──────────────────────── VM "k3s" (Ubuntu Server) ────────────────────────────┐  │
-│  │  tailscale-operator ─► ein Tailscale-Ingress pro App (HTTPS, MagicDNS)       │  │
-│  │  argocd  ◄── synchronisiert ── GitHub: homelab-tutorial/kubernetes/          │  │
-│  │                                                                              │  │
-│  │  media:   jellyfin  jellyseerr  sonarr  radarr  prowlarr  bazarr  qbittorrent │  │
-│  │  apps:    homepage  vaultwarden  immich  paperless-ngx  uptime-kuma           │  │
-│  │  system:  sealed-secrets  (optional: monitoring, intel-gpu-plugin)           │  │
-│  │                                                                              │  │
-│  │  /var/lib/rancher/k3s/storage  → App-Konfigurationen (VM-Disk)               │  │
-│  │  /data                          → Medien-Platte (Disk-Passthrough)           │  │
-│  └──────────────────────────────────────────────────────────────────────────────┘  │
-│  vzdump-Backups der VM → Backup-Ziel (2. Platte / USB)                              │
-└────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────── Alter Desktop-PC (Ryzen 5, RTX 2070 Super, 500 GB HDD): Proxmox VE ─────────────┐
+│  Tailscale (Zugriff auf Proxmox-Web-UI von unterwegs)                                            │
+│                                                                                                  │
+│  ┌──────────────────────── VM "k3s" (Ubuntu Server, q35/UEFI) ─────────────────────────────────┐ │
+│  │  RTX 2070 Super (PCIe-Passthrough) ─► nvidia-device-plugin ─► jellyfin (nvidia.com/gpu: 1)  │ │
+│  │  tailscale-operator ─► ein Tailscale-Ingress pro App (HTTPS, MagicDNS)                      │ │
+│  │  argocd  ◄── synchronisiert ── GitHub: homelab-tutorial/kubernetes/                         │ │
+│  │                                                                                             │ │
+│  │  media:   jellyfin  jellyseerr  sonarr  radarr  prowlarr  bazarr  qbittorrent                │ │
+│  │  apps:    homepage  vaultwarden  immich  paperless-ngx  uptime-kuma                          │ │
+│  │  system:  sealed-secrets  nvidia-device-plugin  (optional: monitoring)                      │ │
+│  │                                                                                             │ │
+│  │  Disk 1 (~60 GB):  Ubuntu + /var/lib/rancher/k3s/storage (App-Konfigurationen) → Backup     │ │
+│  │  Disk 2 (~350 GB): /data  (Medien + Downloads)                                 → kein Backup │ │
+│  └─────────────────────────────────────────────────────────────────────────────────────────────┘ │
+│  vzdump-Backups der VM → USB-Platte                                                              │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -93,7 +115,7 @@ homelab-tutorial/
 │   └── …
 ├── kubernetes/                # Alles, was im Cluster läuft (GitOps-Quelle)
 │   ├── bootstrap/             # Argo CD selbst + "App of Apps"
-│   ├── infrastructure/        # tailscale-operator, sealed-secrets, storage (PV für /data), …
+│   ├── infrastructure/        # tailscale-operator, sealed-secrets, nvidia-device-plugin, storage (PV für /data)
 │   └── apps/
 │       ├── media/             # jellyfin, sonarr, radarr, prowlarr, bazarr, qbittorrent, jellyseerr
 │       └── …                  # homepage, vaultwarden, immich, paperless-ngx, uptime-kuma
@@ -115,11 +137,11 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 | # | Kapitel | Inhalt |
 |---|---------|--------|
 | 00 | Einführung | Was ist ein Homelab, was bauen wir, wie liest man das Tutorial, Kubernetes in 5 Minuten, Glossar |
-| 01 | Voraussetzungen | Hardware-Check des Desktops (RAM, Platten, Virtualisierung im BIOS aktivieren), Werkzeuge auf dem eigenen Rechner, Tailscale-Account, GitHub-Account |
-| 02 | Proxmox installieren | USB-Stick erstellen, Installation, Web-Oberfläche, Paketquellen & Updates |
+| 01 | Voraussetzungen | Hardware-Check (RAM, Platte), **BIOS: SVM + IOMMU aktivieren**, Werkzeuge auf dem eigenen Rechner, Tailscale- und GitHub-Account, USB-Platte für Backups |
+| 02 | Proxmox installieren | USB-Stick erstellen, Installation auf die HDD, Web-Oberfläche, Paketquellen & Updates, Speicheraufteilung |
 | 03 | Tailscale auf Proxmox | Proxmox ins Tailnet aufnehmen, damit die Web-UI von unterwegs erreichbar ist |
-| 04 | Die Kubernetes-VM | VM anlegen (CPU/RAM/Disk), Ubuntu installieren, feste IP, SSH-Key, Medien-Platte durchreichen, `/data`-Ordnerstruktur |
-| 05 | k3s installieren | k3s installieren, VM ins Tailnet, `kubectl` vom eigenen Rechner über Tailscale, erster Snapshot mit „frischem Cluster“ |
+| 04 | Die Kubernetes-VM | VM anlegen (**q35, UEFI, CPU `host`**, RAM), Ubuntu installieren, feste IP, SSH-Key, **zweite Disk für `/data`** anlegen und mounten, Ordnerstruktur |
+| 05 | k3s installieren | k3s installieren, VM ins Tailnet, `kubectl` vom eigenen Rechner über Tailscale, Snapshot „frischer Cluster“ |
 
 ### Teil B – Kubernetes-Grundlagen (am Beispiel)
 | # | Kapitel | Inhalt | K8s-Konzepte |
@@ -137,40 +159,42 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 | 12 | Jellyfin auf dem Smart-TV | Jellyfin-App auf dem TV, Verbindung über LAN-IP, Direct Play vs. Transcoding, Hinweise für Android-/Apple-TV (dort gibt es auch Tailscale) | – |
 | 13 | GitOps mit Argo CD | Argo CD installieren, dieses Repo verbinden, App-of-Apps, Jellyfin „umziehen“ | GitOps, Reconciliation, Drift |
 | 14 | Secrets im Git | Sealed Secrets einrichten, Tailscale-OAuth-Secret verschlüsselt ins Repo | Controller, Verschlüsselung |
+| 15 | GPU an die VM durchreichen | IOMMU prüfen, `vfio` einrichten, RTX 2070 Super per PCIe-Passthrough an die VM, NVIDIA-Treiber + Container Toolkit in der VM, `nvidia-smi` | – |
+| 16 | GPU in Kubernetes | RuntimeClass `nvidia`, NVIDIA Device Plugin, Jellyfin fordert `nvidia.com/gpu` an, NVENC in Jellyfin aktivieren, Test mit 4K-HDR-Datei | DaemonSet, Device Plugins, RuntimeClass, Extended Resources |
 
 ### Teil D – Medien-Automatisierung (*arr-Stack)
 > ⚖️ Hinweis im Tutorial: Nur für legal erworbene bzw. frei verfügbare Inhalte nutzen.
 
 | # | Kapitel | Inhalt | K8s-Konzepte |
 |---|---------|--------|--------------|
-| 15 | Wie der *arr-Stack zusammenspielt | Überblick, Ordnerstruktur, Hardlinks, Benutzer-/Rechte (PUID/PGID) | ein Volume in mehreren Pods |
-| 16 | qBittorrent | Download-Client, optional mit VPN (Gluetun als Sidecar) | Sidecar-Container, `securityContext` |
-| 17 | Prowlarr | Indexer zentral verwalten | Service-zu-Service-Kommunikation, Cluster-DNS |
-| 18 | Sonarr & Radarr | Serien & Filme, Anbindung an qBittorrent & Jellyfin | – |
-| 19 | Bazarr & Jellyseerr | Untertitel, Wunschliste für Familie/Mitbewohner | – |
+| 17 | Wie der *arr-Stack zusammenspielt | Überblick, Ordnerstruktur, Hardlinks, Benutzer/Rechte (PUID/PGID), Speicherplatz im Blick behalten (500 GB!) | ein Volume in mehreren Pods |
+| 18 | qBittorrent | Download-Client, optional mit VPN (Gluetun als Sidecar) | Sidecar-Container, `securityContext` |
+| 19 | Prowlarr | Indexer zentral verwalten | Service-zu-Service-Kommunikation, Cluster-DNS |
+| 20 | Sonarr & Radarr | Serien & Filme, Anbindung an qBittorrent & Jellyfin, Qualitätsprofile passend zur kleinen Platte | – |
+| 21 | Bazarr & Jellyseerr | Untertitel, Wunschliste für Familie/Mitbewohner | – |
 
 ### Teil E – Weitere Apps (kurz, gleiches Muster)
 | # | App | Zweck |
 |---|-----|-------|
-| 20 | Homepage | Dashboard mit Links zu allen Diensten |
-| 21 | Vaultwarden | Passwortmanager (Bitwarden-kompatibel) |
-| 22 | Immich | Foto-Backup vom Handy (Lernbeispiel für Apps mit Datenbank und mehreren Komponenten) |
-| 23 | Paperless-ngx | Dokumente scannen & durchsuchen |
-| 24 | Uptime Kuma | Überwacht, ob alle Dienste laufen |
+| 22 | Homepage | Dashboard mit Links zu allen Diensten |
+| 23 | Vaultwarden | Passwortmanager (Bitwarden-kompatibel) |
+| 24 | Immich | Foto-Backup vom Handy (Apps mit Datenbank, mehreren Komponenten, optional GPU per Time-Slicing geteilt) |
+| 25 | Paperless-ngx | Dokumente scannen & durchsuchen |
+| 26 | Uptime Kuma | Überwacht, ob alle Dienste laufen |
 
 ### Teil F – Betrieb
 | # | Kapitel | Inhalt |
 |---|---------|--------|
-| 25 | Backup & Restore | Proxmox-Backups der VM planen, **Restore wirklich testen**, was mit den Medien passiert |
-| 26 | Updates & Wartung | Proxmox, Ubuntu, k3s und Apps aktualisieren, Renovate |
-| 27 | Troubleshooting-Handbuch | Die häufigsten Fehler (`Pending`, `CrashLoopBackOff`, `ImagePullBackOff`, Rechteprobleme auf `/data`) und wie man sie findet |
+| 27 | Backup & Restore | Proxmox-Backups der VM auf USB-Platte planen, Medien-Disk ausklammern, **Restore wirklich testen** |
+| 28 | Updates & Wartung | Proxmox, Ubuntu, NVIDIA-Treiber, k3s und Apps aktualisieren, Renovate |
+| 29 | Troubleshooting-Handbuch | Die häufigsten Fehler (`Pending`, `CrashLoopBackOff`, `ImagePullBackOff`, Rechte auf `/data`, GPU nicht gefunden, Platte voll) und wie man sie findet |
 
-### Teil G – Für Fortgeschrittene (optional)
+### Teil G – Ausbau (optional)
 | # | Kapitel | Inhalt |
 |---|---------|--------|
-| 28 | Hardware-Transcoding | GPU-Passthrough (Intel iGPU/NVIDIA) von Proxmox in die VM, Device Plugin, Jellyfin-Einstellungen |
-| 29 | Monitoring | kube-prometheus-stack, Grafana-Dashboards |
-| 30 | Mehr Nodes | Zweite VM als Worker, Scheduling, Ausblick Longhorn/HA |
+| 30 | SSD nachrüsten | Proxmox/VM auf eine SSD umziehen, HDD komplett für Medien (Move Disk bzw. Disk-Passthrough) |
+| 31 | Monitoring | kube-prometheus-stack, Grafana-Dashboards (inkl. GPU-Metriken via DCGM-Exporter) |
+| 32 | Mehr Nodes | Zweite VM/zweiter Rechner als Worker, Scheduling, Ausblick Longhorn/HA |
 
 ---
 
@@ -178,19 +202,22 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 
 1. **Phase 1 – Gerüst & Fundament:** README, Repo-Struktur, `flake.nix`, Glossar, Kapitel 00–05.
 2. **Phase 2 – Grundlagen:** Kapitel 06–09 mit Beispiel-Manifesten in `examples/`.
-3. **Phase 3 – Homelab-Herz:** Kapitel 10–14, Manifeste in `kubernetes/` (Tailscale Operator, Jellyfin, Argo CD, Sealed Secrets).
-4. **Phase 4 – *arr-Stack:** Kapitel 15–19.
-5. **Phase 5 – Weitere Apps:** Kapitel 20–24.
-6. **Phase 6 – Betrieb & Fortgeschritten:** Kapitel 25–30, Renovate-Konfiguration.
+3. **Phase 3 – Homelab-Herz:** Kapitel 10–16, Manifeste in `kubernetes/` (Tailscale Operator, Jellyfin, Argo CD, Sealed Secrets, NVIDIA).
+4. **Phase 4 – *arr-Stack:** Kapitel 17–21.
+5. **Phase 5 – Weitere Apps:** Kapitel 22–26.
+6. **Phase 6 – Betrieb & Ausbau:** Kapitel 27–32, Renovate-Konfiguration.
 7. **Laufend:** CI-Check (yamllint, kubeconform, Markdown-Linkcheck), damit die Manifeste immer gültig sind.
 
 Jede Phase wird als eigener Commit/PR umgesetzt.
 
 ---
 
-## 7. Noch offene Fragen
+## 7. Noch offen (nicht blockierend – bis zur Antwort gelten die Annahmen)
 
-1. **Desktop-Details:** Welche CPU (Intel/AMD, Generation), wie viel RAM, welche Platten (SSD für System + HDD für Medien?), gibt es eine Grafikkarte? → bestimmt VM-Größe und ob Kapitel 28 realistisch ist.
-2. **Smart-TV:** Welches System (Samsung Tizen, LG webOS, Android/Google TV, Fire TV, Apple TV)?
-3. **VPN für qBittorrent:** Hast du einen VPN-Anbieter (z. B. Mullvad, ProtonVPN)? Dann kommt Gluetun als Sidecar hinein, sonst wird es nur als optional beschrieben.
-4. **NixOS:** Richtig verstanden, dass NixOS auf deinem *eigenen Rechner* läuft und die Werkzeuge dort vorausgesetzt werden? Oder soll die **VM** auch NixOS sein? (Für Einsteiger empfehle ich Ubuntu in der VM.)
+| Frage | Annahme bis dahin |
+|-------|-------------------|
+| **RAM** des Desktops? | 16 GB → VM bekommt 12 GB. Bei 8 GB: Immich/Paperless werden optional, VM bekommt 6 GB. |
+| Genaues **Ryzen-Modell / Mainboard**? | Ryzen 5 1600/2600 auf B350/B450 → IOMMU-Check in Kapitel 01 |
+| **Smart-TV**-System (Samsung, LG, Android/Google TV, Fire TV, Apple TV)? | Zugriff über LAN-IP, das funktioniert mit allen |
+| **VPN-Anbieter** für qBittorrent? | Gluetun-Sidecar wird als optional beschrieben |
+| **NixOS** nur auf dem eigenen Rechner? | Ja, die VM läuft mit Ubuntu |
