@@ -1,0 +1,41 @@
+# Kapitel 08: linkding, ein Lesezeichen-Manager, mit Secret und dauerhaftem Speicher.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linkding
+  namespace: lernen
+  labels:
+    app: linkding
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate                # erst alten Pod beenden, dann neuen starten (wichtig bei Datenbanken!)
+  selector:
+    matchLabels:
+      app: linkding
+  template:
+    metadata:
+      labels:
+        app: linkding
+    spec:
+      containers:
+        - name: linkding
+          image: sissbruecker/linkding:1.47.0
+          ports:
+            - containerPort: 9090
+          envFrom:
+            - secretRef:
+                name: linkding-zugang     # alle Einträge des Secrets werden Umgebungsvariablen
+          volumeMounts:
+            - name: daten
+              mountPath: /etc/linkding/data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+      volumes:
+        - name: daten
+          persistentVolumeClaim:
+            claimName: linkding-daten     # der PVC aus pvc.yaml

@@ -1,0 +1,12 @@
+# Kapitel 09: Deine Einstellungen (Values) für das Helm-Chart "podinfo".
+# Alle möglichen Werte zeigt: helm show values podinfo/podinfo
+
+replicaCount: 2
+
+ui:
+  message: "Hallo aus meinem Homelab!"
+  color: "#2e7d32"                # Hintergrundfarbe (grün)
+
+service:
+  type: LoadBalancer              # im Heimnetz erreichbar …
+  externalPort: 9898              # … unter http://<VM-IP>:9898

@@ -1,0 +1,13 @@
+# Kapitel 08: Die "Bestellung" von 1 GB dauerhaftem Speicher für linkding.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: linkding-daten
+  namespace: lernen
+spec:
+  storageClassName: local-path    # von k3s mitgeliefert: Ordner auf der Festplatte der VM
+  accessModes:
+    - ReadWriteOnce               # darf von einem Node gleichzeitig beschrieben werden
+  resources:
+    requests:
+      storage: 1Gi

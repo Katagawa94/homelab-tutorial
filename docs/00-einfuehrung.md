@@ -132,7 +132,12 @@ nicht nur einen Server hinstellen.
 - [04 – Die Kubernetes-VM](04-kubernetes-vm.md)
 - [05 – k3s installieren](05-k3s-installieren.md)
 
-### Teil B – Kubernetes-Grundlagen *(folgt)*
+### Teil B – Kubernetes-Grundlagen
+- [06 – Erster Pod](06-erster-pod.md)
+- [07 – Deployments & Services](07-deployments-services.md)
+- [08 – Konfiguration & Daten](08-konfiguration-daten.md)
+- [09 – Helm](09-helm.md)
+
 ### Teil C – Das Homelab-Herz: Tailscale Operator, Jellyfin, Samsung-TV, Argo CD, GPU *(folgt)*
 ### Teil D – *arr-Stack mit Proton VPN *(folgt)*
 ### Teil E – Weitere Apps *(folgt)*

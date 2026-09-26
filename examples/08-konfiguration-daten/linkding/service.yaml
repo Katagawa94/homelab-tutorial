@@ -1,0 +1,15 @@
+# Kapitel 08: linkding im Heimnetz unter http://<VM-IP>:9090
+apiVersion: v1
+kind: Service
+metadata:
+  name: linkding
+  namespace: lernen
+  labels:
+    app: linkding
+spec:
+  type: LoadBalancer
+  selector:
+    app: linkding
+  ports:
+    - port: 9090
+      targetPort: 9090
