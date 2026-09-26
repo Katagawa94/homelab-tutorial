@@ -1,0 +1,10 @@
+# Zugangsdaten niemals committen!
+kubeconfig
+*.kubeconfig
+k3s.yaml
+*.key
+.env
+
+# Nix / direnv
+.direnv/
+result
