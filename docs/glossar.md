@@ -17,6 +17,7 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **BIOS / UEFI** – Die Firmware des Mainboards. Hier werden grundlegende Funktionen wie die Virtualisierung eingeschaltet.
 - **SVM (AMD-V)** – CPU-Funktion für Virtualisierung bei AMD-Prozessoren. Ohne sie laufen keine VMs.
 - **IOMMU** – Mainboard-Funktion, mit der man echte Hardware (z. B. die Grafikkarte) exklusiv an eine VM geben kann.
+- **VFIO** – Platzhalter-Treiber in Linux, der ein Gerät (z. B. die Grafikkarte) für eine VM reserviert, damit der Host es nicht selbst benutzt.
 - **PCIe-Passthrough** – Eine echte PCIe-Karte (bei uns die RTX 2070 Super) wird direkt an eine VM durchgereicht. Die VM benutzt sie, als wäre sie eingebaut.
 
 ## Netzwerk
@@ -32,6 +33,9 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **WireGuard** – Modernes, schnelles VPN-Protokoll. Tailscale und Proton VPN nutzen es.
 - **Tailscale** – Dienst, der deine Geräte über WireGuard zu einem privaten Netz verbindet, egal wo sie gerade sind. Ports im Router müssen dafür nicht geöffnet werden.
 - **Tailnet** – Dein privates Tailscale-Netz, also alle deine Geräte zusammen.
+- **Tag (Tailscale)** – Etikett für Geräte im Tailnet, z. B. `tag:k8s`. Getaggte Geräte gehören keiner Person, sondern werden über Regeln verwaltet.
+- **OAuth-Client** – Zugangsschlüssel für Programme (z. B. den Tailscale Operator) mit genau festgelegten Rechten (*Scopes*).
+- **Personal Access Token (PAT)** – Ein Passwort-Ersatz für GitHub mit begrenzten Rechten, z. B. „dieses eine Repository nur lesen“.
 - **MagicDNS** – Tailscale-Funktion: Geräte im Tailnet sind über ihren Namen erreichbar (z. B. `ssh homelab@k3s`).
 
 ## Container & Kubernetes
@@ -55,19 +59,35 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **ReplicaSet** – Hilfsobjekt eines Deployments, das die gewünschte Anzahl Pods sicherstellt. Man fasst es selten direkt an.
 - **DaemonSet** – Startet einen Pod auf *jedem* Node, z. B. für Treiber-Plugins.
 - **Service** – Feste Adresse für eine Gruppe von Pods. Pods kommen und gehen, der Service bleibt.
+- **Extended Resource** – Zusätzliche Ressource neben CPU und RAM, die ein Plugin meldet, z. B. `nvidia.com/gpu`.
+- **Node-Label** – Label an einem Node, z. B. `nvidia.com/gpu.present=true`. Damit lässt sich steuern, welche Pods auf welchem Node laufen.
 - **LoadBalancer** – Service-Typ, der die App unter der IP des Nodes im Heimnetz erreichbar macht (bei k3s über *ServiceLB*).
+- **IngressClass** – Legt fest, welches Programm einen Ingress umsetzt: `traefik` (bei k3s dabei) oder `tailscale` (Tailscale Operator).
 - **Ingress** – Regel, die Anfragen anhand des Namens (z. B. `jellyfin.…`) an den richtigen Service weiterleitet.
 - **PersistentVolume (PV)** – Ein Stück Speicher, das Kubernetes zur Verfügung steht, z. B. ein Ordner auf der Festplatte.
 - **PersistentVolumeClaim (PVC)** – Die „Bestellung“ einer App: „Ich brauche 5 GB Speicher.“ Kubernetes verbindet sie mit einem passenden PV.
+- **hostPath** – Volume, das einfach einen Ordner des Nodes in den Pod einbindet, bei uns `/data` für die Medien.
+- **emptyDir** – Leeres Volume, das mit dem Pod entsteht und mit ihm verschwindet. Gut für Zwischenspeicher.
+- **Reclaim Policy** – Was mit den Daten passiert, wenn der PVC gelöscht wird: `Delete` (weg) oder `Retain` (bleiben).
 - **StorageClass** – Beschreibt, *wie* Speicher automatisch angelegt wird. k3s bringt `local-path` mit.
 - **ConfigMap** – Konfigurationswerte (keine Geheimnisse), die in Pods als Datei oder Umgebungsvariable landen.
 - **Secret** – Wie eine ConfigMap, aber für Passwörter und Schlüssel.
+- **Probe** – Regelmäßige Gesundheitsprüfung eines Containers: *startup* (hochgefahren?), *readiness* (bereit für Anfragen?), *liveness* (lebt noch?).
+- **securityContext** – Legt fest, mit welchen Rechten ein Container läuft, z. B. als Benutzer `1000`.
+- **Kustomize** – In `kubectl` eingebautes Werkzeug (`kubectl apply -k`), das Manifeste aus einer `kustomization.yaml` zusammensetzt und per *Patch* ergänzen kann.
 - **Helm** – Paketmanager für Kubernetes. Ein *Chart* ist ein Paket, *Values* sind deine Einstellungen dazu, ein *Release* ist ein installiertes Chart.
 - **Operator** – Programm im Cluster, das eine bestimmte Aufgabe automatisiert, z. B. der Tailscale Operator, der Apps ins Tailnet bringt.
 - **CRD (Custom Resource Definition)** – Erweiterung von Kubernetes um neue Objekttypen, meist von einem Operator mitgebracht.
+- **RuntimeClass** – Name für eine Art, Container zu starten. `nvidia` startet Container mit Zugriff auf die GPU.
+- **Container Toolkit (NVIDIA)** – Software auf dem Node, die Treiber und GPU-Geräte in Container bringt.
+- **Device Plugin** – Programm (meist als DaemonSet), das Kubernetes spezielle Hardware wie GPUs als Ressource meldet.
 - **Sidecar** – Ein zusätzlicher Container im selben Pod, der der Haupt-App hilft, z. B. Gluetun als VPN für qBittorrent.
 - **GitOps** – Arbeitsweise, bei der der Soll-Zustand des Clusters in einem Git-Repository steht. Ein Werkzeug gleicht den Cluster automatisch daran an.
 - **Argo CD** – Das GitOps-Werkzeug in diesem Tutorial, mit Weboberfläche.
+- **Application (Argo CD)** – Beschreibt für Argo CD: *diese Quelle* (Git-Ordner oder Helm-Chart) *in dieses Ziel* (Namespace im Cluster) ausrollen.
+- **App-of-Apps** – Eine Application, die selbst nur andere Applications enthält. Bei uns: `root` → alles in `kubernetes/aktiv/`.
+- **Sync / Prune / Self-Heal** – *Sync*: Git-Stand ausrollen. *Prune*: aus Git Entferntes löschen. *Self-Heal*: Änderungen am Git vorbei zurücksetzen.
+- **kubeseal** – Kommandozeilenwerkzeug, das ein Secret mit dem öffentlichen Schlüssel des Clusters zu einem SealedSecret verschlüsselt.
 - **Sealed Secrets** – Verschlüsselt Secrets so, dass sie gefahrlos ins Git-Repository dürfen. Nur der Cluster kann sie entschlüsseln.
 
 ## Medien

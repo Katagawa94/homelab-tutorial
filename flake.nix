@@ -22,6 +22,10 @@
             kubeseal         # Sealed Secrets verschlüsseln (Kapitel 14)
             argocd           # Argo-CD-CLI (Kapitel 13)
 
+            # Prüfen (scripts/validate.sh)
+            kubeconform      # Manifeste gegen Kubernetes-Schemas prüfen
+            yamllint         # YAML-Stil prüfen
+
             # Allgemeine Helfer
             jq               # JSON lesen
             yq-go            # YAML lesen

@@ -355,4 +355,4 @@ In **Teil C** wird es ernst: Tailscale im Cluster, Jellyfin, der Samsung-TV, Git
 
 ---
 
-⬅️ **Zurück:** [08 – Konfiguration & Daten](08-konfiguration-daten.md) · ➡️ **Weiter:** 10 – Tailscale Operator *(folgt in Phase 3)*
+⬅️ **Zurück:** [08 – Konfiguration & Daten](08-konfiguration-daten.md) · ➡️ **Weiter:** [10 – Tailscale Operator](10-tailscale-operator.md)

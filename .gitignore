@@ -8,3 +8,6 @@ k3s.yaml
 # Nix / direnv
 .direnv/
 result
+
+# Privater Schlüssel des Sealed-Secrets-Controllers (Kapitel 14), gehört in den Passwortmanager
+sealed-secrets-key*.yaml

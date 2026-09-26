@@ -1,0 +1,14 @@
+# Kapitel 13: Einstellungen für das Helm-Chart "argo-cd".
+# Alle Möglichkeiten: helm show values argo/argo-cd
+
+configs:
+  params:
+    # Argo CD selbst spricht nur HTTP. HTTPS übernimmt der Tailscale-Ingress
+    # (siehe manifests/ingress.yaml).
+    server.insecure: true
+
+# Nicht benötigte Komponenten abschalten, spart RAM
+dex:
+  enabled: false                  # Login über externe Anbieter (GitHub, Google …)
+notifications:
+  enabled: false                  # Benachrichtigungen (Slack, E-Mail …)

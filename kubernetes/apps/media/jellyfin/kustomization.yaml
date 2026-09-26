@@ -1,0 +1,14 @@
+# Kapitel 11: Jellyfin
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: media
+resources:
+  - pvc-config.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+# Kapitel 16: Die beiden Zeilen unten einkommentieren (die "#" entfernen),
+# damit Jellyfin die NVIDIA-GPU zum Transcoding nutzt.
+# patches:
+#   - path: gpu-patch.yaml

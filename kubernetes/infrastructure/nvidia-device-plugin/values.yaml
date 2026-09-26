@@ -1,0 +1,9 @@
+# Kapitel 16: Einstellungen für das Helm-Chart "nvidia-device-plugin".
+# Alle Möglichkeiten: helm show values nvdp/nvidia-device-plugin
+
+# Das Plugin selbst muss mit der NVIDIA-Runtime laufen, um die GPU zu sehen.
+# Die RuntimeClass "nvidia" legt k3s automatisch an.
+runtimeClassName: nvidia
+
+# Das Plugin läuft nur auf Nodes mit dem Label nvidia.com/gpu.present=true
+# (in Kapitel 16 per kubectl label gesetzt).

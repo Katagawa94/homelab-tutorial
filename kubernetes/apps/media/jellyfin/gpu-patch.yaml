@@ -1,0 +1,18 @@
+# Kapitel 16: Ergänzt das Jellyfin-Deployment um die NVIDIA-GPU.
+# Wird über "patches" in kustomization.yaml aktiviert.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+spec:
+  template:
+    spec:
+      runtimeClassName: nvidia    # Container mit der NVIDIA-Runtime starten
+      containers:
+        - name: jellyfin
+          env:
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: compute,video,utility   # "video" = NVENC/NVDEC
+          resources:
+            limits:
+              nvidia.com/gpu: 1   # eine GPU anfordern (vom Device Plugin bereitgestellt)

@@ -1,0 +1,14 @@
+# Kapitel 11: Speicher für Jellyfins Einstellungen, Datenbank und Metadaten (Cover, Beschreibungen).
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-config
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false   # Argo CD darf diesen PVC nie löschen
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

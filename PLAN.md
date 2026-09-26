@@ -118,16 +118,22 @@ homelab-tutorial/
 │   ├── glossar.md
 │   └── …
 ├── kubernetes/                # Alles, was im Cluster läuft (GitOps-Quelle)
-│   ├── bootstrap/             # Argo CD selbst + "App of Apps"
-│   ├── infrastructure/        # tailscale-operator, sealed-secrets, nvidia-device-plugin, storage (PV für /data)
-│   └── apps/
-│       ├── media/             # jellyfin, sonarr, radarr, prowlarr, bazarr, qbittorrent, jellyseerr
-│       └── …                  # homepage, vaultwarden, immich, paperless-ngx, uptime-kuma
+│   ├── bootstrap/root.yaml    # Wurzel-Application (App-of-Apps), einmalig per kubectl
+│   ├── katalog/               # Argo-CD-Applications aller verfügbaren Apps (Vorlagen)
+│   ├── aktiv/                 # aktivierte Applications (Kopie aus katalog/), von root ausgerollt
+│   ├── infrastructure/        # Helm-Values: argocd, tailscale-operator, sealed-secrets, nvidia-device-plugin
+│   ├── apps/
+│   │   ├── media/             # basis (Namespace, PV/PVC /data), jellyfin, später *arr-Stack
+│   │   └── …                  # homepage, vaultwarden, immich, paperless-ngx, uptime-kuma
+│   └── secrets/<namespace>/   # SealedSecrets (verschlüsselt)
 ├── examples/                  # Lern-Manifeste für die Grundlagenkapitel (nginx, whoami, …)
-└── scripts/                   # Hilfsskripte (VM-Vorbereitung, k3s-Installation, Checks)
+└── scripts/validate.sh       # prüft alle Manifeste (auch in der CI)
 ```
 
 Jede App bekommt einen eigenen Ordner mit der gleichen Struktur. So lernt man das Muster einmal und verwendet es danach immer wieder.
+
+**Aktivieren statt alles auf einmal:** Das Repository enthält den *Endzustand*, aber Argo CD rollt nur aus, was in
+`kubernetes/aktiv/` liegt. So kann man Kapitel für Kapitel vorgehen. Argo CD beobachtet dieses (private) Repository direkt.
 
 ---
 
@@ -214,7 +220,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 
 Jede Phase wird als eigener Commit/PR umgesetzt.
 
-**Status:** Phase 1 ✅ · Phase 2 ✅
+**Status:** Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅
 
 ---
 

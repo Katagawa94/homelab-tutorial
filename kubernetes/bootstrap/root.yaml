@@ -1,0 +1,21 @@
+# Kapitel 13: Die "Wurzel" von allem (App-of-Apps).
+# Argo CD rollt jede Application aus, die im Ordner kubernetes/aktiv/ liegt.
+# Einmalig anwenden mit: kubectl apply -f kubernetes/bootstrap/root.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Katagawa94/homelab-tutorial.git
+    targetRevision: HEAD          # HEAD = Standard-Branch des Repositories
+    path: kubernetes/aktiv
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true                 # Datei aus aktiv/ gelöscht → Application wird entfernt
+      selfHeal: true              # Änderungen am Cluster vorbei werden zurückgesetzt
