@@ -1,0 +1,39 @@
+# Kapitel 13: Argo CD verwaltet sich selbst.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argo-cd
+      targetRevision: 10.9.2
+      helm:
+        releaseName: argocd
+        valueFiles:
+          - $values/kubernetes/infrastructure/argocd/values.yaml
+    - repoURL: https://github.com/Katagawa94/homelab-tutorial.git
+      targetRevision: HEAD
+      ref: values
+    # 3. Zusätzliche Manifeste (Tailscale-Ingress für die Weboberfläche)
+    - repoURL: https://github.com/Katagawa94/homelab-tutorial.git
+      targetRevision: HEAD
+      path: kubernetes/infrastructure/argocd/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true      # nötig, weil manche Argo-CD-CRDs sehr groß sind
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m

@@ -138,7 +138,15 @@ nicht nur einen Server hinstellen.
 - [08 – Konfiguration & Daten](08-konfiguration-daten.md)
 - [09 – Helm](09-helm.md)
 
-### Teil C – Das Homelab-Herz: Tailscale Operator, Jellyfin, Samsung-TV, Argo CD, GPU *(folgt)*
+### Teil C – Das Homelab-Herz
+- [10 – Tailscale Operator](10-tailscale-operator.md)
+- [11 – Jellyfin](11-jellyfin.md)
+- [12 – Jellyfin auf dem Samsung-TV](12-samsung-tv.md)
+- [13 – GitOps mit Argo CD](13-argocd.md)
+- [14 – Secrets im Git](14-sealed-secrets.md)
+- [15 – GPU an die VM durchreichen](15-gpu-passthrough.md)
+- [16 – GPU in Kubernetes](16-gpu-kubernetes.md)
+
 ### Teil D – *arr-Stack mit Proton VPN *(folgt)*
 ### Teil E – Weitere Apps *(folgt)*
 ### Teil F – Betrieb: Backup, Updates, Troubleshooting *(folgt)*

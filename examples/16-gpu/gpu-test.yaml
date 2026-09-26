@@ -1,0 +1,16 @@
+# Kapitel 16: Einmaliger Test-Pod: sieht der Container die GPU?
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gpu-test
+  namespace: default
+spec:
+  restartPolicy: Never            # nur einmal ausführen
+  runtimeClassName: nvidia
+  containers:
+    - name: test
+      image: ubuntu:24.04
+      command: ["nvidia-smi"]     # wird von der NVIDIA-Runtime in den Container gebracht
+      resources:
+        limits:
+          nvidia.com/gpu: 1

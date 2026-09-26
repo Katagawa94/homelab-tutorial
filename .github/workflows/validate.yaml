@@ -11,13 +11,17 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: yamllint
+      - name: Werkzeuge installieren
         run: |
           pip install --quiet yamllint
-          yamllint -c .yamllint.yaml .
+          mkdir -p "$HOME/bin" && cd "$HOME/bin"
+          curl -sSL https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz | tar xz
+          KUSTOMIZE=https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.7.1
+          curl -sSL "$KUSTOMIZE/kustomize_v5.7.1_linux_amd64.tar.gz" | tar xz
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
+      - name: yamllint
+        run: yamllint -c .yamllint.yaml .
 
       - name: kubeconform
-        run: |
-          curl -sSL https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz | tar xz
-          # Helm-Values sind keine Kubernetes-Manifeste und werden übersprungen.
-          ./kubeconform -strict -summary -ignore-filename-pattern 'values\.yaml$' examples/
+        run: scripts/validate.sh

@@ -1,0 +1,19 @@
+# Kapitel 11: Ein von Hand angelegtes PersistentVolume für die Medien-Platte /data der VM.
+# PersistentVolumes gehören keinem Namespace, sie gelten für den ganzen Cluster.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: media-data
+spec:
+  capacity:
+    storage: 300Gi                # nur eine Angabe; hostPath prüft die Größe nicht
+  accessModes:
+    - ReadWriteMany               # mehrere Pods (Jellyfin, Sonarr, qBittorrent …) teilen sich /data
+  persistentVolumeReclaimPolicy: Retain   # NIEMALS automatisch löschen!
+  storageClassName: ""            # kein automatischer Lieferdienst, dieses PV ist handgemacht
+  claimRef:                       # reserviert dieses PV für genau einen PVC
+    namespace: media
+    name: media-data
+  hostPath:
+    path: /data                   # der Ordner auf der VM (Kapitel 04)
+    type: Directory               # muss bereits existieren

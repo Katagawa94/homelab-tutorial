@@ -1,0 +1,7 @@
+# Kapitel 11: Gemeinsame Grundlage für alle Medien-Apps (Jellyfin, *arr-Stack).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - pv-data.yaml
+  - pvc-data.yaml

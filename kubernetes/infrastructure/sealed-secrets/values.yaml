@@ -1,0 +1,5 @@
+# Kapitel 14: Einstellungen für das Helm-Chart "sealed-secrets".
+# Alle Möglichkeiten: helm show values sealed-secrets/sealed-secrets
+
+# Unter diesem Namen sucht kubeseal den Controller standardmäßig (im Namespace kube-system).
+fullnameOverride: sealed-secrets-controller

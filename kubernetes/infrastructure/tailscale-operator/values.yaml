@@ -1,0 +1,9 @@
+# Kapitel 10: Einstellungen für das Helm-Chart "tailscale-operator".
+# Alle Möglichkeiten: helm show values tailscale/tailscale-operator
+#
+# Die OAuth-Zugangsdaten stehen bewusst NICHT hier. Der Operator liest sie aus dem
+# Secret "operator-oauth" im Namespace "tailscale" (Kapitel 10: per kubectl angelegt,
+# Kapitel 14: als SealedSecret in kubernetes/secrets/tailscale/).
+
+operatorConfig:
+  hostname: tailscale-operator    # Name des Operators in der Tailscale-Admin-Konsole

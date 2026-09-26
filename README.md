@@ -38,9 +38,16 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin
 | 08 | [Konfiguration & Daten](docs/08-konfiguration-daten.md) |
 | 09 | [Helm](docs/09-helm.md) |
 
-### Teil C – Das Homelab-Herz 🚧
-10 Tailscale Operator · 11 Jellyfin · 12 Jellyfin auf dem Samsung-TV · 13 GitOps mit Argo CD ·
-14 Secrets im Git · 15 GPU an die VM durchreichen · 16 GPU in Kubernetes
+### Teil C – Das Homelab-Herz ✅
+| # | Kapitel |
+|---|---------|
+| 10 | [Tailscale Operator](docs/10-tailscale-operator.md) |
+| 11 | [Jellyfin](docs/11-jellyfin.md) |
+| 12 | [Jellyfin auf dem Samsung-TV](docs/12-samsung-tv.md) |
+| 13 | [GitOps mit Argo CD](docs/13-argocd.md) |
+| 14 | [Secrets im Git](docs/14-sealed-secrets.md) |
+| 15 | [GPU an die VM durchreichen](docs/15-gpu-passthrough.md) |
+| 16 | [GPU in Kubernetes](docs/16-gpu-kubernetes.md) |
 
 ### Teil D – *arr-Stack 🚧
 17 Wie der *arr-Stack zusammenspielt · 18 qBittorrent + Proton VPN · 19 Prowlarr · 20 Sonarr & Radarr · 21 Bazarr & Jellyseerr
@@ -60,7 +67,8 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin
 
 ```
 docs/          Tutorial-Kapitel
-kubernetes/    Cluster-Konfiguration für GitOps (ab Teil C)
-examples/      Beispiel-Manifeste für Teil B
+kubernetes/    Die echte Cluster-Konfiguration, von Argo CD ausgerollt (ab Teil C)
+examples/      Lern- und Test-Manifeste
+scripts/       Hilfsskripte (validate.sh prüft alle Manifeste)
 flake.nix      Werkzeuge für deinen Rechner (nix develop)
 ```

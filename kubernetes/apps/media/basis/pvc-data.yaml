@@ -1,0 +1,16 @@
+# Kapitel 11: Der passende PVC zum handgemachten PV. Alle Medien-Apps binden diesen PVC ein.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-data
+  namespace: media
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false   # Argo CD darf diesen PVC nie löschen
+spec:
+  storageClassName: ""
+  volumeName: media-data          # genau dieses PV verwenden
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 300Gi
