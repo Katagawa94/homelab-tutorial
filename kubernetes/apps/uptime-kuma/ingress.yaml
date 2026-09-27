@@ -1,0 +1,15 @@
+# Kapitel 26: im Tailnet unter https://uptime.<tailnet>.ts.net
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: uptime-kuma
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: uptime-kuma
+      port:
+        number: 3001
+  tls:
+    - hosts:
+        - uptime

@@ -7,3 +7,16 @@ runtimeClassName: nvidia
 
 # Das Plugin läuft nur auf Nodes mit dem Label nvidia.com/gpu.present=true
 # (in Kapitel 16 per kubectl label gesetzt).
+
+# Kapitel 24 (optional): Time-Slicing. Die eine RTX 2070 Super wird als 2 "GPUs"
+# gemeldet, damit Jellyfin UND Immich sie gleichzeitig nutzen können.
+# Zum Aktivieren die "#" vor den folgenden Zeilen entfernen.
+# config:
+#   map:
+#     default: |-
+#       version: v1
+#       sharing:
+#         timeSlicing:
+#           resources:
+#             - name: nvidia.com/gpu
+#               replicas: 2

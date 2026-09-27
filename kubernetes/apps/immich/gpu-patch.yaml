@@ -1,0 +1,15 @@
+# Kapitel 24 (optional): Machine Learning auf der NVIDIA-GPU (CUDA).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-machine-learning
+spec:
+  template:
+    spec:
+      runtimeClassName: nvidia
+      containers:
+        - name: machine-learning
+          image: ghcr.io/immich-app/immich-machine-learning:v3.2.0-cuda   # CUDA-Variante
+          resources:
+            limits:
+              nvidia.com/gpu: 1

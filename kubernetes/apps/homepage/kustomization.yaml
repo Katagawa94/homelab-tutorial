@@ -1,0 +1,22 @@
+# Kapitel 22: Homepage, das Dashboard für alle Dienste.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: homepage
+resources:
+  - namespace.yaml
+  - rbac.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+# Aus den Dateien in config/ wird eine ConfigMap erzeugt. Kustomize hängt einen Hash
+# an den Namen (z. B. homepage-config-7g2k9h4b5c). Ändert sich eine Datei, ändert
+# sich der Name, und das Deployment startet automatisch mit der neuen Konfiguration.
+configMapGenerator:
+  - name: homepage-config
+    files:
+      - config/settings.yaml
+      - config/services.yaml
+      - config/widgets.yaml
+      - config/bookmarks.yaml
+      - config/kubernetes.yaml

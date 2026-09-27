@@ -1,0 +1,14 @@
+# Kapitel 25: Die Dokumente selbst (Originale + durchsuchbare PDFs). Wertvoll → Backup!
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paperless-media
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false   # Argo CD darf diesen PVC nie löschen
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi

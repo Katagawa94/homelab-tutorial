@@ -221,4 +221,4 @@ Zusammen etwa 2 GB RAM im Ruhezustand. Die VM hat 12 GB, also ist noch viel Luft
 
 ---
 
-⬅️ **Zurück:** [20 – Sonarr & Radarr](20-sonarr-radarr.md) · ➡️ **Weiter:** 22 – Homepage *(folgt in Phase 5)*
+⬅️ **Zurück:** [20 – Sonarr & Radarr](20-sonarr-radarr.md) · ➡️ **Weiter:** [22 – Homepage](22-homepage.md)

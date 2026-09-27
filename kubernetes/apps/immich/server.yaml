@@ -1,0 +1,68 @@
+# Kapitel 24: Der Immich-Server: Weboberfläche, API für die Handy-App, Verarbeitung der Fotos.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-server
+  labels:
+    app: immich-server
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: immich-server
+  template:
+    metadata:
+      labels:
+        app: immich-server
+    spec:
+      containers:
+        - name: immich-server
+          image: ghcr.io/immich-app/immich-server:v3.2.0
+          envFrom:
+            - configMapRef:
+                name: immich-env
+            - secretRef:
+                name: immich-db   # DB_PASSWORD
+          ports:
+            - name: http
+              containerPort: 2283
+          volumeMounts:
+            - name: library
+              mountPath: /data    # hier legt Immich die Fotos ab → /data/photos in der VM
+          startupProbe:
+            httpGet:
+              path: /api/server/ping
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /api/server/ping
+              port: http
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 4Gi
+      volumes:
+        - name: library
+          persistentVolumeClaim:
+            claimName: immich-library
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-server
+  labels:
+    app: immich-server
+spec:
+  selector:
+    app: immich-server
+  ports:
+    - name: http
+      port: 2283
+      targetPort: http

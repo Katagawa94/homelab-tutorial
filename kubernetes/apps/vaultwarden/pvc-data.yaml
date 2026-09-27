@@ -1,0 +1,14 @@
+# Kapitel 23: Tresor-Datenbank, Anhänge und Schlüssel. SEHR wertvoll → Backup (Kapitel 27)!
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vaultwarden-data
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false   # Argo CD darf diesen PVC nie löschen
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

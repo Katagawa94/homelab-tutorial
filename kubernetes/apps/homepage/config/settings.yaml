@@ -1,0 +1,16 @@
+# Allgemeine Einstellungen: https://gethomepage.dev/configs/settings/
+title: Mein Homelab
+language: de
+theme: dark
+color: slate
+headerStyle: boxed
+layout:
+  Medien:
+    style: row
+    columns: 3
+  Verwaltung:
+    style: row
+    columns: 3
+  Werkzeuge:
+    style: row
+    columns: 3

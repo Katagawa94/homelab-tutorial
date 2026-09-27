@@ -1,0 +1,37 @@
+# Kapitel 22: Homepage darf den Cluster LESEN (für Pod-Status und Auslastung).
+#
+# ServiceAccount     = die Identität, unter der der Homepage-Pod mit Kubernetes spricht
+# ClusterRole        = eine Liste von Rechten (was darf man?)
+# ClusterRoleBinding = verbindet beides (wer darf das?)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: homepage
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: homepage
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces", "pods", "nodes"]
+    verbs: ["get", "list"]                # nur lesen, nichts ändern!
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses"]
+    verbs: ["get", "list"]
+  - apiGroups: ["metrics.k8s.io"]         # CPU/RAM vom metrics-server
+    resources: ["nodes", "pods"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: homepage
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: homepage
+subjects:
+  - kind: ServiceAccount
+    name: homepage
+    namespace: homepage

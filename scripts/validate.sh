@@ -33,14 +33,17 @@ done
 echo "▶ ${#plain[@]} einzelne Dateien"
 "${KUBECONFORM[@]}" "${plain[@]}"
 
-# 3. Den GPU-Patch testweise mitbauen, damit er nicht erst in Kapitel 16 auffällt
-echo "▶ Jellyfin mit GPU-Patch"
+# 3. GPU-Patches testweise mitbauen, damit sie nicht erst in Kapitel 16/24 auffallen
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
-cp -r kubernetes/apps/media/jellyfin/. "$tmp"
-sed -i 's/^# patches:/patches:/; s/^#   - path: gpu-patch.yaml/  - path: gpu-patch.yaml/' "$tmp/kustomization.yaml"
-grep -q '^patches:' "$tmp/kustomization.yaml"
-kustomize build "$tmp" | tee "$tmp/out.yaml" | "${KUBECONFORM[@]}" -
-grep -q 'nvidia.com/gpu: 1' "$tmp/out.yaml"
+for patch in $(find kubernetes -name gpu-patch.yaml | sort); do
+  dir=$(dirname "$patch")
+  echo "▶ $dir mit GPU-Patch"
+  rm -rf "$tmp/app" && cp -r "$dir/." "$tmp/app"
+  sed -i 's/^# patches:/patches:/; s/^#   - path: gpu-patch.yaml/  - path: gpu-patch.yaml/' "$tmp/app/kustomization.yaml"
+  grep -q '^patches:' "$tmp/app/kustomization.yaml"
+  kustomize build "$tmp/app" | tee "$tmp/out.yaml" | "${KUBECONFORM[@]}" -
+  grep -q 'nvidia.com/gpu: 1' "$tmp/out.yaml"
+done
 
 echo "✅ Alles gültig"

@@ -1,0 +1,13 @@
+# Kapitel 25: Paperless-ngx, Dokumente scannen, durchsuchen, archivieren.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: paperless
+resources:
+  - namespace.yaml
+  - pvc-data.yaml
+  - pvc-media.yaml
+  - redis.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+# Das Secret "paperless-secrets" liegt verschlüsselt in kubernetes/secrets/paperless/ (Kapitel 25).

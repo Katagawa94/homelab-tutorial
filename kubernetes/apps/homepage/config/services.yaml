@@ -1,0 +1,104 @@
+# Die Kacheln: https://gethomepage.dev/configs/services/
+#
+# namespace + podSelector: Homepage zeigt Status, CPU und RAM der Pods an (Rechte aus rbac.yaml).
+# widget: zeigt Live-Daten der App. Die API-Schlüssel kommen aus dem Secret "homepage-keys"
+#         und werden über {{HOMEPAGE_VAR_…}} eingesetzt.
+# "tail1a2b3c.ts.net" durch deinen Tailnet-Namen ersetzen (Kapitel 22, Schritt 1).
+
+- Medien:
+    - Jellyfin:
+        icon: jellyfin.svg
+        href: https://jellyfin.tail1a2b3c.ts.net
+        description: Filme & Serien
+        namespace: media
+        podSelector: app=jellyfin
+        widget:
+          type: jellyfin
+          url: http://jellyfin.media:8096
+          key: "{{HOMEPAGE_VAR_JELLYFIN_KEY}}"
+          version: 2
+          enableBlocks: true
+    - Seerr:
+        icon: jellyseerr.svg
+        href: https://seerr.tail1a2b3c.ts.net
+        description: Wunschliste
+        namespace: media
+        podSelector: app=seerr
+    - Immich:
+        icon: immich.svg
+        href: https://immich.tail1a2b3c.ts.net
+        description: Fotos
+        namespace: immich
+        podSelector: ""
+
+- Verwaltung:
+    - Sonarr:
+        icon: sonarr.svg
+        href: https://sonarr.tail1a2b3c.ts.net
+        description: Serien
+        namespace: media
+        podSelector: app=sonarr
+        widget:
+          type: sonarr
+          url: http://sonarr.media:8989
+          key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
+          enableQueue: true
+    - Radarr:
+        icon: radarr.svg
+        href: https://radarr.tail1a2b3c.ts.net
+        description: Filme
+        namespace: media
+        podSelector: app=radarr
+        widget:
+          type: radarr
+          url: http://radarr.media:7878
+          key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
+          enableQueue: true
+    - Prowlarr:
+        icon: prowlarr.svg
+        href: https://prowlarr.tail1a2b3c.ts.net
+        description: Indexer
+        namespace: media
+        podSelector: app=prowlarr
+    - qBittorrent:
+        icon: qbittorrent.svg
+        href: https://qbittorrent.tail1a2b3c.ts.net
+        description: Downloads (via Proton VPN)
+        namespace: media
+        podSelector: app=qbittorrent
+    - Bazarr:
+        icon: bazarr.svg
+        href: https://bazarr.tail1a2b3c.ts.net
+        description: Untertitel
+        namespace: media
+        podSelector: app=bazarr
+
+- Werkzeuge:
+    - Vaultwarden:
+        icon: vaultwarden.svg
+        href: https://vaultwarden.tail1a2b3c.ts.net
+        description: Passwörter
+        namespace: vaultwarden
+        podSelector: app=vaultwarden
+    - Paperless:
+        icon: paperless-ngx.svg
+        href: https://paperless.tail1a2b3c.ts.net
+        description: Dokumente
+        namespace: paperless
+        podSelector: ""
+    - Uptime Kuma:
+        icon: uptime-kuma.svg
+        href: https://uptime.tail1a2b3c.ts.net
+        description: Überwachung
+        namespace: uptime-kuma
+        podSelector: app=uptime-kuma
+    - Argo CD:
+        icon: argo-cd.svg
+        href: https://argocd.tail1a2b3c.ts.net
+        description: GitOps
+        namespace: argocd
+        podSelector: app.kubernetes.io/name=argocd-server
+    - Proxmox:
+        icon: proxmox.svg
+        href: https://pve.tail1a2b3c.ts.net
+        description: Hypervisor

@@ -1,0 +1,27 @@
+# Kapitel 25: Paperless-ngx, Dokumentenarchiv.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: paperless
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Katagawa94/homelab-tutorial.git
+    targetRevision: HEAD
+    path: kubernetes/apps/paperless
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: paperless
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m

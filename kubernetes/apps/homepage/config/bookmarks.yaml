@@ -1,0 +1,8 @@
+# Lesezeichen: https://gethomepage.dev/configs/bookmarks/
+- Homelab:
+    - Tutorial:
+        - abbr: HL
+          href: https://github.com/Katagawa94/homelab-tutorial
+    - Tailscale:
+        - abbr: TS
+          href: https://login.tailscale.com/admin/machines
