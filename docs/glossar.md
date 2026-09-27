@@ -13,6 +13,8 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **VM (Virtuelle Maschine)** – Ein „Computer im Computer“. Er hat eigene (virtuelle) CPU, RAM, Festplatten und ein eigenes Betriebssystem.
 - **Snapshot** – Eine Momentaufnahme einer VM. Geht etwas schief, springt man mit einem Klick zu diesem Zustand zurück.
 - **Backup** – Eine Kopie der VM auf einem *anderen* Datenträger. Im Gegensatz zum Snapshot hilft ein Backup auch, wenn die Festplatte kaputtgeht.
+- **3-2-1-Regel** – 3 Kopien, auf 2 verschiedenen Datenträgern, 1 davon außer Haus. Die Faustregel für Backups.
+- **restic** – Backup-Programm, das verschlüsselt, inkrementell und dedupliziert sichert. Bei uns für die Fotos.
 - **LVM-Thin** – Die Art, wie Proxmox den Speicher für VM-Festplatten verwaltet. „Thin“ bedeutet: Belegt wird nur, was wirklich beschrieben wurde. Wird der Speicher trotzdem voll, bleiben alle VMs stehen. Deshalb lassen wir Puffer frei.
 - **BIOS / UEFI** – Die Firmware des Mainboards. Hier werden grundlegende Funktionen wie die Virtualisierung eingeschaltet.
 - **SVM (AMD-V)** – CPU-Funktion für Virtualisierung bei AMD-Prozessoren. Ohne sie laufen keine VMs.
@@ -60,10 +62,14 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **Deployment** – Beschreibt, welcher Pod wie oft laufen soll. Stirbt ein Pod, startet das Deployment einen neuen.
 - **ReplicaSet** – Hilfsobjekt eines Deployments, das die gewünschte Anzahl Pods sicherstellt. Man fasst es selten direkt an.
 - **StatefulSet** – Wie ein Deployment, aber mit festen Pod-Namen (`name-0`, `name-1` …) und eigenem Speicher pro Pod (`volumeClaimTemplates`). Typisch für Datenbanken.
+- **Job** – Führt einen Pod aus, bis er erfolgreich beendet ist (im Gegensatz zum Deployment, das Pods dauerhaft laufen lässt).
+- **CronJob** – Startet Jobs nach Zeitplan, z. B. täglich um 03:30 ein Backup.
 - **DaemonSet** – Startet einen Pod auf *jedem* Node, z. B. für Treiber-Plugins.
 - **Service** – Feste Adresse für eine Gruppe von Pods. Pods kommen und gehen, der Service bleibt.
 - **Extended Resource** – Zusätzliche Ressource neben CPU und RAM, die ein Plugin meldet, z. B. `nvidia.com/gpu`.
 - **Node-Label** – Label an einem Node, z. B. `nvidia.com/gpu.present=true`. Damit lässt sich steuern, welche Pods auf welchem Node laufen.
+- **Scheduling** – Die Entscheidung des *Schedulers*, auf welchem Node ein Pod läuft. Beeinflussbar mit `nodeSelector`, Affinity und Taints.
+- **Taint & Toleration** – Ein *Taint* am Node hält Pods fern, außer sie haben eine passende *Toleration*.
 - **LoadBalancer** – Service-Typ, der die App unter der IP des Nodes im Heimnetz erreichbar macht (bei k3s über *ServiceLB*).
 - **IngressClass** – Legt fest, welches Programm einen Ingress umsetzt: `traefik` (bei k3s dabei) oder `tailscale` (Tailscale Operator).
 - **Ingress** – Regel, die Anfragen anhand des Namens (z. B. `jellyfin.…`) an den richtigen Service weiterleitet.
@@ -97,6 +103,9 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **App-of-Apps** – Eine Application, die selbst nur andere Applications enthält. Bei uns: `root` → alles in `kubernetes/aktiv/`.
 - **Sync / Prune / Self-Heal** – *Sync*: Git-Stand ausrollen. *Prune*: aus Git Entferntes löschen. *Self-Heal*: Änderungen am Git vorbei zurücksetzen.
 - **kubeseal** – Kommandozeilenwerkzeug, das ein Secret mit dem öffentlichen Schlüssel des Clusters zu einem SealedSecret verschlüsselt.
+- **Renovate** – Bot, der neue Versionen von Images und Helm-Charts findet und als Pull Request vorschlägt.
+- **Prometheus** – Sammelt Messwerte (Metriken) von Exportern und speichert sie als Zeitreihen.
+- **Grafana** – Stellt Messwerte aus Prometheus als Dashboards dar.
 - **Sealed Secrets** – Verschlüsselt Secrets so, dass sie gefahrlos ins Git-Repository dürfen. Nur der Cluster kann sie entschlüsseln.
 
 ## Medien

@@ -20,6 +20,8 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin
 
 ## Inhalt
 
+➡️ **Los geht's mit [00 – Einführung](docs/00-einfuehrung.md).** Alle 33 Kapitel (00–32) sind fertig.
+
 ### Teil A – Fundament ✅
 | # | Kapitel |
 |---|---------|
@@ -67,11 +69,19 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin
 | 25 | [Paperless-ngx](docs/25-paperless.md) |
 | 26 | [Uptime Kuma](docs/26-uptime-kuma.md) |
 
-### Teil F – Betrieb 🚧
-27 Backup & Restore · 28 Updates & Wartung · 29 Troubleshooting-Handbuch
+### Teil F – Betrieb ✅
+| # | Kapitel |
+|---|---------|
+| 27 | [Backup & Restore](docs/27-backup-restore.md) |
+| 28 | [Updates & Wartung](docs/28-updates-wartung.md) |
+| 29 | [Troubleshooting-Handbuch](docs/29-troubleshooting.md) |
 
-### Teil G – Ausbau 🚧
-30 SSD nachrüsten · 31 Monitoring · 32 Mehr Nodes
+### Teil G – Ausbau ✅
+| # | Kapitel |
+|---|---------|
+| 30 | [SSD nachrüsten](docs/30-ssd-nachruesten.md) |
+| 31 | [Monitoring mit Prometheus & Grafana](docs/31-monitoring.md) |
+| 32 | [Mehr Nodes](docs/32-mehr-nodes.md) |
 
 📖 [Glossar](docs/glossar.md) · 🗺️ [Gesamtplan](PLAN.md)
 

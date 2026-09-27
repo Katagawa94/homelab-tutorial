@@ -11,3 +11,6 @@ result
 
 # Privater Schlüssel des Sealed-Secrets-Controllers (Kapitel 14), gehört in den Passwortmanager
 sealed-secrets-key*.yaml
+
+# SSH-Schlüssel für das Foto-Backup (Kapitel 27), gehört versiegelt ins Git, nie im Klartext
+restic-photos-key*

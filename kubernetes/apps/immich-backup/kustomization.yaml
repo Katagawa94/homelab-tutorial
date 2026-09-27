@@ -1,0 +1,17 @@
+# Kapitel 27: Nächtliches Backup der Immich-Fotos (/data/photos) mit restic
+# auf die USB-Platte am Proxmox-Host.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: immich
+resources:
+  - cronjob.yaml
+configMapGenerator:
+  - name: restic-ssh-config
+    files:
+      - config=ssh-config
+    options:
+      # Kein Hash im Namen: Der CronJob startet ohnehin jedes Mal einen neuen Pod,
+      # und der Restore-Test (examples/27-backup) kann den festen Namen verwenden.
+      disableNameSuffixHash: true
+# Das Secret "restic-photos" (Repository-Passwort + SSH-Schlüssel) liegt verschlüsselt
+# in kubernetes/secrets/immich/restic-photos.yaml (Kapitel 27).

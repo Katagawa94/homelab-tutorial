@@ -152,4 +152,4 @@ Daten, die nicht verloren gehen dürfen.
 
 ---
 
-⬅️ **Zurück:** [25 – Paperless-ngx](25-paperless.md) · ➡️ **Weiter:** 27 – Backup & Restore *(folgt in Phase 6)*
+⬅️ **Zurück:** [25 – Paperless-ngx](25-paperless.md) · ➡️ **Weiter:** [27 – Backup & Restore](27-backup-restore.md)

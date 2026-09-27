@@ -1,0 +1,49 @@
+# Kapitel 27: Einmaliger Test-Pod: Kann restic das Foto-Backup lesen?
+# Zeigt alle Sicherungsstände und die ersten Dateien des neuesten.
+# Nutzt dieselben Einstellungen wie der CronJob in kubernetes/apps/immich-backup/.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: restore-test
+  namespace: immich
+spec:
+  restartPolicy: Never
+  containers:
+    - name: restic
+      image: restic/restic:0.19.1
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          restic snapshots
+          echo "== Inhalt des neuesten Stands (Auszug)"
+          restic ls latest | head -20
+          echo "== Probe-Wiederherstellung nach /tmp/restore"
+          restic restore latest --target /tmp/restore --include "/data/library" --verify 2>&1 | tail -5
+          du -sh /tmp/restore
+      env:
+        - name: RESTIC_REPOSITORY
+          value: sftp:pve:/mnt/pve/usb-backup/restic-photos
+        - name: RESTIC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: restic-photos
+              key: RESTIC_PASSWORD
+      volumeMounts:
+        - name: ssh
+          mountPath: /root/.ssh
+          readOnly: true
+      resources:
+        limits:
+          memory: 1Gi
+  volumes:
+    - name: ssh
+      projected:
+        defaultMode: 0400
+        sources:
+          - configMap:
+              name: restic-ssh-config
+          - secret:
+              name: restic-photos
+              items:
+                - key: id_ed25519
+                  path: id_ed25519

@@ -18,7 +18,7 @@
 | ☐ | **Netzwerkkabel** zum Router | Proxmox braucht kabelgebundenes Netzwerk, WLAN wird nicht unterstützt |
 | ☐ | **Monitor + Tastatur** | nur für die Installation, danach läuft alles über den Browser |
 | ☐ | **USB-Stick** (mind. 4 GB) | Installationsmedium für Proxmox, **wird komplett gelöscht** |
-| ☐ | *(später)* **USB-Festplatte** | Ziel für Backups ([Kapitel 27](../PLAN.md)) |
+| ☐ | *(später)* **USB-Festplatte** | Ziel für Backups ([Kapitel 27](27-backup-restore.md)) |
 
 > ⚠️ **Achtung: Die 500-GB-Festplatte wird komplett gelöscht.** Sichere vorher alles, was du davon noch brauchst.
 > Sind noch weitere Festplatten eingebaut, notiere dir ihre Größe, damit du bei der Installation nicht die falsche erwischst.

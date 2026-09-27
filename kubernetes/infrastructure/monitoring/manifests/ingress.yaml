@@ -1,0 +1,16 @@
+# Kapitel 31: Grafana im Tailnet unter https://grafana.<tailnet>.ts.net
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: monitoring-grafana      # <Release-Name>-grafana
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - grafana

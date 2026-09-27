@@ -203,7 +203,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 | # | Kapitel | Inhalt |
 |---|---------|--------|
 | 30 | SSD nachrüsten | Proxmox/VM auf eine SSD umziehen, HDD komplett für Medien (Move Disk bzw. Disk-Passthrough) |
-| 31 | Monitoring | kube-prometheus-stack, Grafana-Dashboards (inkl. GPU-Metriken via DCGM-Exporter) |
+| 31 | Monitoring | kube-prometheus-stack, Grafana-Dashboards (GPU-Metriken: Ausblick auf nvidia_gpu_exporter, da DCGM GeForce-Karten nur eingeschränkt unterstützt) |
 | 32 | Mehr Nodes | Zweite VM/zweiter Rechner als Worker, Scheduling, Ausblick Longhorn/HA |
 
 ---
@@ -220,7 +220,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 
 Jede Phase wird als eigener Commit/PR umgesetzt.
 
-**Status:** Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · Phase 4 ✅ · Phase 5 ✅
+**Status:** Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · Phase 4 ✅ · Phase 5 ✅ · Phase 6 ✅
 
 ---
 

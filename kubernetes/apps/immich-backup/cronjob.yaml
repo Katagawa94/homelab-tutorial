@@ -1,0 +1,74 @@
+# Kapitel 27: Ein CronJob startet nach Zeitplan einen Job, der einen Pod startet,
+# der seine Arbeit erledigt und sich dann beendet.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: photos-backup
+spec:
+  schedule: "30 3 * * *"          # täglich um 03:30 (Minute Stunde Tag Monat Wochentag)
+  timeZone: Europe/Berlin
+  concurrencyPolicy: Forbid       # nie zwei Backups gleichzeitig
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2             # bei Fehler höchstens 2 weitere Versuche
+      template:
+        metadata:
+          labels:
+            app: photos-backup
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: restic
+              image: restic/restic:0.19.1
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  echo "== Repository prüfen (beim ersten Mal anlegen)"
+                  restic cat config > /dev/null 2>&1 || restic init
+                  echo "== Sichern"
+                  restic backup /data --tag immich --host k3s
+                  echo "== Alte Stände aufräumen"
+                  restic forget --tag immich --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --prune
+                  echo "== Repository prüfen"
+                  restic check
+              env:
+                - name: RESTIC_REPOSITORY   # "pve" ist in ssh-config definiert
+                  value: sftp:pve:/mnt/pve/usb-backup/restic-photos
+                - name: RESTIC_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: restic-photos
+                      key: RESTIC_PASSWORD
+                - name: TZ
+                  value: Europe/Berlin
+              volumeMounts:
+                - name: photos
+                  mountPath: /data
+                  readOnly: true            # das Backup darf die Fotos nur lesen
+                - name: ssh
+                  mountPath: /root/.ssh
+                  readOnly: true
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  memory: 1Gi
+          volumes:
+            - name: photos
+              persistentVolumeClaim:
+                claimName: immich-library   # derselbe PVC wie immich-server
+            - name: ssh                     # SSH-Konfiguration + privater Schlüssel in einem Ordner
+              projected:
+                defaultMode: 0400           # SSH verlangt strenge Dateirechte
+                sources:
+                  - configMap:
+                      name: restic-ssh-config
+                  - secret:
+                      name: restic-photos
+                      items:
+                        - key: id_ed25519
+                          path: id_ed25519

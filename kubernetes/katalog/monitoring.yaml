@@ -1,0 +1,38 @@
+# Kapitel 31: Monitoring mit Prometheus und Grafana.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://prometheus-community.github.io/helm-charts
+      chart: kube-prometheus-stack
+      targetRevision: 91.7.1
+      helm:
+        releaseName: monitoring
+        valueFiles:
+          - $values/kubernetes/infrastructure/monitoring/values.yaml
+    - repoURL: https://github.com/Katagawa94/homelab-tutorial.git
+      targetRevision: HEAD
+      ref: values
+    - repoURL: https://github.com/Katagawa94/homelab-tutorial.git
+      targetRevision: HEAD
+      path: kubernetes/infrastructure/monitoring/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true      # die Prometheus-CRDs sind sehr groß
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
