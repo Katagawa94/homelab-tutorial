@@ -1,0 +1,8 @@
+# Kapitel 27: SSH-Einstellungen, mit denen restic den Proxmox-Host erreicht.
+# IP-Adresse an deinen Proxmox-Host anpassen (Spickzettel)!
+Host pve
+  HostName 192.168.178.10
+  User restic
+  IdentityFile /root/.ssh/id_ed25519
+  StrictHostKeyChecking accept-new
+  UserKnownHostsFile /tmp/known_hosts

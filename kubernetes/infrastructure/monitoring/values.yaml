@@ -1,0 +1,49 @@
+# Kapitel 31: Einstellungen für das Helm-Chart "kube-prometheus-stack"
+# (Prometheus + Grafana + node-exporter + kube-state-metrics).
+# Alle Möglichkeiten: helm show values prometheus-community/kube-prometheus-stack
+
+# k3s bündelt diese Kubernetes-Bausteine in einem einzigen Prozess. Sie lassen sich
+# nicht einzeln abfragen, Prometheus würde sonst dauerhaft Fehler melden.
+kubeEtcd:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false
+
+# Alarme schickt uns bereits Uptime Kuma (Kapitel 26), das spart RAM.
+alertmanager:
+  enabled: false
+
+prometheus:
+  prometheusSpec:
+    retention: 7d                 # Messwerte 7 Tage aufheben …
+    retentionSize: 8GB            # … aber höchstens 8 GB
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        memory: 2Gi
+    storageSpec:
+      volumeClaimTemplate:        # Prometheus läuft als StatefulSet (Kapitel 24)
+        spec:
+          storageClassName: local-path
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi
+
+grafana:
+  admin:
+    existingSecret: grafana-admin # Kapitel 31: SealedSecret in kubernetes/secrets/monitoring/
+    userKey: admin-user
+    passwordKey: admin-password
+  defaultDashboardsTimezone: Europe/Berlin
+  persistence:                    # eigene Dashboards überleben einen Neustart
+    enabled: true
+    storageClassName: local-path
+    size: 1Gi

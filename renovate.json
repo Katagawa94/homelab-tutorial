@@ -1,0 +1,37 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Kapitel 28: Renovate schlägt per Pull Request neue Versionen vor.",
+  "extends": ["config:recommended"],
+  "timezone": "Europe/Berlin",
+  "schedule": ["before 6am on saturday"],
+  "labels": ["renovate"],
+  "kubernetes": {
+    "managerFilePatterns": ["/^kubernetes/.+\\.yaml$/", "/^examples/.+\\.yaml$/"]
+  },
+  "argocd": {
+    "managerFilePatterns": ["/^kubernetes/(katalog|aktiv)/.+\\.yaml$/"]
+  },
+  "packageRules": [
+    {
+      "description": "Große Versionssprünge (major) erst nach Freigabe im Dependency Dashboard",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true,
+      "addLabels": ["major"]
+    },
+    {
+      "description": "Immich: Server und Machine Learning immer gemeinsam aktualisieren",
+      "matchPackageNames": ["ghcr.io/immich-app/immich-server", "ghcr.io/immich-app/immich-machine-learning"],
+      "groupName": "immich"
+    },
+    {
+      "description": "Die Immich-Datenbank nur nach Anleitung der Immich-Release-Notes ändern",
+      "matchPackageNames": ["ghcr.io/immich-app/postgres"],
+      "enabled": false
+    },
+    {
+      "description": "Jellyfin: nur Tags wie 12.1, nicht die datierten Build-Tags",
+      "matchPackageNames": ["jellyfin/jellyfin"],
+      "allowedVersions": "/^\\d+\\.\\d+(\\.\\d+)?$/"
+    }
+  ]
+}

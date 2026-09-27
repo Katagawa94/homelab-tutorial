@@ -161,8 +161,15 @@ nicht nur einen Server hinstellen.
 - [25 – Paperless-ngx](25-paperless.md)
 - [26 – Uptime Kuma](26-uptime-kuma.md)
 
-### Teil F – Betrieb: Backup, Updates, Troubleshooting *(folgt)*
-### Teil G – Ausbau *(folgt)*
+### Teil F – Betrieb
+- [27 – Backup & Restore](27-backup-restore.md)
+- [28 – Updates & Wartung](28-updates-wartung.md)
+- [29 – Troubleshooting-Handbuch](29-troubleshooting.md)
+
+### Teil G – Ausbau
+- [30 – SSD nachrüsten](30-ssd-nachruesten.md)
+- [31 – Monitoring mit Prometheus & Grafana](31-monitoring.md)
+- [32 – Mehr Nodes](32-mehr-nodes.md)
 
 Die vollständige Planung findest du in [PLAN.md](../PLAN.md).
 
