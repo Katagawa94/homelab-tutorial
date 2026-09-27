@@ -154,7 +154,13 @@ nicht nur einen Server hinstellen.
 - [20 – Sonarr & Radarr](20-sonarr-radarr.md)
 - [21 – Bazarr & Seerr](21-bazarr-seerr.md)
 
-### Teil E – Weitere Apps *(folgt)*
+### Teil E – Weitere Apps
+- [22 – Homepage](22-homepage.md)
+- [23 – Vaultwarden](23-vaultwarden.md)
+- [24 – Immich](24-immich.md)
+- [25 – Paperless-ngx](25-paperless.md)
+- [26 – Uptime Kuma](26-uptime-kuma.md)
+
 ### Teil F – Betrieb: Backup, Updates, Troubleshooting *(folgt)*
 ### Teil G – Ausbau *(folgt)*
 

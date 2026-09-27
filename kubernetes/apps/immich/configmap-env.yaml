@@ -1,0 +1,13 @@
+# Kapitel 24: Gemeinsame Einstellungen für Server und Machine Learning.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-env
+data:
+  DB_HOSTNAME: immich-postgres    # Service-Name der Datenbank
+  DB_USERNAME: postgres
+  DB_DATABASE_NAME: immich
+  REDIS_HOSTNAME: immich-redis    # Service-Name von Valkey
+  TZ: Europe/Berlin
+  # Der Server findet das Machine Learning unter http://immich-machine-learning:3003,
+  # das ist der Standard, deshalb heißt der Service genau so.

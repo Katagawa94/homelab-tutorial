@@ -1,0 +1,15 @@
+# Kapitel 24: Immich im Tailnet unter https://immich.<tailnet>.ts.net
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: immich
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: immich-server
+      port:
+        number: 2283
+  tls:
+    - hosts:
+        - immich

@@ -1,0 +1,88 @@
+# Kapitel 24: PostgreSQL mit den Erweiterungen, die Immich braucht (VectorChord).
+#
+# Ein StatefulSet statt eines Deployments:
+#  - der Pod hat einen festen Namen (immich-postgres-0) statt einer Zufallsendung
+#  - der Speicher wird über volumeClaimTemplates für GENAU diesen Pod angelegt
+#  - Pods werden der Reihe nach gestartet/beendet
+# Das ist der übliche Weg für Datenbanken.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: immich-postgres
+  labels:
+    app: immich-postgres
+spec:
+  serviceName: immich-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-postgres
+  template:
+    metadata:
+      labels:
+        app: immich-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_DB
+              value: immich
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:     # nur EINEN Wert aus einem Secret holen
+                  name: immich-db
+                  key: DB_PASSWORD
+            - name: POSTGRES_INITDB_ARGS
+              value: --data-checksums
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - name: postgres
+              containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+            - name: shm
+              mountPath: /dev/shm
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              memory: 2Gi
+      volumes:
+        - name: shm               # gemeinsamer Arbeitsspeicher für Postgres (wie "shm_size" bei Docker)
+          emptyDir:
+            medium: Memory
+            sizeLimit: 128Mi
+  volumeClaimTemplates:           # erzeugt den PVC "data-immich-postgres-0"
+    - metadata:
+        name: data
+      spec:
+        storageClassName: local-path
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-postgres
+  labels:
+    app: immich-postgres
+spec:
+  selector:
+    app: immich-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

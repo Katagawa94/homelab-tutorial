@@ -58,8 +58,14 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin
 | 20 | [Sonarr & Radarr](docs/20-sonarr-radarr.md) |
 | 21 | [Bazarr & Seerr](docs/21-bazarr-seerr.md) |
 
-### Teil E – Weitere Apps 🚧
-22 Homepage · 23 Vaultwarden · 24 Immich · 25 Paperless-ngx · 26 Uptime Kuma
+### Teil E – Weitere Apps ✅
+| # | Kapitel |
+|---|---------|
+| 22 | [Homepage](docs/22-homepage.md) |
+| 23 | [Vaultwarden](docs/23-vaultwarden.md) |
+| 24 | [Immich](docs/24-immich.md) |
+| 25 | [Paperless-ngx](docs/25-paperless.md) |
+| 26 | [Uptime Kuma](docs/26-uptime-kuma.md) |
 
 ### Teil F – Betrieb 🚧
 27 Backup & Restore · 28 Updates & Wartung · 29 Troubleshooting-Handbuch

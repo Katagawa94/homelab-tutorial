@@ -1,0 +1,2 @@
+# Homepage läuft im Cluster und benutzt die Rechte aus rbac.yaml
+mode: cluster

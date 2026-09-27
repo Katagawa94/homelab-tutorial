@@ -39,3 +39,11 @@ scripts/validate.sh
 | `prowlarr.yaml` | 19 |
 | `sonarr.yaml`, `radarr.yaml` | 20 |
 | `bazarr.yaml`, `seerr.yaml` | 21 |
+| `homepage.yaml` | 22 (optional: SealedSecret `secrets/homepage/homepage-keys.yaml`) |
+| `vaultwarden.yaml` | 23 |
+| `immich.yaml` | 24 (braucht `secrets/immich/immich-db.yaml` und den Ordner `/data/photos` in der VM) |
+| `paperless.yaml` | 25 (braucht `secrets/paperless/paperless-secrets.yaml`) |
+| `uptime-kuma.yaml` | 26 |
+
+> **Tailnet-Name:** Einige Manifeste enthalten den Platzhalter `tail1a2b3c.ts.net`. Er wird in Kapitel 22 einmalig in `kubernetes/apps/`
+> durch deinen Tailnet-Namen ersetzt.

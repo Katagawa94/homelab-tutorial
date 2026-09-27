@@ -1,0 +1,15 @@
+# Kapitel 22: Homepage im Tailnet unter https://homepage.<tailnet>.ts.net
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homepage
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: homepage
+      port:
+        number: 3000
+  tls:
+    - hosts:
+        - homepage

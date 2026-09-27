@@ -1,0 +1,78 @@
+# Kapitel 25: Paperless-ngx
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless
+  labels:
+    app: paperless
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate                # SQLite-Datenbank
+  selector:
+    matchLabels:
+      app: paperless
+  template:
+    metadata:
+      labels:
+        app: paperless
+    spec:
+      containers:
+        - name: paperless
+          image: ghcr.io/paperless-ngx/paperless-ngx:3.2.1
+          envFrom:
+            - secretRef:
+                name: paperless-secrets   # PAPERLESS_SECRET_KEY, PAPERLESS_ADMIN_USER, PAPERLESS_ADMIN_PASSWORD
+          env:
+            - name: PAPERLESS_URL         # Adresse im Tailnet, wichtig für den Login-Schutz (CSRF)
+              value: https://paperless.tail1a2b3c.ts.net
+            - name: PAPERLESS_REDIS
+              value: redis://paperless-redis:6379
+            - name: PAPERLESS_DBENGINE
+              value: sqlite
+            - name: PAPERLESS_OCR_LANGUAGE
+              value: deu+eng              # Texterkennung auf Deutsch und Englisch
+            - name: PAPERLESS_TIME_ZONE
+              value: Europe/Berlin
+            - name: USERMAP_UID
+              value: "1000"
+            - name: USERMAP_GID
+              value: "1000"
+          ports:
+            - name: http
+              containerPort: 8000
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+            - name: consume
+              mountPath: /usr/src/paperless/consume
+            - name: export
+              mountPath: /usr/src/paperless/export
+          startupProbe:           # der erste Start (Datenbank anlegen) dauert
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 60
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 2Gi          # Texterkennung (OCR) braucht zeitweise viel RAM
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: paperless-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: paperless-media
+        - name: consume           # Eingangsordner, Dateien werden nach dem Import entfernt
+          emptyDir: {}
+        - name: export            # für den Dokument-Export (Backup, Kapitel 27)
+          emptyDir: {}

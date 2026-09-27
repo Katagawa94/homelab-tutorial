@@ -1,0 +1,19 @@
+# Kapitel 24: Die Fotos liegen auf der großen Datenplatte unter /data/photos.
+# Wie media-data in Kapitel 11: handgemacht, Retain, für genau einen PVC reserviert.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-library
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain   # Fotos NIEMALS automatisch löschen
+  storageClassName: ""
+  claimRef:
+    namespace: immich
+    name: immich-library
+  hostPath:
+    path: /data/photos                    # vorher in der VM anlegen (Kapitel 24)
+    type: Directory

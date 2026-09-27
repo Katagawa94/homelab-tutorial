@@ -1,0 +1,75 @@
+# Kapitel 22: Homepage
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homepage
+  labels:
+    app: homepage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homepage
+  template:
+    metadata:
+      labels:
+        app: homepage
+    spec:
+      serviceAccountName: homepage        # mit den Rechten aus rbac.yaml
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: homepage
+          image: ghcr.io/gethomepage/homepage:v2.4.0
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP # die eigene Pod-IP, von Kubernetes eingesetzt
+            # Unter welchen Adressen Homepage aufgerufen werden darf (Schutz vor Missbrauch).
+            # Die Pod-IP braucht Kubernetes für die Probes.
+            - name: HOMEPAGE_ALLOWED_HOSTS
+              value: $(MY_POD_IP):3000,homepage.tail1a2b3c.ts.net
+          envFrom:
+            - secretRef:
+                name: homepage-keys       # API-Schlüssel für die Widgets (Kapitel 22)
+                optional: true            # Homepage startet auch ohne
+          ports:
+            - name: http
+              containerPort: 3000
+          volumeMounts:
+            - name: config
+              mountPath: /app/config/settings.yaml
+              subPath: settings.yaml      # nur diese eine Datei einbinden, nicht den ganzen Ordner
+            - name: config
+              mountPath: /app/config/services.yaml
+              subPath: services.yaml
+            - name: config
+              mountPath: /app/config/widgets.yaml
+              subPath: widgets.yaml
+            - name: config
+              mountPath: /app/config/bookmarks.yaml
+              subPath: bookmarks.yaml
+            - name: config
+              mountPath: /app/config/kubernetes.yaml
+              subPath: kubernetes.yaml
+            - name: logs
+              mountPath: /app/config/logs
+          livenessProbe:
+            httpGet:
+              path: /api/healthcheck
+              port: http
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 20m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+      volumes:
+        - name: config
+          configMap:
+            name: homepage-config         # Kustomize ergänzt hier automatisch den Hash
+        - name: logs
+          emptyDir: {}

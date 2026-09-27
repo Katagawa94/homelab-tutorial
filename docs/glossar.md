@@ -59,6 +59,7 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **Pod** – Die kleinste Einheit in Kubernetes: ein oder mehrere Container, die zusammen laufen und sich Netzwerk und Speicher teilen.
 - **Deployment** – Beschreibt, welcher Pod wie oft laufen soll. Stirbt ein Pod, startet das Deployment einen neuen.
 - **ReplicaSet** – Hilfsobjekt eines Deployments, das die gewünschte Anzahl Pods sicherstellt. Man fasst es selten direkt an.
+- **StatefulSet** – Wie ein Deployment, aber mit festen Pod-Namen (`name-0`, `name-1` …) und eigenem Speicher pro Pod (`volumeClaimTemplates`). Typisch für Datenbanken.
 - **DaemonSet** – Startet einen Pod auf *jedem* Node, z. B. für Treiber-Plugins.
 - **Service** – Feste Adresse für eine Gruppe von Pods. Pods kommen und gehen, der Service bleibt.
 - **Extended Resource** – Zusätzliche Ressource neben CPU und RAM, die ein Plugin meldet, z. B. `nvidia.com/gpu`.
@@ -76,12 +77,17 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **Secret** – Wie eine ConfigMap, aber für Passwörter und Schlüssel.
 - **Probe** – Regelmäßige Gesundheitsprüfung eines Containers: *startup* (hochgefahren?), *readiness* (bereit für Anfragen?), *liveness* (lebt noch?).
 - **securityContext** – Legt fest, mit welchen Rechten ein Container läuft, z. B. als Benutzer `1000`.
+- **configMapGenerator** – Kustomize-Funktion, die aus normalen Dateien eine ConfigMap erzeugt. Ein Hash im Namen sorgt dafür, dass Pods bei Änderungen automatisch neu starten.
+- **RBAC** – *Role-Based Access Control*: legt fest, wer im Cluster was darf.
+- **ServiceAccount** – Die Identität, unter der ein Pod mit der Kubernetes-API spricht.
+- **Role / ClusterRole** – Eine Liste von Rechten (z. B. „Pods lesen“), gültig in einem Namespace bzw. im ganzen Cluster. Ein **(Cluster)RoleBinding** gibt sie einem ServiceAccount oder Benutzer.
 - **Kustomize** – In `kubectl` eingebautes Werkzeug (`kubectl apply -k`), das Manifeste aus einer `kustomization.yaml` zusammensetzt und per *Patch* ergänzen kann.
 - **Helm** – Paketmanager für Kubernetes. Ein *Chart* ist ein Paket, *Values* sind deine Einstellungen dazu, ein *Release* ist ein installiertes Chart.
 - **Operator** – Programm im Cluster, das eine bestimmte Aufgabe automatisiert, z. B. der Tailscale Operator, der Apps ins Tailnet bringt.
 - **CRD (Custom Resource Definition)** – Erweiterung von Kubernetes um neue Objekttypen, meist von einem Operator mitgebracht.
 - **RuntimeClass** – Name für eine Art, Container zu starten. `nvidia` startet Container mit Zugriff auf die GPU.
 - **Container Toolkit (NVIDIA)** – Software auf dem Node, die Treiber und GPU-Geräte in Container bringt.
+- **Time-Slicing** – Eine GPU wird als mehrere gemeldet, und die Pods teilen sich ihre Rechenzeit. So können Jellyfin und Immich eine Karte gemeinsam nutzen.
 - **Device Plugin** – Programm (meist als DaemonSet), das Kubernetes spezielle Hardware wie GPUs als Ressource meldet.
 - **Nativer Sidecar** – Ein Sidecar, der als `initContainer` mit `restartPolicy: Always` definiert ist. Er startet **vor** der Haupt-App und läuft die ganze Zeit mit.
 - **Sidecar** – Ein zusätzlicher Container im selben Pod, der der Haupt-App hilft, z. B. Gluetun als VPN für qBittorrent.

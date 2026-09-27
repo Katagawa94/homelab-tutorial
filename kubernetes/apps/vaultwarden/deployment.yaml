@@ -1,0 +1,56 @@
+# Kapitel 23: Vaultwarden
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden
+  labels:
+    app: vaultwarden
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate                # SQLite-Datenbank
+  selector:
+    matchLabels:
+      app: vaultwarden
+  template:
+    metadata:
+      labels:
+        app: vaultwarden
+    spec:
+      containers:
+        - name: vaultwarden
+          image: vaultwarden/server:1.37.3
+          env:
+            - name: DOMAIN        # die Adresse, unter der Vaultwarden erreichbar ist
+              value: https://vaultwarden.tail1a2b3c.ts.net
+            - name: SIGNUPS_ALLOWED
+              value: "true"       # Kapitel 23: nach dem Anlegen deines Kontos auf "false" setzen!
+            - name: TZ
+              value: Europe/Berlin
+          ports:
+            - name: http
+              containerPort: 80
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          startupProbe:
+            httpGet:
+              path: /alive
+              port: http
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /alive
+              port: http
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 20m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: vaultwarden-data
