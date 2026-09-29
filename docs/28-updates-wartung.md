@@ -201,7 +201,7 @@ Die zweite Zeile sollte nach ein paar Minuten nur noch die Überschrift zeigen.
 | monatlich | Plattenplatz: `df -h /data` in der VM, `local-lvm` und `usb-backup` in Proxmox | |
 | **vierteljährlich** | Restore-Test (Kapitel 27, Test A und B) | |
 | vierteljährlich | k3s um eine Minor-Version anheben | VM |
-| **jährlich** | GitHub-Token für Argo CD erneuern (Kapitel 13/14: neuer Token → neu versiegeln) | GitHub |
+| **jährlich** | nur bei privatem Repository: GitHub-Token für Argo CD erneuern (Kapitel 13/14: neuer Token → neu versiegeln) | GitHub |
 | jährlich | Proton-VPN-Abo und WireGuard-Schlüssel prüfen | Proton |
 
 Trag dir die Termine in deinen Kalender ein.

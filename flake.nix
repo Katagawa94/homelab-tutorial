@@ -26,6 +26,9 @@
             kubeconform      # Manifeste gegen Kubernetes-Schemas prüfen
             yamllint         # YAML-Stil prüfen
 
+            # Website lokal ansehen: mkdocs serve
+            (python3.withPackages (ps: [ ps.mkdocs-material ]))
+
             # Allgemeine Helfer
             jq               # JSON lesen
             yq-go            # YAML lesen

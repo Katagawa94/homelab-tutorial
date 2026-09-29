@@ -5,7 +5,7 @@ Hier liegen **nur** mit `kubeseal` verschlüsselte Secrets (`kind: SealedSecret`
 ```
 secrets/
 ├── argocd/
-│   └── repo-homelab.yaml
+│   └── repo-homelab.yaml     (nur bei privatem Repository)
 └── tailscale/
     └── operator-oauth.yaml
 ```

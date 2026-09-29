@@ -1,0 +1,113 @@
+# Website des Tutorials (GitHub Pages), gebaut mit MkDocs Material.
+# Lokal ansehen: mkdocs serve  →  http://127.0.0.1:8000
+site_name: Homelab-Tutorial
+site_description: Kubernetes lernen mit Proxmox, k3s, Jellyfin und Tailscale – Schritt für Schritt für Einsteiger
+site_url: https://katagawa94.github.io/homelab-tutorial/
+repo_url: https://github.com/Katagawa94/homelab-tutorial
+repo_name: Katagawa94/homelab-tutorial
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: de
+  icon:
+    logo: material/home-automation
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Dunkles Design
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Helles Design
+  features:
+    - navigation.sections
+    - navigation.footer          # "Zurück"/"Weiter" unten auf jeder Seite
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.code.copy          # Kopier-Knopf an jedem Code-Block
+    - content.action.edit
+    - toc.follow
+
+plugins:
+  - search:
+      lang: de
+
+hooks:
+  - hooks/links.py               # Links aus docs/ heraus (kubernetes/, examples/ …) auf GitHub umleiten
+
+markdown_extensions:
+  - tables
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true      # die ☐-Checklisten in den Checkpoints
+  - toc:
+      permalink: true
+      # Überschriften-Anker wie auf GitHub (Umlaute bleiben erhalten), damit alle Links in beiden Welten funktionieren
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+
+validation:
+  links:
+    anchors: warn
+
+nav:
+  - Start: index.md
+  - "Teil A – Fundament":
+      - 00-einfuehrung.md
+      - 01-voraussetzungen.md
+      - 02-proxmox-installieren.md
+      - 03-tailscale-proxmox.md
+      - 04-kubernetes-vm.md
+      - 05-k3s-installieren.md
+  - "Teil B – Kubernetes-Grundlagen":
+      - 06-erster-pod.md
+      - 07-deployments-services.md
+      - 08-konfiguration-daten.md
+      - 09-helm.md
+  - "Teil C – Das Homelab-Herz":
+      - 10-tailscale-operator.md
+      - 11-jellyfin.md
+      - 12-samsung-tv.md
+      - 13-argocd.md
+      - 14-sealed-secrets.md
+      - 15-gpu-passthrough.md
+      - 16-gpu-kubernetes.md
+  - "Teil D – *arr-Stack":
+      - 17-arr-ueberblick.md
+      - 18-qbittorrent-vpn.md
+      - 19-prowlarr.md
+      - 20-sonarr-radarr.md
+      - 21-bazarr-seerr.md
+  - "Teil E – Weitere Apps":
+      - 22-homepage.md
+      - 23-vaultwarden.md
+      - 24-immich.md
+      - 25-paperless.md
+      - 26-uptime-kuma.md
+  - "Teil F – Betrieb":
+      - 27-backup-restore.md
+      - 28-updates-wartung.md
+      - 29-troubleshooting.md
+  - "Teil G – Ausbau":
+      - 30-ssd-nachruesten.md
+      - 31-monitoring.md
+      - 32-mehr-nodes.md
+  - Glossar: glossar.md

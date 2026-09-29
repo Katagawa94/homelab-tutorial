@@ -14,3 +14,7 @@ sealed-secrets-key*.yaml
 
 # SSH-Schlüssel für das Foto-Backup (Kapitel 27), gehört versiegelt ins Git, nie im Klartext
 restic-photos-key*
+
+# MkDocs-Ausgabe (Website)
+site/
+__pycache__/

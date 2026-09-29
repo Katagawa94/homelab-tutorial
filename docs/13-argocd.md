@@ -91,9 +91,20 @@ git pull
 > 💡 **Welcher Branch?** Argo CD folgt dem **Standard-Branch** des Repositories (`HEAD`). Welcher das ist, siehst du auf
 > GitHub unter **Settings → General → Default branch**. Arbeite ab jetzt auf genau diesem Branch.
 
-## 2. Ein Lese-Token für Argo CD
+> ⚠️ **Öffentliches Repository = alles ist öffentlich.** Dieses Repository ist öffentlich, damit Argo CD es ohne
+> Zugangsdaten lesen kann und die Tutorial-Website funktioniert. Das heißt: **Alles, was du committest, kann jeder lesen.**
+> Deshalb gelangen Zugangsdaten in diesem Tutorial nur **verschlüsselt** ins Repository (Kapitel 14). Vor jedem Commit
+> kurz `git diff --staged` ansehen.
 
-Dein Repository ist **privat**, also braucht Argo CD einen Schlüssel zum Lesen. Wir erstellen einen
+> 💡 **Eigene Kopie?** Wenn du das Tutorial mit einem **eigenen** Repository (Fork) nachbaust, ersetze überall in
+> `kubernetes/` die Adresse `github.com/Katagawa94/homelab-tutorial` durch deine:
+> `grep -rl 'Katagawa94/homelab-tutorial' kubernetes/ | xargs sed -i 's#Katagawa94/homelab-tutorial#<DEIN-NAME>/<DEIN-REPO>#g'`
+
+## 2. Nur bei privatem Repository: ein Lese-Token für Argo CD
+
+Ein **öffentliches** Repository kann Argo CD ohne Zugangsdaten lesen, **dann überspringst du die Schritte 2 und 4**.
+
+Ist dein Repository **privat**, braucht Argo CD einen Schlüssel zum Lesen. Wir erstellen einen
 **Fine-grained Personal Access Token**, der nur dieses eine Repository lesen darf:
 
 1. GitHub → Profilbild → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**
@@ -175,7 +186,7 @@ Start-Passwort löschen:
 kubectl delete secret argocd-initial-admin-secret -n argocd
 ```
 
-## 4. Das Repository bei Argo CD hinterlegen
+## 4. Nur bei privatem Repository: Zugangsdaten hinterlegen
 
 Argo CD erkennt Zugangsdaten für Repositories an einem Secret mit einem bestimmten **Label**
 (`<TOKEN>` durch deinen `github_pat_…` ersetzen):
@@ -190,6 +201,8 @@ kubectl label secret repo-homelab -n argocd argocd.argoproj.io/secret-type=repos
 ```
 
 In der Weboberfläche unter **Settings → Repositories** steht das Repository jetzt mit **CONNECTION STATUS: Successful**. ✅
+
+(Bei einem öffentlichen Repository taucht es dort erst auf, sobald die erste Application es benutzt, nämlich in Schritt 5.)
 
 ## 5. Die Wurzel pflanzen
 
@@ -364,7 +377,7 @@ argocd app sync jellyfin          # sofort synchronisieren statt 3 Minuten warte
 ## ✅ Checkpoint
 
 - [ ] `https://argocd.<tailnet>.ts.net` öffnet Argo CD, das Start-Passwort ist geändert und gelöscht.
-- [ ] Unter **Settings → Repositories** ist dein Repository **Successful**.
+- [ ] Unter **Settings → Repositories** ist dein Repository **Successful** (bei privatem Repository).
 - [ ] Die Apps `root`, `argocd`, `tailscale-operator`, `media-basis` und `jellyfin` sind **Synced** und **Healthy**.
 - [ ] `helm list -A` zeigt nur noch `traefik` und `traefik-crd`.
 - [ ] Du hast Self-Heal beobachtet (Jellyfin kam von allein zurück).
@@ -389,7 +402,7 @@ argocd app sync jellyfin          # sofort synchronisieren statt 3 Minuten warte
 - **App-of-Apps**: Eine Wurzel-Application verwaltet alle anderen. Aktivieren heißt Datei nach `aktiv/` kopieren.
 - **Sync** rollt aus, **Prune** löscht Entferntes, **Self-Heal** setzt Änderungen am Git vorbei zurück.
 - Bestehende Installationen lassen sich an Argo CD übergeben, ohne sie neu zu starten.
-- Private Repositories brauchen einen Lese-Token.
+- Öffentliche Repositories liest Argo CD ohne Zugangsdaten, private brauchen einen Lese-Token.
 
 ---
 
