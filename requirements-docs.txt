@@ -1,0 +1,3 @@
+# Werkzeuge für die Website (mkdocs.yml). Installieren: pip install -r requirements-docs.txt
+mkdocs-material==9.7.7
+mkdocs>=1.6,<2               # MkDocs 2.0 ist inkompatibel mit Material

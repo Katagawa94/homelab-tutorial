@@ -6,6 +6,8 @@ der ***arr-Stack** mit Proton VPN und weitere Self-Hosted-Apps, von unterwegs si
 
 Das eigentliche Ziel: **Kubernetes lernen**, an Apps, die du danach wirklich benutzt.
 
+📖 **Als Website lesen (mit Suche und Navigation):** <https://katagawa94.github.io/homelab-tutorial/>
+
 ```
 Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin, *arr, Vaultwarden, Immich, …
                                                           ▲
@@ -93,4 +95,5 @@ kubernetes/    Die echte Cluster-Konfiguration, von Argo CD ausgerollt (ab Teil 
 examples/      Lern- und Test-Manifeste
 scripts/       Hilfsskripte (validate.sh prüft alle Manifeste)
 flake.nix      Werkzeuge für deinen Rechner (nix develop)
+mkdocs.yml     Website (GitHub Pages): lokal ansehen mit `mkdocs serve`
 ```

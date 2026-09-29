@@ -1,6 +1,6 @@
 # 14 – Secrets im Git
 
-> **Was du am Ende hast:** Die Zugangsdaten für Tailscale und GitHub liegen **verschlüsselt** im Git-Repository.
+> **Was du am Ende hast:** Die Zugangsdaten für Tailscale (und ggf. GitHub) liegen **verschlüsselt** im Git-Repository.
 > Nur dein Cluster kann sie entschlüsseln, und nach einem Neuaufbau ist alles automatisch wieder da.
 >
 > ⏱️ **Zeit:** ca. 45 Minuten
@@ -14,7 +14,7 @@
 
 ## Das Problem
 
-Zwei Secrets hast du bisher per Befehl angelegt: `operator-oauth` (Kapitel 10) und `repo-homelab` (Kapitel 13).
+Bisher hast du Secrets per Befehl angelegt: `operator-oauth` (Kapitel 10) und, nur bei privatem Repository, `repo-homelab` (Kapitel 13).
 Sie existieren **nur im Cluster**. Geht die VM kaputt, müsstest du sie von Hand neu anlegen. Das widerspricht der
 GitOps-Idee: *Alles steht in Git.*
 
@@ -148,7 +148,9 @@ Diese Datei **darf** ins Git. Ohne den privaten Schlüssel aus deinem Cluster ka
 > 💡 **Name und Namespace sind Teil der Verschlüsselung.** Dieses SealedSecret lässt sich nur als `operator-oauth` im
 > Namespace `tailscale` entschlüsseln. Kopiert jemand die Datei in einen anderen Namespace, funktioniert sie nicht.
 
-## 4. Das GitHub-Token versiegeln
+## 4. Nur bei privatem Repository: das GitHub-Token versiegeln
+
+Hast du in Kapitel 13 kein Token angelegt (öffentliches Repository), **überspringe diesen Schritt** und in Schritt 5 die zweite Zeile.
 
 Das Repository-Secret für Argo CD braucht zusätzlich sein **Label** (Kapitel 13). Mit `kubectl label --local` hängen
 wir es an, bevor verschlüsselt wird:
@@ -223,7 +225,7 @@ kubectl get secret operator-oauth -n tailscale -o jsonpath='{.metadata.ownerRefe
 SealedSecret
 ```
 
-In Argo CD ist die App **secrets** *Synced* und *Healthy*. Unter **Settings → Repositories** ist das Repository weiterhin **Successful**.
+(Die Zeile `repo-homelab` gibt es nur bei privatem Repository.) In Argo CD ist die App **secrets** *Synced* und *Healthy*.
 
 ### Der Beweis
 
@@ -238,7 +240,7 @@ Nach wenigen Sekunden ist es wieder da, neu erzeugt aus dem SealedSecret in Git.
 
 ## Ein Secret ändern
 
-Wird z. B. das GitHub-Token erneuert, wiederholst du einfach Schritt 4 mit dem neuen Token. Die Datei wird überschrieben,
+Wird z. B. der OAuth-Client von Tailscale (oder bei privatem Repository das GitHub-Token) erneuert, wiederholst du einfach Schritt 3 bzw. 4 mit dem neuen Wert. Die Datei wird überschrieben,
 dann folgen `git commit` und `git push`. Den Rest erledigen Argo CD und der Controller.
 
 ## Regeln für Secrets ab jetzt
@@ -251,7 +253,7 @@ dann folgen `git commit` und `git push`. Den Rest erledigen Argo CD und der Cont
 
 - [ ] `kubectl get pods -n kube-system -l app.kubernetes.io/name=sealed-secrets` zeigt den Controller als `Running`.
 - [ ] Der private Schlüssel ist sicher außerhalb von Cluster und Git abgelegt.
-- [ ] `kubectl get sealedsecrets -A` zeigt beide SealedSecrets mit `SYNCED True`.
+- [ ] `kubectl get sealedsecrets -A` zeigt die SealedSecrets mit `SYNCED True`.
 - [ ] Ein gelöschtes Secret wurde automatisch wiederhergestellt.
 - [ ] Argo CD zeigt alle Apps als **Synced** und **Healthy**.
 

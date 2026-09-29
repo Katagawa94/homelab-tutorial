@@ -1,0 +1,51 @@
+name: Website
+
+on:
+  push:
+    branches: [main]
+  pull_request:                   # bei PRs nur bauen (prüfen), nicht veröffentlichen
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Website bauen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: MkDocs installieren
+        run: pip install -r requirements-docs.txt
+
+      - name: Bauen (--strict bricht bei kaputten Links ab)
+        run: mkdocs build --strict
+
+      - uses: actions/upload-pages-artifact@v5
+        if: github.event_name != 'pull_request'
+        with:
+          path: site
+
+  deploy:
+    name: Auf GitHub Pages veröffentlichen
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

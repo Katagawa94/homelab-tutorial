@@ -133,7 +133,7 @@ homelab-tutorial/
 Jede App bekommt einen eigenen Ordner mit der gleichen Struktur. So lernt man das Muster einmal und verwendet es danach immer wieder.
 
 **Aktivieren statt alles auf einmal:** Das Repository enthält den *Endzustand*, aber Argo CD rollt nur aus, was in
-`kubernetes/aktiv/` liegt. So kann man Kapitel für Kapitel vorgehen. Argo CD beobachtet dieses (private) Repository direkt.
+`kubernetes/aktiv/` liegt. So kann man Kapitel für Kapitel vorgehen. Argo CD beobachtet dieses (öffentliche) Repository direkt. Die Kapitel sind zusätzlich als Website über GitHub Pages verfügbar.
 
 ---
 
