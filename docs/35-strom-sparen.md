@@ -230,6 +230,10 @@ systemctl enable powertop.service
 
 > 🧪 Noch nicht auf echter Hardware ausprobiert.
 
+> 💡 **Erst nach Kapitel 18:** `nvidia-smi` gibt es erst, wenn die Grafikkarte an die VM durchgereicht und der
+> NVIDIA-Treiber installiert ist. Bist du noch nicht so weit, überspring diesen Abschnitt und die `nvidia-smi`-Messung
+> in Abschnitt 1. BIOS (Abschnitt 2) und Proxmox (Abschnitt 3) gehen schon vorher.
+
 Die RTX 2070 Super kann im Leerlauf mit unter 10 W auskommen (Zustand `P8`), oder dauerhaft deutlich mehr ziehen.
 Entscheidend ist, dass der **NVIDIA-Treiber in der VM** sie verwaltet.
 
