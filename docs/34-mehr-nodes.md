@@ -154,20 +154,6 @@ Wenn du weitermachen willst, sind hier Themen, die auf diesem Tutorial aufbauen:
 | **Home Assistant** | Smart Home im Cluster (Sonderfall: `hostNetwork`, weil viele Geräte Broadcasts nutzen) |
 | **Eigene Helm-Charts** | deine Manifeste als wiederverwendbares Paket |
 
-## 🎉 Geschafft!
-
-Du hast in 35 Kapiteln
-
-- einen alten PC in einen **Proxmox-Hypervisor** verwandelt,
-- **Kubernetes** von Pod bis Operator verstanden und selbst betrieben,
-- **Passwörter** (Vaultwarden), **Dateien** (Nextcloud) und den **DNS** deines Netzes (Pi-hole) in eigene Hände genommen,
-- **Jellyfin** mit GPU-Transcoding auf den Samsung-TV gebracht,
-- den ***arr-Stack** sicher hinter Proton VPN aufgebaut,
-- **Fotos und Dokumente** mit Immich und Paperless dazugeholt,
-- alles per **GitOps** in einem Repository beschrieben, **verschlüsselt**, **überwacht**, **gesichert** und **wartbar** gemacht.
-
-Das ist eine Menge. Viel Spaß mit deinem Homelab! 🏠
-
 ## 🎓 Was du gelernt hast
 
 - Ein **Worker** tritt mit `K3S_URL` und Token einem bestehenden Cluster bei.
@@ -177,4 +163,4 @@ Das ist eine Menge. Viel Spaß mit deinem Homelab! 🏠
 
 ---
 
-⬅️ **Zurück:** [33 – Monitoring mit Prometheus & Grafana](33-monitoring.md) · 🏠 **Zum Anfang:** [00 – Einführung](00-einfuehrung.md)
+⬅️ **Zurück:** [33 – Monitoring mit Prometheus & Grafana](33-monitoring.md) · ➡️ **Weiter:** [35 – Strom sparen](35-strom-sparen.md)

@@ -24,7 +24,7 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Vaultwar
 
 ## Inhalt
 
-➡️ **Los geht's mit [00 – Einführung](docs/00-einfuehrung.md).** Alle 35 Kapitel (00–34) sind fertig.
+➡️ **Los geht's mit [00 – Einführung](docs/00-einfuehrung.md).** Alle 36 Kapitel (00–35) sind fertig.
 
 ### Teil A – Fundament ✅
 | # | Kapitel |
@@ -92,6 +92,7 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Vaultwar
 | 32 | [Speicher erweitern](docs/32-speicher-erweitern.md) |
 | 33 | [Monitoring mit Prometheus & Grafana](docs/33-monitoring.md) |
 | 34 | [Mehr Nodes](docs/34-mehr-nodes.md) |
+| 35 | [Strom sparen](docs/35-strom-sparen.md) |
 📖 [Glossar](docs/glossar.md) · 🗺️ [Gesamtplan](PLAN.md)
 
 ## Repository-Struktur

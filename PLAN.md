@@ -212,6 +212,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 | 32 | Speicher erweitern | 1-TB-HDD einbauen, als LVM-Thin-Storage anlegen, Datenplatte der VM im laufenden Betrieb auf die HDD verschieben (Move Disk), vergrößern, Systemplatte wachsen lassen |
 | 33 | Monitoring | kube-prometheus-stack, Grafana-Dashboards (GPU-Metriken: Ausblick auf nvidia_gpu_exporter, da DCGM GeForce-Karten nur eingeschränkt unterstützt) |
 | 34 | Mehr Nodes | Zweite VM/zweiter Rechner als Worker, Scheduling, Ausblick Longhorn/HA |
+| 35 | Strom sparen | Verbrauch messen, BIOS (C-States, ASPM), CPU-Governor und powertop auf Proxmox, GPU-Persistence-Mode, HDD-Spin-down, Nachtruhe mit `rtcwake`, weniger Hintergrundarbeit der Apps (noch nicht auf echter Hardware getestet) |
 
 ---
 
@@ -222,7 +223,7 @@ Vor jedem Kapitel gibt es den Hinweis: **Proxmox-Snapshot anlegen**, damit man j
 3. **Phase 3 – Plattform, wichtigste Dienste, Heimkino:** Kapitel 10–19, Manifeste in `kubernetes/` (Tailscale Operator, Argo CD, Sealed Secrets, Vaultwarden, Nextcloud, Pi-hole, Jellyfin, NVIDIA).
 4. **Phase 4 – *arr-Stack:** Kapitel 20–24.
 5. **Phase 5 – Weitere Apps:** Kapitel 25–28.
-6. **Phase 6 – Betrieb & Ausbau:** Kapitel 29–34, Renovate-Konfiguration.
+6. **Phase 6 – Betrieb & Ausbau:** Kapitel 29–35, Renovate-Konfiguration.
 7. **Umbau:** Vaultwarden, Nextcloud und Pi-hole als „wichtigste Dienste“ direkt nach der Plattform (Teil D), Hardware korrigiert (500-GB-SSD + 1-TB-HDD), Kapitel 32 erklärt den Umzug der Daten auf die HDD.
 8. **Laufend:** CI-Check (yamllint, kubeconform, Markdown-Linkcheck), damit die Manifeste immer gültig sind.
 

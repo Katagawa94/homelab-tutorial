@@ -176,6 +176,7 @@ nicht nur einen Server hinstellen.
 - [32 – Speicher erweitern](32-speicher-erweitern.md)
 - [33 – Monitoring mit Prometheus & Grafana](33-monitoring.md)
 - [34 – Mehr Nodes](34-mehr-nodes.md)
+- [35 – Strom sparen](35-strom-sparen.md)
 Die vollständige Planung findest du in [PLAN.md](../PLAN.md).
 
 ## 🎓 Was du gelernt hast

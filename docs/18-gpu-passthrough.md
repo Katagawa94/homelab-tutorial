@@ -247,6 +247,9 @@ nvidia-smi
 
 Die RTX 2070 Super meldet sich in der VM. 🎉
 
+> 🔌 **Strom sparen:** `P8` ist der Sparmodus der Karte. Damit sie dort auch bleibt und warum sie bei **ausgeschalteter**
+> VM mehr Strom zieht, steht in [Kapitel 35](35-strom-sparen.md#4-die-grafikkarte-im-leerlauf).
+
 ## ✅ Checkpoint
 
 - [ ] Auf Proxmox zeigt `lspci -nnk -s 0a:00` für alle vier Teile `Kernel driver in use: vfio-pci`.
