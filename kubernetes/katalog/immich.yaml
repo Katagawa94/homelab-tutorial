@@ -1,4 +1,4 @@
-# Kapitel 24: Immich, Foto-Backup.
+# Kapitel 26: Immich, Foto-Backup.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

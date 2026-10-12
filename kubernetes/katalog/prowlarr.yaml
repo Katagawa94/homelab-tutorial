@@ -1,4 +1,4 @@
-# Kapitel 19: Prowlarr (Indexer).
+# Kapitel 22: Prowlarr (Indexer).
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

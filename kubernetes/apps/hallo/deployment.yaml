@@ -1,0 +1,32 @@
+# Kapitel 11: whoami, die App aus Kapitel 07, diesmal von Argo CD verwaltet.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hallo
+  labels:
+    app: hallo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hallo
+  template:
+    metadata:
+      labels:
+        app: hallo
+    spec:
+      containers:
+        - name: whoami
+          image: traefik/whoami:v1.12.0
+          env:
+            - name: WHOAMI_NAME   # Kapitel 11: diesen Wert per Git ändern
+              value: hallo-von-argocd
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 32Mi

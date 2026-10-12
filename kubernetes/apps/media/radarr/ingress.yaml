@@ -1,4 +1,4 @@
-# Kapitel 20: radarr im Tailnet unter https://radarr.<tailnet>.ts.net
+# Kapitel 23: radarr im Tailnet unter https://radarr.<tailnet>.ts.net
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

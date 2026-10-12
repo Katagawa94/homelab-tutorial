@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nextcloud-data
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false   # Argo CD darf diesen PVC nie löschen
+spec:
+  storageClassName: ""
+  volumeName: nextcloud-data      # genau dieses PV verwenden
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Gi

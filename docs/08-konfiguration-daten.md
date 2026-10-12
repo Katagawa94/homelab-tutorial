@@ -168,7 +168,7 @@ Dein Passwort erscheint im Klartext.
 > ⚠️ **Base64 ist keine Verschlüsselung**, nur eine andere Schreibweise. Kubernetes schützt Secrets über
 > *Zugriffsrechte* (nicht jeder darf sie lesen), nicht über Verschlüsselung. Deshalb gilt:
 > **Secrets niemals als normale YAML-Datei ins Git-Repository!**
-> In Kapitel 14 lernst du **Sealed Secrets** kennen. Damit werden Secrets so verschlüsselt, dass sie ins Repository dürfen.
+> In Kapitel 12 lernst du **Sealed Secrets** kennen. Damit werden Secrets so verschlüsselt, dass sie ins Repository dürfen.
 
 ### Secret als Umgebungsvariablen
 
@@ -325,10 +325,11 @@ sudo ls /var/lib/rancher/k3s/storage/pvc-*_lernen_linkding-daten/
 db.sqlite3  favicons  previews  secretkey.txt
 ```
 
-Das ist ein ganz normaler Ordner auf der 60-GB-Systemplatte der VM. Genau diese Platte sichern wir in Kapitel 27 mit Proxmox-Backups.
+Das ist ein ganz normaler Ordner auf der Systemplatte der VM. Genau diese Platte sichern wir in Kapitel 29 mit Proxmox-Backups.
 
-> 💡 **Ausblick:** Für Jellyfins Filme nutzen wir in Kapitel 11 **keinen** automatisch angelegten Ordner, sondern ein
-> **von Hand angelegtes PV**, das auf `/data` zeigt, die 300-GB-Platte aus Kapitel 04.
+> 💡 **Ausblick:** Für große Datenmengen (Nextcloud-Dateien ab Kapitel 14, später Filme und Fotos) nutzen wir **keinen**
+> automatisch angelegten Ordner, sondern ein **von Hand angelegtes PV**, das auf `/data` zeigt, die Datenplatte aus
+> Kapitel 04.
 
 ## Aufräumen
 

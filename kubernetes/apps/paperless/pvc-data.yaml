@@ -1,4 +1,4 @@
-# Kapitel 25: Datenbank (SQLite) und Suchindex von Paperless.
+# Kapitel 27: Datenbank (SQLite) und Suchindex von Paperless.
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

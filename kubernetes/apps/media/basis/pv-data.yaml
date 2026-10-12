@@ -1,4 +1,4 @@
-# Kapitel 11: Ein von Hand angelegtes PersistentVolume für die Medien-Platte /data der VM.
+# Kapitel 16: Ein von Hand angelegtes PersistentVolume für die Medien-Platte /data der VM.
 # PersistentVolumes gehören keinem Namespace, sie gelten für den ganzen Cluster.
 apiVersion: v1
 kind: PersistentVolume

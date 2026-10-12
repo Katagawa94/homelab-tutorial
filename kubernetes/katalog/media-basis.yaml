@@ -1,4 +1,4 @@
-# Kapitel 11: Gemeinsame Grundlage aller Medien-Apps (Namespace, Speicher /data).
+# Kapitel 16: Gemeinsame Grundlage aller Medien-Apps (Namespace, Speicher /data).
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

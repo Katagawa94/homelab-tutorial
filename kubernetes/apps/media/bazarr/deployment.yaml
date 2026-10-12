@@ -1,4 +1,4 @@
-# Kapitel 21: Bazarr lädt passende Untertitel für Serien und Filme.
+# Kapitel 24: Bazarr lädt passende Untertitel für Serien und Filme.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

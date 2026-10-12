@@ -1,0 +1,10 @@
+# Kapitel 11: Kleine Demo-App, an der du Argo CD ausprobierst (Self-Heal, Änderungen per Git).
+# Am Ende von Kapitel 11 wird sie wieder deaktiviert.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: hallo
+resources:
+  - namespace.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml

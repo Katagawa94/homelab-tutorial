@@ -1,4 +1,4 @@
-# Kapitel 26: Einstellungen und Messwerte von Uptime Kuma.
+# Kapitel 28: Einstellungen und Messwerte von Uptime Kuma.
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

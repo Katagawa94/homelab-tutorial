@@ -1,4 +1,4 @@
-# Kapitel 24: Der Immich-Server: Weboberfläche, API für die Handy-App, Verarbeitung der Fotos.
+# Kapitel 26: Der Immich-Server: Weboberfläche, API für die Handy-App, Verarbeitung der Fotos.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

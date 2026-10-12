@@ -1,4 +1,4 @@
-# Kapitel 13: Die "Wurzel" von allem (App-of-Apps).
+# Kapitel 11: Die "Wurzel" von allem (App-of-Apps).
 # Argo CD rollt jede Application aus, die im Ordner kubernetes/aktiv/ liegt.
 # Einmalig anwenden mit: kubectl apply -f kubernetes/bootstrap/root.yaml
 apiVersion: argoproj.io/v1alpha1

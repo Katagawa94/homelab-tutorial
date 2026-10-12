@@ -1,4 +1,4 @@
-# Kapitel 11: Der passende PVC zum handgemachten PV. Alle Medien-Apps binden diesen PVC ein.
+# Kapitel 16: Der passende PVC zum handgemachten PV. Alle Medien-Apps binden diesen PVC ein.
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

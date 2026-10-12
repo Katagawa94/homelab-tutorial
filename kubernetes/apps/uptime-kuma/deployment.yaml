@@ -1,4 +1,4 @@
-# Kapitel 26: Uptime Kuma
+# Kapitel 28: Uptime Kuma
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -1,4 +1,4 @@
-# Kapitel 11: Speicher für Jellyfins Einstellungen, Datenbank und Metadaten (Cover, Beschreibungen).
+# Kapitel 16: Speicher für Jellyfins Einstellungen, Datenbank und Metadaten (Cover, Beschreibungen).
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

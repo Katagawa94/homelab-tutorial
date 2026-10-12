@@ -1,4 +1,4 @@
-# Kapitel 24: Immich im Tailnet unter https://immich.<tailnet>.ts.net
+# Kapitel 26: Immich im Tailnet unter https://immich.<tailnet>.ts.net
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

@@ -1,4 +1,4 @@
-# Kapitel 24: Gemeinsame Einstellungen für Server und Machine Learning.
+# Kapitel 26: Gemeinsame Einstellungen für Server und Machine Learning.
 apiVersion: v1
 kind: ConfigMap
 metadata:

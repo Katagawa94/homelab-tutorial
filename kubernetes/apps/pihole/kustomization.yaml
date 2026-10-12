@@ -1,0 +1,13 @@
+# Kapitel 15: Pi-hole, ein Werbe- und Tracking-Blocker für dein ganzes Netz (per DNS).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: pihole
+resources:
+  - namespace.yaml
+  - pvc-config.yaml
+  - deployment.yaml
+  - service-dns.yaml
+  - service-web.yaml
+  - ingress.yaml
+# Das Secret "pihole-secrets" (Passwort der Weboberfläche) liegt verschlüsselt
+# in kubernetes/secrets/pihole/ (Kapitel 15).

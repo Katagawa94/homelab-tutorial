@@ -1,4 +1,4 @@
-# Kapitel 11: Jellyfin, der Medienserver.
+# Kapitel 16: Jellyfin, der Medienserver.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

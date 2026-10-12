@@ -1,4 +1,4 @@
-# Kapitel 18: Einstellungen von qBittorrent.
+# Kapitel 21: Einstellungen von qBittorrent.
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

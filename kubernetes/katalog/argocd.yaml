@@ -1,4 +1,4 @@
-# Kapitel 13: Argo CD verwaltet sich selbst.
+# Kapitel 11: Argo CD verwaltet sich selbst.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

@@ -82,32 +82,35 @@ nav:
       - 07-deployments-services.md
       - 08-konfiguration-daten.md
       - 09-helm.md
-  - "Teil C – Das Homelab-Herz":
+  - "Teil C – Die Plattform":
       - 10-tailscale-operator.md
-      - 11-jellyfin.md
-      - 12-samsung-tv.md
-      - 13-argocd.md
-      - 14-sealed-secrets.md
-      - 15-gpu-passthrough.md
-      - 16-gpu-kubernetes.md
-  - "Teil D – *arr-Stack":
-      - 17-arr-ueberblick.md
-      - 18-qbittorrent-vpn.md
-      - 19-prowlarr.md
-      - 20-sonarr-radarr.md
-      - 21-bazarr-seerr.md
-  - "Teil E – Weitere Apps":
-      - 22-homepage.md
-      - 23-vaultwarden.md
-      - 24-immich.md
-      - 25-paperless.md
-      - 26-uptime-kuma.md
-  - "Teil F – Betrieb":
-      - 27-backup-restore.md
-      - 28-updates-wartung.md
-      - 29-troubleshooting.md
-  - "Teil G – Ausbau":
-      - 30-ssd-nachruesten.md
-      - 31-monitoring.md
-      - 32-mehr-nodes.md
+      - 11-argocd.md
+      - 12-sealed-secrets.md
+  - "Teil D – Die wichtigsten Dienste":
+      - 13-vaultwarden.md
+      - 14-nextcloud.md
+      - 15-pihole.md
+  - "Teil E – Heimkino und *arr-Stack":
+      - 16-jellyfin.md
+      - 17-samsung-tv.md
+      - 18-gpu-passthrough.md
+      - 19-gpu-kubernetes.md
+      - 20-arr-ueberblick.md
+      - 21-qbittorrent-vpn.md
+      - 22-prowlarr.md
+      - 23-sonarr-radarr.md
+      - 24-bazarr-seerr.md
+  - "Teil F – Weitere Apps":
+      - 25-homepage.md
+      - 26-immich.md
+      - 27-paperless.md
+      - 28-uptime-kuma.md
+  - "Teil G – Betrieb":
+      - 29-backup-restore.md
+      - 30-updates-wartung.md
+      - 31-troubleshooting.md
+  - "Teil H – Ausbau":
+      - 32-speicher-erweitern.md
+      - 33-monitoring.md
+      - 34-mehr-nodes.md
   - Glossar: glossar.md

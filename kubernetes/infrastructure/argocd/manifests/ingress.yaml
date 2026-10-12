@@ -1,4 +1,4 @@
-# Kapitel 13: Argo-CD-Weboberfläche im Tailnet unter https://argocd.<tailnet>.ts.net
+# Kapitel 11: Argo-CD-Weboberfläche im Tailnet unter https://argocd.<tailnet>.ts.net
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

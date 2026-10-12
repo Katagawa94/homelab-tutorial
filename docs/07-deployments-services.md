@@ -174,7 +174,7 @@ kubectl apply -f examples/07-deployments-services/deployment.yaml
 Zwei Pods gehen in `Terminating`, es bleiben 3.
 
 > 💡 **Merke:** Die **Datei** ist die Wahrheit. Änderungen per Befehl sind schnell, gehen aber beim nächsten `apply`
-> verloren. In Kapitel 13 (GitOps) passiert dieses „Zurücksetzen auf die Datei“ sogar automatisch.
+> verloren. In Kapitel 11 (GitOps) passiert dieses „Zurücksetzen auf die Datei“ sogar automatisch.
 
 ## 5. Services: eine feste Adresse
 

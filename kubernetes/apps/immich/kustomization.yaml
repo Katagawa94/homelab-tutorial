@@ -1,4 +1,4 @@
-# Kapitel 24: Immich, Foto-Backup vom Handy. Besteht aus vier Teilen:
+# Kapitel 26: Immich, Foto-Backup vom Handy. Besteht aus vier Teilen:
 #   immich-server            Weboberfläche, API, Handy-App-Anbindung
 #   immich-machine-learning  Gesichtserkennung und intelligente Suche
 #   immich-postgres          Datenbank (StatefulSet)
@@ -16,9 +16,9 @@ resources:
   - machine-learning.yaml
   - server.yaml
   - ingress.yaml
-# Das Secret "immich-db" (Datenbank-Passwort) liegt verschlüsselt in kubernetes/secrets/immich/ (Kapitel 24).
+# Das Secret "immich-db" (Datenbank-Passwort) liegt verschlüsselt in kubernetes/secrets/immich/ (Kapitel 26).
 
-# Kapitel 24 (optional): Die beiden Zeilen unten einkommentieren, damit die
-# Gesichtserkennung auf der GPU läuft. Voraussetzung: Time-Slicing (siehe Kapitel 24).
+# Kapitel 26 (optional): Die beiden Zeilen unten einkommentieren, damit die
+# Gesichtserkennung auf der GPU läuft. Voraussetzung: Time-Slicing (siehe Kapitel 26).
 # patches:
 #   - path: gpu-patch.yaml

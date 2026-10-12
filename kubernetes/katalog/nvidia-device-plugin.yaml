@@ -1,4 +1,4 @@
-# Kapitel 16: NVIDIA Device Plugin meldet die GPU als Ressource nvidia.com/gpu an Kubernetes.
+# Kapitel 19: NVIDIA Device Plugin meldet die GPU als Ressource nvidia.com/gpu an Kubernetes.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

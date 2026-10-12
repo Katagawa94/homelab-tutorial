@@ -1,4 +1,4 @@
-# Kapitel 31: Einstellungen für das Helm-Chart "kube-prometheus-stack"
+# Kapitel 33: Einstellungen für das Helm-Chart "kube-prometheus-stack"
 # (Prometheus + Grafana + node-exporter + kube-state-metrics).
 # Alle Möglichkeiten: helm show values prometheus-community/kube-prometheus-stack
 
@@ -13,7 +13,7 @@ kubeScheduler:
 kubeProxy:
   enabled: false
 
-# Alarme schickt uns bereits Uptime Kuma (Kapitel 26), das spart RAM.
+# Alarme schickt uns bereits Uptime Kuma (Kapitel 28), das spart RAM.
 alertmanager:
   enabled: false
 
@@ -28,7 +28,7 @@ prometheus:
       limits:
         memory: 2Gi
     storageSpec:
-      volumeClaimTemplate:        # Prometheus läuft als StatefulSet (Kapitel 24)
+      volumeClaimTemplate:        # Prometheus läuft als StatefulSet (Kapitel 26)
         spec:
           storageClassName: local-path
           accessModes:
@@ -39,7 +39,7 @@ prometheus:
 
 grafana:
   admin:
-    existingSecret: grafana-admin # Kapitel 31: SealedSecret in kubernetes/secrets/monitoring/
+    existingSecret: grafana-admin # Kapitel 33: SealedSecret in kubernetes/secrets/monitoring/
     userKey: admin-user
     passwordKey: admin-password
   defaultDashboardsTimezone: Europe/Berlin

@@ -1,4 +1,4 @@
-# Kapitel 19: Einstellungen und Datenbank von prowlarr.
+# Kapitel 22: Einstellungen und Datenbank von prowlarr.
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

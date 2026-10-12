@@ -1,0 +1,48 @@
+# Kapitel 14: Valkey (Redis-kompatibel). Nextcloud merkt sich hier Sitzungen und
+# Datei-Sperren, damit gleichzeitige Zugriffe sich nicht in die Quere kommen.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-redis
+  labels:
+    app: nextcloud-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud-redis
+  template:
+    metadata:
+      labels:
+        app: nextcloud-redis
+    spec:
+      containers:
+        - name: valkey
+          image: valkey/valkey:9.0-alpine
+          ports:
+            - name: redis
+              containerPort: 6379
+          readinessProbe:
+            exec:
+              command: ["valkey-cli", "ping"]
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-redis
+  labels:
+    app: nextcloud-redis
+spec:
+  selector:
+    app: nextcloud-redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis

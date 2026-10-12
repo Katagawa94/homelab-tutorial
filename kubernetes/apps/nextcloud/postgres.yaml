@@ -1,0 +1,79 @@
+# Kapitel 14: PostgreSQL als Datenbank für Nextcloud.
+#
+# Ein StatefulSet statt eines Deployments:
+#  - der Pod hat einen festen Namen (nextcloud-postgres-0) statt einer Zufallsendung
+#  - der Speicher wird über volumeClaimTemplates für GENAU diesen Pod angelegt
+#  - Pods werden der Reihe nach gestartet und beendet
+# Das ist der übliche Weg für Datenbanken.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nextcloud-postgres
+  labels:
+    app: nextcloud-postgres
+spec:
+  serviceName: nextcloud-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud-postgres
+  template:
+    metadata:
+      labels:
+        app: nextcloud-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17.11-alpine
+          env:
+            - name: POSTGRES_USER
+              value: nextcloud
+            - name: POSTGRES_DB
+              value: nextcloud
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:     # nur EINEN Wert aus einem Secret holen
+                  name: nextcloud-secrets
+                  key: POSTGRES_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - name: postgres
+              containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "nextcloud"]
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 1Gi
+  volumeClaimTemplates:           # erzeugt den PVC "data-nextcloud-postgres-0"
+    - metadata:
+        name: data
+      spec:
+        storageClassName: local-path
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-postgres
+  labels:
+    app: nextcloud-postgres
+spec:
+  selector:
+    app: nextcloud-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

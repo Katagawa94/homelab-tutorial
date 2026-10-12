@@ -1,0 +1,81 @@
+# Kapitel 29: Ein CronJob startet nach Zeitplan einen Job, der einen Pod startet,
+# der seine Arbeit erledigt und sich dann beendet.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: daten-backup
+spec:
+  schedule: "30 3 * * *"          # täglich um 03:30 (Minute Stunde Tag Monat Wochentag)
+  timeZone: Europe/Berlin
+  concurrencyPolicy: Forbid       # nie zwei Backups gleichzeitig
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2             # bei Fehler höchstens 2 weitere Versuche
+      template:
+        metadata:
+          labels:
+            app: daten-backup
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: restic
+              image: restic/restic:0.19.1
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  # Nur sichern, was es gibt (z. B. /data/photos erst ab Immich)
+                  PFADE=""
+                  for d in /data/nextcloud /data/photos; do
+                    [ -d "$d" ] && PFADE="$PFADE $d"
+                  done
+                  echo "== Gesichert wird:$PFADE"
+                  echo "== Repository prüfen (beim ersten Mal anlegen)"
+                  restic cat config > /dev/null 2>&1 || restic init
+                  echo "== Sichern"
+                  restic backup $PFADE --tag homelab --host k3s
+                  echo "== Alte Stände aufräumen"
+                  restic forget --tag homelab --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --prune
+                  echo "== Repository prüfen"
+                  restic check
+              env:
+                - name: RESTIC_REPOSITORY   # "pve" ist in ssh-config definiert
+                  value: sftp:pve:/mnt/pve/usb-backup/restic-homelab
+                - name: RESTIC_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: restic-backup
+                      key: RESTIC_PASSWORD
+                - name: TZ
+                  value: Europe/Berlin
+              volumeMounts:
+                - name: daten
+                  mountPath: /data
+                  readOnly: true            # das Backup darf die Daten nur lesen
+                - name: ssh
+                  mountPath: /root/.ssh
+                  readOnly: true
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  memory: 1Gi
+          volumes:
+            - name: daten                   # die ganze Datenplatte der VM, direkt als Ordner
+              hostPath:
+                path: /data
+                type: Directory
+            - name: ssh                     # SSH-Konfiguration + privater Schlüssel in einem Ordner
+              projected:
+                defaultMode: 0400           # SSH verlangt strenge Dateirechte
+                sources:
+                  - configMap:
+                      name: restic-ssh-config
+                  - secret:
+                      name: restic-backup
+                      items:
+                        - key: id_ed25519
+                          path: id_ed25519

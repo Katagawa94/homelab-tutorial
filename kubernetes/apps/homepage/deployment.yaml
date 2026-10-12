@@ -1,4 +1,4 @@
-# Kapitel 22: Homepage
+# Kapitel 25: Homepage
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,7 +33,7 @@ spec:
               value: $(MY_POD_IP):3000,homepage.tail1a2b3c.ts.net
           envFrom:
             - secretRef:
-                name: homepage-keys       # API-Schlüssel für die Widgets (Kapitel 22)
+                name: homepage-keys       # API-Schlüssel für die Widgets (Kapitel 25)
                 optional: true            # Homepage startet auch ohne
           ports:
             - name: http

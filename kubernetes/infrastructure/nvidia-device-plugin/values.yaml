@@ -1,4 +1,4 @@
-# Kapitel 16: Einstellungen für das Helm-Chart "nvidia-device-plugin".
+# Kapitel 19: Einstellungen für das Helm-Chart "nvidia-device-plugin".
 # Alle Möglichkeiten: helm show values nvdp/nvidia-device-plugin
 
 # Das Plugin selbst muss mit der NVIDIA-Runtime laufen, um die GPU zu sehen.
@@ -6,9 +6,9 @@
 runtimeClassName: nvidia
 
 # Das Plugin läuft nur auf Nodes mit dem Label nvidia.com/gpu.present=true
-# (in Kapitel 16 per kubectl label gesetzt).
+# (in Kapitel 19 per kubectl label gesetzt).
 
-# Kapitel 24 (optional): Time-Slicing. Die eine RTX 2070 Super wird als 2 "GPUs"
+# Kapitel 26 (optional): Time-Slicing. Die eine RTX 2070 Super wird als 2 "GPUs"
 # gemeldet, damit Jellyfin UND Immich sie gleichzeitig nutzen können.
 # Zum Aktivieren die "#" vor den folgenden Zeilen entfernen.
 # config:

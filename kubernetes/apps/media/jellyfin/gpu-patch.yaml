@@ -1,4 +1,4 @@
-# Kapitel 16: Ergänzt das Jellyfin-Deployment um die NVIDIA-GPU.
+# Kapitel 19: Ergänzt das Jellyfin-Deployment um die NVIDIA-GPU.
 # Wird über "patches" in kustomization.yaml aktiviert.
 apiVersion: apps/v1
 kind: Deployment

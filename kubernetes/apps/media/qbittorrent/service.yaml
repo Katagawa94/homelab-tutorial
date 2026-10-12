@@ -1,4 +1,4 @@
-# Kapitel 18: Weboberfläche im Cluster unter http://qbittorrent:8080 (für Sonarr & Radarr)
+# Kapitel 21: Weboberfläche im Cluster unter http://qbittorrent:8080 (für Sonarr & Radarr)
 apiVersion: v1
 kind: Service
 metadata:

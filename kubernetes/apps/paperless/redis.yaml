@@ -1,4 +1,4 @@
-# Kapitel 25: Valkey (Redis-kompatibel) als Warteschlange für Paperless.
+# Kapitel 27: Valkey (Redis-kompatibel) als Warteschlange für Paperless.
 # Paperless legt hier Aufgaben ab ("Dokument X verarbeiten"), sein Hintergrund-Prozess arbeitet sie ab.
 apiVersion: apps/v1
 kind: Deployment

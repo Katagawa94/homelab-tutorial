@@ -1,4 +1,4 @@
-# Kapitel 21: Seerr: Wunschliste für Filme und Serien, mit Anbindung an Jellyfin.
+# Kapitel 24: Seerr: Wunschliste für Filme und Serien, mit Anbindung an Jellyfin.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

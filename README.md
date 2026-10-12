@@ -1,28 +1,30 @@
 # 🏠 Homelab-Tutorial: Kubernetes lernen mit Jellyfin & Tailscale
 
 Ein Schritt-für-Schritt-Tutorial **für Einsteiger**: Aus einem alten Desktop-PC wird mit **Proxmox** und
-**Kubernetes (k3s)** ein Homelab. Darauf laufen **Jellyfin** (auch auf dem Samsung-TV, mit GPU-Transcoding),
-der ***arr-Stack** mit Proton VPN und weitere Self-Hosted-Apps, von unterwegs sicher erreichbar über **Tailscale**.
+**Kubernetes (k3s)** ein Homelab. Zuerst kommen die wichtigsten Dienste: **Vaultwarden** (Passwörter),
+**Nextcloud** (eigene Cloud) und **Pi-hole** (Werbeblocker). Danach **Jellyfin** (auch auf dem Samsung-TV, mit
+GPU-Transcoding), der ***arr-Stack** mit Proton VPN und weitere Self-Hosted-Apps, alles von unterwegs sicher erreichbar
+über **Tailscale**.
 
 Das eigentliche Ziel: **Kubernetes lernen**, an Apps, die du danach wirklich benutzt.
 
 📖 **Als Website lesen (mit Suche und Navigation):** <https://katagawa94.github.io/homelab-tutorial/>
 
 ```
-Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin, *arr, Vaultwarden, Immich, …
+Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Vaultwarden, Nextcloud, Pi-hole, Jellyfin, *arr, …
                                                           ▲
                               Laptop / Handy ── Tailscale ┘   Samsung-TV ── Heimnetz
 ```
 
 ## Voraussetzungen
 
-- Ein alter PC (hier: Ryzen 5, 16 GB RAM, RTX 2070 Super, 500 GB HDD)
+- Ein alter PC (hier: Ryzen 5, 16 GB RAM, RTX 2070 Super, 500 GB SSD + 1 TB HDD)
 - Ein eigener Rechner mit Linux, macOS oder Windows. Die Werkzeuge liefert unter Nix die [`flake.nix`](flake.nix) (`nix develop`)
 - Keine Kubernetes-Vorkenntnisse. Grundlegende Terminal-Erfahrung hilft
 
 ## Inhalt
 
-➡️ **Los geht's mit [00 – Einführung](docs/00-einfuehrung.md).** Alle 33 Kapitel (00–32) sind fertig.
+➡️ **Los geht's mit [00 – Einführung](docs/00-einfuehrung.md).** Alle 35 Kapitel (00–34) sind fertig.
 
 ### Teil A – Fundament ✅
 | # | Kapitel |
@@ -42,49 +44,54 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Jellyfin
 | 08 | [Konfiguration & Daten](docs/08-konfiguration-daten.md) |
 | 09 | [Helm](docs/09-helm.md) |
 
-### Teil C – Das Homelab-Herz ✅
+### Teil C – Die Plattform ✅
 | # | Kapitel |
 |---|---------|
 | 10 | [Tailscale Operator](docs/10-tailscale-operator.md) |
-| 11 | [Jellyfin](docs/11-jellyfin.md) |
-| 12 | [Jellyfin auf dem Samsung-TV](docs/12-samsung-tv.md) |
-| 13 | [GitOps mit Argo CD](docs/13-argocd.md) |
-| 14 | [Secrets im Git](docs/14-sealed-secrets.md) |
-| 15 | [GPU an die VM durchreichen](docs/15-gpu-passthrough.md) |
-| 16 | [GPU in Kubernetes](docs/16-gpu-kubernetes.md) |
+| 11 | [GitOps mit Argo CD](docs/11-argocd.md) |
+| 12 | [Secrets im Git](docs/12-sealed-secrets.md) |
 
-### Teil D – *arr-Stack ✅
+### Teil D – Die wichtigsten Dienste ✅
 | # | Kapitel |
 |---|---------|
-| 17 | [Wie der *arr-Stack zusammenspielt](docs/17-arr-ueberblick.md) |
-| 18 | [qBittorrent + Proton VPN](docs/18-qbittorrent-vpn.md) |
-| 19 | [Prowlarr](docs/19-prowlarr.md) |
-| 20 | [Sonarr & Radarr](docs/20-sonarr-radarr.md) |
-| 21 | [Bazarr & Seerr](docs/21-bazarr-seerr.md) |
+| 13 | [Vaultwarden](docs/13-vaultwarden.md) |
+| 14 | [Nextcloud](docs/14-nextcloud.md) |
+| 15 | [Pi-hole](docs/15-pihole.md) |
 
-### Teil E – Weitere Apps ✅
+### Teil E – Heimkino und *arr-Stack ✅
 | # | Kapitel |
 |---|---------|
-| 22 | [Homepage](docs/22-homepage.md) |
-| 23 | [Vaultwarden](docs/23-vaultwarden.md) |
-| 24 | [Immich](docs/24-immich.md) |
-| 25 | [Paperless-ngx](docs/25-paperless.md) |
-| 26 | [Uptime Kuma](docs/26-uptime-kuma.md) |
+| 16 | [Jellyfin](docs/16-jellyfin.md) |
+| 17 | [Jellyfin auf dem Samsung-TV](docs/17-samsung-tv.md) |
+| 18 | [GPU an die VM durchreichen](docs/18-gpu-passthrough.md) |
+| 19 | [GPU in Kubernetes](docs/19-gpu-kubernetes.md) |
+| 20 | [Wie der *arr-Stack zusammenspielt](docs/20-arr-ueberblick.md) |
+| 21 | [qBittorrent + Proton VPN](docs/21-qbittorrent-vpn.md) |
+| 22 | [Prowlarr](docs/22-prowlarr.md) |
+| 23 | [Sonarr & Radarr](docs/23-sonarr-radarr.md) |
+| 24 | [Bazarr & Seerr](docs/24-bazarr-seerr.md) |
 
-### Teil F – Betrieb ✅
+### Teil F – Weitere Apps ✅
 | # | Kapitel |
 |---|---------|
-| 27 | [Backup & Restore](docs/27-backup-restore.md) |
-| 28 | [Updates & Wartung](docs/28-updates-wartung.md) |
-| 29 | [Troubleshooting-Handbuch](docs/29-troubleshooting.md) |
+| 25 | [Homepage](docs/25-homepage.md) |
+| 26 | [Immich](docs/26-immich.md) |
+| 27 | [Paperless-ngx](docs/27-paperless.md) |
+| 28 | [Uptime Kuma](docs/28-uptime-kuma.md) |
 
-### Teil G – Ausbau ✅
+### Teil G – Betrieb ✅
 | # | Kapitel |
 |---|---------|
-| 30 | [SSD nachrüsten](docs/30-ssd-nachruesten.md) |
-| 31 | [Monitoring mit Prometheus & Grafana](docs/31-monitoring.md) |
-| 32 | [Mehr Nodes](docs/32-mehr-nodes.md) |
+| 29 | [Backup & Restore](docs/29-backup-restore.md) |
+| 30 | [Updates & Wartung](docs/30-updates-wartung.md) |
+| 31 | [Troubleshooting-Handbuch](docs/31-troubleshooting.md) |
 
+### Teil H – Ausbau ✅
+| # | Kapitel |
+|---|---------|
+| 32 | [Speicher erweitern](docs/32-speicher-erweitern.md) |
+| 33 | [Monitoring mit Prometheus & Grafana](docs/33-monitoring.md) |
+| 34 | [Mehr Nodes](docs/34-mehr-nodes.md) |
 📖 [Glossar](docs/glossar.md) · 🗺️ [Gesamtplan](PLAN.md)
 
 ## Repository-Struktur

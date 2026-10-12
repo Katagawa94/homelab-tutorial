@@ -1,4 +1,4 @@
-# Kapitel 25: Paperless-ngx, Dokumentenarchiv.
+# Kapitel 27: Paperless-ngx, Dokumentenarchiv.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

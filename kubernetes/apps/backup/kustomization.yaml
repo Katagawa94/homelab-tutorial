@@ -1,0 +1,19 @@
+# Kapitel 29: Nächtliches Backup der wertvollen Dateien auf der Datenplatte
+# (/data/photos von Immich, /data/nextcloud von Nextcloud) mit restic auf die
+# USB-Platte am Proxmox-Host. Filme und Downloads werden bewusst NICHT gesichert.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: backup
+resources:
+  - namespace.yaml
+  - cronjob.yaml
+configMapGenerator:
+  - name: restic-ssh-config
+    files:
+      - config=ssh-config
+    options:
+      # Kein Hash im Namen: Der CronJob startet ohnehin jedes Mal einen neuen Pod,
+      # und der Restore-Test (examples/29-backup) kann den festen Namen verwenden.
+      disableNameSuffixHash: true
+# Das Secret "restic-backup" (Repository-Passwort + SSH-Schlüssel) liegt verschlüsselt
+# in kubernetes/secrets/backup/restic-backup.yaml (Kapitel 29).
