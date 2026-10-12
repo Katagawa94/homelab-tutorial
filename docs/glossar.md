@@ -20,6 +20,9 @@ wenn ein Begriff zum ersten Mal auftaucht.
 - **SVM (AMD-V)** – CPU-Funktion für Virtualisierung bei AMD-Prozessoren. Ohne sie laufen keine VMs.
 - **IOMMU** – Mainboard-Funktion, mit der man echte Hardware (z. B. die Grafikkarte) exklusiv an eine VM geben kann.
 - **VFIO** – Platzhalter-Treiber in Linux, der ein Gerät (z. B. die Grafikkarte) für eine VM reserviert, damit der Host es nicht selbst benutzt.
+- **C-States** – Schlafzustände der CPU. Je tiefer (z. B. `C6`), desto weniger Strom braucht ein Kern, wenn er gerade nichts zu tun hat.
+- **CPU-Governor** – Die Regel, nach der Linux den CPU-Takt wählt: `performance` = immer volle Kraft, `schedutil`/`powersave` = nach Bedarf.
+- **ASPM** – *Active State Power Management*: PCIe-Geräte wie Grafikkarte oder Netzwerkkarte dürfen im Leerlauf Strom sparen.
 - **PCIe-Passthrough** – Eine echte PCIe-Karte (bei uns die RTX 2070 Super) wird direkt an eine VM durchgereicht. Die VM benutzt sie, als wäre sie eingebaut.
 
 ## Netzwerk

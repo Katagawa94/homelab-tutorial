@@ -154,6 +154,9 @@ Wo die Optionen genau liegen, hängt vom Mainboard-Hersteller ab. Typische Orte:
 
 Setze beide auf **Enabled** (nicht „Auto“). Speichere mit `F10` und starte neu.
 
+> 🔌 **Strom sparen:** Das BIOS hat auch Einstellungen, die den Verbrauch im Leerlauf deutlich senken. Darum kümmern wir uns
+> in [Kapitel 35](35-strom-sparen.md#2-bios-die-größten-hebel), wenn alles läuft.
+
 > 💡 **Option nicht gefunden?** Viele BIOS haben eine „Easy Mode“-Ansicht. Wechsle mit `F7` in den „Advanced Mode“.
 > Fehlt IOMMU komplett, hilft oft ein BIOS-Update von der Hersteller-Seite.
 
