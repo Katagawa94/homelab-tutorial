@@ -1,0 +1,14 @@
+# Kapitel 15: Weboberfläche, nur im Cluster (von außen über den Tailscale-Ingress).
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-web
+  labels:
+    app: pihole
+spec:
+  selector:
+    app: pihole
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

@@ -1,4 +1,4 @@
-# Kapitel 31: Monitoring mit Prometheus und Grafana.
+# Kapitel 33: Monitoring mit Prometheus und Grafana.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

@@ -1,4 +1,4 @@
-# Kapitel 26: Uptime Kuma, Überwachung.
+# Kapitel 28: Uptime Kuma, Überwachung.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

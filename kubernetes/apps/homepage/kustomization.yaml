@@ -1,4 +1,4 @@
-# Kapitel 22: Homepage, das Dashboard für alle Dienste.
+# Kapitel 25: Homepage, das Dashboard für alle Dienste.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: homepage

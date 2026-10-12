@@ -1,0 +1,19 @@
+# Kapitel 14: Die Dateien deiner Nextcloud liegen auf der Datenplatte unter /data/nextcloud.
+# Ein von Hand angelegtes PersistentVolume: Retain, für genau einen PVC reserviert.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nextcloud-data
+spec:
+  capacity:
+    storage: 200Gi                # nur eine Angabe; hostPath prüft die Größe nicht
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain   # deine Dateien NIEMALS automatisch löschen
+  storageClassName: ""            # kein automatischer Lieferdienst, dieses PV ist handgemacht
+  claimRef:                       # reserviert dieses PV für genau diesen PVC
+    namespace: nextcloud
+    name: nextcloud-data
+  hostPath:
+    path: /data/nextcloud         # vorher in der VM anlegen (Kapitel 14)
+    type: Directory

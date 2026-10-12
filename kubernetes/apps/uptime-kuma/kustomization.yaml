@@ -1,4 +1,4 @@
-# Kapitel 26: Uptime Kuma überwacht, ob alle Dienste laufen.
+# Kapitel 28: Uptime Kuma überwacht, ob alle Dienste laufen.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: uptime-kuma

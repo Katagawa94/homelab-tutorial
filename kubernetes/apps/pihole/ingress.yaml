@@ -1,0 +1,15 @@
+# Kapitel 15: Pi-hole-Weboberfläche im Tailnet unter https://pihole.<tailnet>.ts.net/admin
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pihole
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: pihole-web
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - pihole

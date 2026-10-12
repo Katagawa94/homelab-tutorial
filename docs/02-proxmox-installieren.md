@@ -60,7 +60,7 @@ Wähle **Install Proxmox VE (Graphical)** und akzeptiere die Lizenz.
 
 ### Zielfestplatte
 
-Wähle bei **Target Harddisk** die 500-GB-Festplatte und klicke auf **Options**:
+Wähle bei **Target Harddisk** die **500-GB-SSD** (nicht die HDD, falls schon eingebaut) und klicke auf **Options**:
 
 | Feld | Wert | Erklärung |
 |------|------|-----------|
@@ -186,7 +186,7 @@ root@pve:~#
 
 ## 8. Vorab-Check: Lässt sich die Grafikkarte durchreichen?
 
-Die RTX 2070 Super soll in Kapitel 15 an die Kubernetes-VM gehen. Damit das klappt, muss **IOMMU** aktiv sein und die
+Die RTX 2070 Super soll in Kapitel 18 an die Kubernetes-VM gehen. Damit das klappt, muss **IOMMU** aktiv sein und die
 Grafikkarte in einer **eigenen IOMMU-Gruppe** stecken. Wir prüfen das jetzt. Ist etwas nicht in Ordnung, erfährst du es,
 bevor du Stunden investiert hast.
 
@@ -230,8 +230,8 @@ Die Grafikkarte hat vier Teile (Bild, Ton, USB, USB-C), und **in ihrer Gruppe st
 
 | Ergebnis | Bedeutung |
 |----------|-----------|
-| NVIDIA-Geräte allein in ihrer Gruppe | Perfekt, Kapitel 15 wird problemlos |
-| In der Gruppe stehen zusätzlich andere Geräte (z. B. SATA, Netzwerk) | Grafikkarte in den **obersten** PCIe-Slot stecken (der hängt direkt an der CPU). Hilft das nicht, gibt es in Kapitel 15 einen Workaround |
+| NVIDIA-Geräte allein in ihrer Gruppe | Perfekt, Kapitel 18 wird problemlos |
+| In der Gruppe stehen zusätzlich andere Geräte (z. B. SATA, Netzwerk) | Grafikkarte in den **obersten** PCIe-Slot stecken (der hängt direkt an der CPU). Hilft das nicht, gibt es in Kapitel 18 einen Workaround |
 | Die Schleife gibt gar nichts aus | IOMMU ist nicht aktiv → BIOS prüfen |
 
 Notiere dir die Adresse der Grafikkarte (im Beispiel `0a:00`) auf dem Spickzettel.

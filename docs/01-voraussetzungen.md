@@ -14,13 +14,15 @@
 
 | ✔ | Was | Wofür |
 |---|-----|-------|
-| ☐ | **Desktop-PC** (Ryzen 5, 16 GB RAM, RTX 2070 Super, 500-GB-HDD) | wird der Server |
+| ☐ | **Desktop-PC** (Ryzen 5, 16 GB RAM, RTX 2070 Super, 500-GB-SSD) | wird der Server |
+| ☐ | *(später)* **1-TB-HDD** | mehr Platz für Medien, Fotos und Dateien ([Kapitel 32](32-speicher-erweitern.md)) |
 | ☐ | **Netzwerkkabel** zum Router | Proxmox braucht kabelgebundenes Netzwerk, WLAN wird nicht unterstützt |
 | ☐ | **Monitor + Tastatur** | nur für die Installation, danach läuft alles über den Browser |
 | ☐ | **USB-Stick** (mind. 4 GB) | Installationsmedium für Proxmox, **wird komplett gelöscht** |
-| ☐ | *(später)* **USB-Festplatte** | Ziel für Backups ([Kapitel 27](27-backup-restore.md)) |
+| ☐ | *(später)* **USB-Festplatte** | Ziel für Backups ([Kapitel 29](29-backup-restore.md)) |
 
-> ⚠️ **Achtung: Die 500-GB-Festplatte wird komplett gelöscht.** Sichere vorher alles, was du davon noch brauchst.
+> ⚠️ **Achtung: Die 500-GB-SSD wird komplett gelöscht.** Sichere vorher alles, was du davon noch brauchst.
+> Die 1-TB-HDD brauchst du erst in [Kapitel 32](32-speicher-erweitern.md). Ist sie schon eingebaut, lass sie bei der Installation einfach links liegen.
 > Sind noch weitere Festplatten eingebaut, notiere dir ihre Größe, damit du bei der Installation nicht die falsche erwischst.
 
 ## 2. Konten anlegen
@@ -41,11 +43,11 @@
 
 ### GitHub
 
-Hast du bereits. Du brauchst es gleich für deinen SSH-Key und später für GitOps (Kapitel 13).
+Hast du bereits. Du brauchst es gleich für deinen SSH-Key und später für GitOps (Kapitel 11).
 
 ### Proton VPN
 
-Brauchst du erst in Kapitel 18 (qBittorrent). Du musst jetzt noch nichts abschließen.
+Brauchst du erst in Kapitel 21 (qBittorrent). Du musst jetzt noch nichts abschließen.
 
 ## 3. Werkzeuge auf deinem Rechner
 
@@ -136,7 +138,7 @@ Jetzt geht es an den Desktop-PC. Wir schalten drei Dinge ein:
 | Einstellung | Wofür | Typischer Name |
 |-------------|-------|----------------|
 | **SVM** | Ohne sie laufen keine VMs | `SVM Mode`, `AMD-V`, `Virtualization` |
-| **IOMMU** | Grafikkarte später an die VM durchreichen (Kapitel 15) | `IOMMU`, `AMD-Vi` |
+| **IOMMU** | Grafikkarte später an die VM durchreichen (Kapitel 18) | `IOMMU`, `AMD-Vi` |
 | **Nach Stromausfall einschalten** | Server startet von selbst wieder | `Restore on AC Power Loss` → `Power On` |
 
 **So kommst du ins BIOS:** PC einschalten und sofort mehrmals `Entf` (`Del`) oder `F2` drücken.

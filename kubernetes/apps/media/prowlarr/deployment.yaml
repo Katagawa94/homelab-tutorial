@@ -1,4 +1,4 @@
-# Kapitel 19: Prowlarr verwaltet die Indexer (Suchquellen) für Sonarr und Radarr.
+# Kapitel 22: Prowlarr verwaltet die Indexer (Suchquellen) für Sonarr und Radarr.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -3,7 +3,27 @@
 # namespace + podSelector: Homepage zeigt Status, CPU und RAM der Pods an (Rechte aus rbac.yaml).
 # widget: zeigt Live-Daten der App. Die API-Schlüssel kommen aus dem Secret "homepage-keys"
 #         und werden über {{HOMEPAGE_VAR_…}} eingesetzt.
-# "tail1a2b3c.ts.net" durch deinen Tailnet-Namen ersetzen (Kapitel 22, Schritt 1).
+# "tail1a2b3c.ts.net" durch deinen Tailnet-Namen ersetzen (Kapitel 13, Schritt 1).
+
+- Wichtig:
+    - Vaultwarden:
+        icon: vaultwarden.svg
+        href: https://vaultwarden.tail1a2b3c.ts.net
+        description: Passwörter
+        namespace: vaultwarden
+        podSelector: app=vaultwarden
+    - Nextcloud:
+        icon: nextcloud.svg
+        href: https://nextcloud.tail1a2b3c.ts.net
+        description: Dateien, Kalender, Kontakte
+        namespace: nextcloud
+        podSelector: ""
+    - Pi-hole:
+        icon: pi-hole.svg
+        href: https://pihole.tail1a2b3c.ts.net/admin/
+        description: Werbeblocker (DNS)
+        namespace: pihole
+        podSelector: app=pihole
 
 - Medien:
     - Jellyfin:
@@ -74,12 +94,6 @@
         podSelector: app=bazarr
 
 - Werkzeuge:
-    - Vaultwarden:
-        icon: vaultwarden.svg
-        href: https://vaultwarden.tail1a2b3c.ts.net
-        description: Passwörter
-        namespace: vaultwarden
-        podSelector: app=vaultwarden
     - Paperless:
         icon: paperless-ngx.svg
         href: https://paperless.tail1a2b3c.ts.net

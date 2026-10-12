@@ -1,0 +1,49 @@
+# Kapitel 29: Einmaliger Test-Pod: Kann restic das Backup lesen?
+# Zeigt alle Sicherungsstände und spielt einen Teil probeweise nach /tmp/restore zurück.
+# Nutzt dieselben Einstellungen wie der CronJob in kubernetes/apps/backup/.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: restore-test
+  namespace: backup
+spec:
+  restartPolicy: Never
+  containers:
+    - name: restic
+      image: restic/restic:0.19.1
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          restic snapshots
+          echo "== Inhalt des neuesten Stands (Auszug)"
+          restic ls latest | head -20
+          echo "== Probe-Wiederherstellung nach /tmp/restore"
+          restic restore latest --target /tmp/restore --include "/data/nextcloud" --verify 2>&1 | tail -5
+          du -sh /tmp/restore
+      env:
+        - name: RESTIC_REPOSITORY
+          value: sftp:pve:/mnt/pve/usb-backup/restic-homelab
+        - name: RESTIC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: restic-backup
+              key: RESTIC_PASSWORD
+      volumeMounts:
+        - name: ssh
+          mountPath: /root/.ssh
+          readOnly: true
+      resources:
+        limits:
+          memory: 1Gi
+  volumes:
+    - name: ssh
+      projected:
+        defaultMode: 0400
+        sources:
+          - configMap:
+              name: restic-ssh-config
+          - secret:
+              name: restic-backup
+              items:
+                - key: id_ed25519
+                  path: id_ed25519

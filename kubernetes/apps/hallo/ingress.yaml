@@ -1,0 +1,15 @@
+# Kapitel 11: https://hallo.<tailnet>.ts.net
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hallo
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: hallo
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - hallo

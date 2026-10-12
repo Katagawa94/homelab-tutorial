@@ -1,4 +1,4 @@
-# Kapitel 17: Gemeinsame Einstellungen für alle Medien-Apps.
+# Kapitel 20: Gemeinsame Einstellungen für alle Medien-Apps.
 # Wird in den Deployments per "envFrom" als Umgebungsvariablen eingebunden.
 apiVersion: v1
 kind: ConfigMap

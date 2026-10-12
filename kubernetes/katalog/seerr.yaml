@@ -1,4 +1,4 @@
-# Kapitel 21: Seerr (Wunschliste).
+# Kapitel 24: Seerr (Wunschliste).
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

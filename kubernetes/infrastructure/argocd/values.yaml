@@ -1,4 +1,4 @@
-# Kapitel 13: Einstellungen für das Helm-Chart "argo-cd".
+# Kapitel 11: Einstellungen für das Helm-Chart "argo-cd".
 # Alle Möglichkeiten: helm show values argo/argo-cd
 
 configs:

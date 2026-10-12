@@ -1,4 +1,4 @@
-# Kapitel 24 (optional): Machine Learning auf der NVIDIA-GPU (CUDA).
+# Kapitel 26 (optional): Machine Learning auf der NVIDIA-GPU (CUDA).
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -1,4 +1,4 @@
-# Kapitel 24: Machine Learning, erkennt Gesichter und Objekte für die Suche.
+# Kapitel 26: Machine Learning, erkennt Gesichter und Objekte für die Suche.
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

@@ -1,4 +1,4 @@
-# Kapitel 24: Valkey (Redis-kompatibel) als Warteschlange für Immich-Hintergrundaufgaben.
+# Kapitel 26: Valkey (Redis-kompatibel) als Warteschlange für Immich-Hintergrundaufgaben.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

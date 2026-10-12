@@ -1,0 +1,19 @@
+# Kapitel 14: Nextcloud, deine eigene Cloud für Dateien, Kalender und Kontakte.
+#   nextcloud           Weboberfläche + Sync (Apache/PHP), mit Cron-Sidecar für Hintergrundaufgaben
+#   nextcloud-postgres  Datenbank (StatefulSet)
+#   nextcloud-redis     Zwischenspeicher und Datei-Sperren (Valkey)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: nextcloud
+resources:
+  - namespace.yaml
+  - pv-data.yaml
+  - pvc-data.yaml
+  - pvc-html.yaml
+  - postgres.yaml
+  - redis.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+# Das Secret "nextcloud-secrets" (Datenbank- und Admin-Passwort) liegt verschlüsselt
+# in kubernetes/secrets/nextcloud/ (Kapitel 14).

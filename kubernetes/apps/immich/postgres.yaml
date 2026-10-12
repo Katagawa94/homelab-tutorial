@@ -1,4 +1,4 @@
-# Kapitel 24: PostgreSQL mit den Erweiterungen, die Immich braucht (VectorChord).
+# Kapitel 26: PostgreSQL mit den Erweiterungen, die Immich braucht (VectorChord).
 #
 # Ein StatefulSet statt eines Deployments:
 #  - der Pod hat einen festen Namen (immich-postgres-0) statt einer Zufallsendung

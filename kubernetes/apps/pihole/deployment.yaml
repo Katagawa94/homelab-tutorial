@@ -1,0 +1,68 @@
+# Kapitel 15: Pi-hole (Version 6)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+  labels:
+    app: pihole
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate                # die Statistik-Datenbank verträgt keine zwei Pi-holes
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+    spec:
+      containers:
+        - name: pihole
+          image: pihole/pihole:2026.09.0
+          env:
+            - name: TZ
+              value: Europe/Berlin
+            - name: FTLCONF_webserver_api_password   # Passwort der Weboberfläche
+              valueFrom:
+                secretKeyRef:
+                  name: pihole-secrets
+                  key: WEB_PASSWORD
+            # Anfragen aus allen Netzen beantworten (Heimnetz, Tailnet, Cluster).
+            # Von außen erreichbar ist Pi-hole trotzdem nicht: Dein Router lässt nichts herein.
+            - name: FTLCONF_dns_listeningMode
+              value: ALL
+            # Wohin Pi-hole erlaubte Anfragen weiterreicht (hier: Quad9, datenschutzfreundlich)
+            - name: FTLCONF_dns_upstreams
+              value: 9.9.9.9;149.112.112.112
+          ports:
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: http
+              containerPort: 80
+          volumeMounts:
+            - name: config
+              mountPath: /etc/pihole
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe:
+            tcpSocket:
+              port: dns-tcp
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 20m
+              memory: 64Mi
+            limits:
+              memory: 512Mi
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: pihole-config

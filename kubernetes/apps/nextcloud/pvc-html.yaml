@@ -1,0 +1,14 @@
+# Kapitel 14: Programm, Einstellungen (config.php) und installierte Nextcloud-Apps.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nextcloud-html
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

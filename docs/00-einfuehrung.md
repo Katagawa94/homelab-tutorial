@@ -10,9 +10,11 @@
 
 Aus einem alten Desktop-PC wird ein kleiner Heimserver, ein **Homelab**. Darauf laufen am Ende:
 
+- **zuerst das Wichtigste:** **Vaultwarden** (Passwortmanager), **Nextcloud** (deine eigene Cloud für Dateien,
+  Kalender und Kontakte) und **Pi-hole** (blockt Werbung und Tracker für alle Geräte)
 - **Jellyfin**: dein eigenes „Netflix“ für Filme und Serien, auf dem Samsung-TV, dem Handy und dem Laptop
 - der ***arr-Stack**: Programme, die deine Mediensammlung automatisch organisieren
-- weitere nützliche Apps: Dashboard, Passwortmanager, Foto-Backup, Dokumentenarchiv
+- weitere nützliche Apps: Dashboard, Foto-Backup, Dokumentenarchiv, Überwachung
 - alles erreichbar **von unterwegs über Tailscale**, ohne einen einzigen offenen Port an deinem Router
 
 Das eigentliche Ziel ist aber: **Du lernst dabei Kubernetes.** Jedes Konzept wird genau dann erklärt,
@@ -28,7 +30,7 @@ wenn du es brauchst, und zwar an einer App, die du danach wirklich benutzt.
 ┌──────────────── Alter Desktop-PC: Proxmox VE ──────────────────────────────────────┐
 │                                                                                    │
 │   ┌──────────────── VM "k3s" (Ubuntu Server + Kubernetes) ───────────────────┐     │
-│   │   Jellyfin   Sonarr   Radarr   qBittorrent   Vaultwarden   Immich   …    │     │
+│   │   Vaultwarden   Nextcloud   Pi-hole   Jellyfin   Sonarr   Radarr   …   │     │
 │   │   RTX 2070 Super (für schnelles Video-Umwandeln)                         │     │
 │   └──────────────────────────────────────────────────────────────────────────┘     │
 └────────────────────────────────────────────────────────────────────────────────────┘
@@ -36,7 +38,7 @@ wenn du es brauchst, und zwar an einer App, die du danach wirklich benutzt.
 
 Die Schichten von unten nach oben:
 
-1. **Hardware**: dein Desktop-PC (Ryzen 5, 16 GB RAM, RTX 2070 Super, 500-GB-Festplatte)
+1. **Hardware**: dein Desktop-PC (Ryzen 5, 16 GB RAM, RTX 2070 Super, 500-GB-SSD, später zusätzlich eine 1-TB-HDD)
 2. **Proxmox VE**: verwaltet virtuelle Maschinen. Damit kannst du jederzeit Snapshots machen und bei Fehlern zurückspringen.
 3. **Eine VM mit Ubuntu Server**: das Betriebssystem, auf dem Kubernetes läuft
 4. **k3s**: ein schlankes Kubernetes
@@ -138,39 +140,42 @@ nicht nur einen Server hinstellen.
 - [08 – Konfiguration & Daten](08-konfiguration-daten.md)
 - [09 – Helm](09-helm.md)
 
-### Teil C – Das Homelab-Herz
+### Teil C – Die Plattform
 - [10 – Tailscale Operator](10-tailscale-operator.md)
-- [11 – Jellyfin](11-jellyfin.md)
-- [12 – Jellyfin auf dem Samsung-TV](12-samsung-tv.md)
-- [13 – GitOps mit Argo CD](13-argocd.md)
-- [14 – Secrets im Git](14-sealed-secrets.md)
-- [15 – GPU an die VM durchreichen](15-gpu-passthrough.md)
-- [16 – GPU in Kubernetes](16-gpu-kubernetes.md)
+- [11 – GitOps mit Argo CD](11-argocd.md)
+- [12 – Secrets im Git](12-sealed-secrets.md)
 
-### Teil D – *arr-Stack mit Proton VPN
-- [17 – Wie der *arr-Stack zusammenspielt](17-arr-ueberblick.md)
-- [18 – qBittorrent + Proton VPN](18-qbittorrent-vpn.md)
-- [19 – Prowlarr](19-prowlarr.md)
-- [20 – Sonarr & Radarr](20-sonarr-radarr.md)
-- [21 – Bazarr & Seerr](21-bazarr-seerr.md)
+### Teil D – Die wichtigsten Dienste
+- [13 – Vaultwarden](13-vaultwarden.md)
+- [14 – Nextcloud](14-nextcloud.md)
+- [15 – Pi-hole](15-pihole.md)
 
-### Teil E – Weitere Apps
-- [22 – Homepage](22-homepage.md)
-- [23 – Vaultwarden](23-vaultwarden.md)
-- [24 – Immich](24-immich.md)
-- [25 – Paperless-ngx](25-paperless.md)
-- [26 – Uptime Kuma](26-uptime-kuma.md)
+### Teil E – Heimkino und *arr-Stack
+- [16 – Jellyfin](16-jellyfin.md)
+- [17 – Jellyfin auf dem Samsung-TV](17-samsung-tv.md)
+- [18 – GPU an die VM durchreichen](18-gpu-passthrough.md)
+- [19 – GPU in Kubernetes](19-gpu-kubernetes.md)
+- [20 – Wie der *arr-Stack zusammenspielt](20-arr-ueberblick.md)
+- [21 – qBittorrent + Proton VPN](21-qbittorrent-vpn.md)
+- [22 – Prowlarr](22-prowlarr.md)
+- [23 – Sonarr & Radarr](23-sonarr-radarr.md)
+- [24 – Bazarr & Seerr](24-bazarr-seerr.md)
 
-### Teil F – Betrieb
-- [27 – Backup & Restore](27-backup-restore.md)
-- [28 – Updates & Wartung](28-updates-wartung.md)
-- [29 – Troubleshooting-Handbuch](29-troubleshooting.md)
+### Teil F – Weitere Apps
+- [25 – Homepage](25-homepage.md)
+- [26 – Immich](26-immich.md)
+- [27 – Paperless-ngx](27-paperless.md)
+- [28 – Uptime Kuma](28-uptime-kuma.md)
 
-### Teil G – Ausbau
-- [30 – SSD nachrüsten](30-ssd-nachruesten.md)
-- [31 – Monitoring mit Prometheus & Grafana](31-monitoring.md)
-- [32 – Mehr Nodes](32-mehr-nodes.md)
+### Teil G – Betrieb
+- [29 – Backup & Restore](29-backup-restore.md)
+- [30 – Updates & Wartung](30-updates-wartung.md)
+- [31 – Troubleshooting-Handbuch](31-troubleshooting.md)
 
+### Teil H – Ausbau
+- [32 – Speicher erweitern](32-speicher-erweitern.md)
+- [33 – Monitoring mit Prometheus & Grafana](33-monitoring.md)
+- [34 – Mehr Nodes](34-mehr-nodes.md)
 Die vollständige Planung findest du in [PLAN.md](../PLAN.md).
 
 ## 🎓 Was du gelernt hast

@@ -33,7 +33,7 @@ done
 echo "▶ ${#plain[@]} einzelne Dateien"
 "${KUBECONFORM[@]}" "${plain[@]}"
 
-# 3. GPU-Patches testweise mitbauen, damit sie nicht erst in Kapitel 16/24 auffallen
+# 3. GPU-Patches testweise mitbauen, damit sie nicht erst in Kapitel 19/26 auffallen
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 for patch in $(find kubernetes -name gpu-patch.yaml | sort); do

@@ -18,7 +18,7 @@ Wir bauen diese VM:
 |-------------|------|-------|
 | Name / ID | `k3s` / `100` | |
 | Betriebssystem | Ubuntu Server 24.04 LTS | Viele Anleitungen, offizielle NVIDIA-Treiber, Updates bis 2029 |
-| Maschinentyp / BIOS | `q35` / `OVMF (UEFI)` | **Voraussetzung für das GPU-Passthrough** in Kapitel 15 |
+| Maschinentyp / BIOS | `q35` / `OVMF (UEFI)` | **Voraussetzung für das GPU-Passthrough** in Kapitel 18 |
 | Secure Boot | aus | NVIDIA-Treiber lassen sich so ohne Signatur-Umwege installieren |
 | CPU | 8 Kerne, Typ `host` | Die VM sieht die echte CPU, was schneller ist |
 | RAM | 12 GB, ohne Ballooning | 4 GB bleiben für Proxmox. Mit durchgereichter GPU ist Ballooning ohnehin nicht möglich |
@@ -26,8 +26,8 @@ Wir bauen diese VM:
 | Disk 2 | 300 GB, **ohne Backup** | `/data`: Medien und Downloads |
 
 > 💡 **Warum zwei Festplatten?** Medien sind groß und lassen sich neu beschaffen. App-Konfigurationen sind klein und
-> wertvoll. Mit getrennten Platten sichern wir später nur das Wichtige (Disk 1) und können Disk 2 bei Bedarf mit einem
-> Klick auf eine größere Festplatte umziehen.
+> wertvoll. Mit getrennten Platten sichern wir später nur das Wichtige (Disk 1) und können Disk 2 mit einem Klick auf
+> eine größere Festplatte umziehen. Genau das passiert in Kapitel 32: Dann wandert Disk 2 auf die 1-TB-HDD.
 
 ## 1. Ubuntu-Image herunterladen
 
@@ -71,7 +71,7 @@ Klicke oben rechts auf **VM erstellen** und fülle die Reiter so aus:
 | TPM hinzufügen | ☐ |
 
 > 💡 `q35` und UEFI lassen sich nachträglich nur mit Neuinstallation ändern. Deshalb stellen wir sie schon jetzt
-> passend für die Grafikkarte ein, obwohl wir sie erst in Kapitel 15 brauchen.
+> passend für die Grafikkarte ein, obwohl wir sie erst in Kapitel 18 brauchen.
 
 ### Festplatten
 
@@ -82,7 +82,7 @@ Klicke oben rechts auf **VM erstellen** und fülle die Reiter so aus:
 | Größe (GiB) | `60` |
 | Discard | ☑ (gibt freigewordenen Platz an Proxmox zurück) |
 | IO thread | ☑ |
-| SSD-Emulation | ☐ (wir haben eine HDD) |
+| SSD-Emulation | ☑ (die Platte liegt auf einer SSD) |
 
 ### CPU
 
@@ -334,7 +334,7 @@ Die Apps im Cluster (Jellyfin, Sonarr, qBittorrent …) laufen später ebenfalls
 
 > 💡 **Warum liegen Downloads und Medien auf derselben Platte?** So kann der *arr-Stack fertige Downloads per
 > **Hardlink** in die Medienordner „verschieben“: Die Datei erscheint an beiden Orten, belegt aber nur einmal Platz.
-> Mehr dazu in Kapitel 17.
+> Mehr dazu in Kapitel 20.
 
 ## 9. Der erste Snapshot
 

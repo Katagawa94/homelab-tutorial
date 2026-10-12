@@ -1,0 +1,27 @@
+# Kapitel 29: Nächtliches Backup von /data/photos und /data/nextcloud mit restic.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backup
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Katagawa94/homelab-tutorial.git
+    targetRevision: HEAD
+    path: kubernetes/apps/backup
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: backup
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m

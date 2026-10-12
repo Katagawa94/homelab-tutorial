@@ -1,4 +1,4 @@
-# Kapitel 22: Homepage darf den Cluster LESEN (für Pod-Status und Auslastung).
+# Kapitel 25: Homepage darf den Cluster LESEN (für Pod-Status und Auslastung).
 #
 # ServiceAccount     = die Identität, unter der der Homepage-Pod mit Kubernetes spricht
 # ClusterRole        = eine Liste von Rechten (was darf man?)

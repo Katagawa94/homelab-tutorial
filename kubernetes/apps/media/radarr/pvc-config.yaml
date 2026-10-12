@@ -1,4 +1,4 @@
-# Kapitel 20: Einstellungen und Datenbank von radarr.
+# Kapitel 23: Einstellungen und Datenbank von radarr.
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

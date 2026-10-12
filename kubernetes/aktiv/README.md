@@ -13,4 +13,4 @@ git push
 ```
 
 Eine App deaktivieren: Datei hier löschen, committen, pushen. Die Application verschwindet,
-die von ihr angelegten Kubernetes-Objekte bleiben aber stehen (siehe Kapitel 13).
+die von ihr angelegten Kubernetes-Objekte bleiben aber stehen (siehe Kapitel 11).

@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Kapitel 28: Renovate schlägt per Pull Request neue Versionen vor.",
+  "description": "Kapitel 30: Renovate schlägt per Pull Request neue Versionen vor.",
   "extends": ["config:recommended"],
   "timezone": "Europe/Berlin",
   "schedule": ["before 6am on saturday"],

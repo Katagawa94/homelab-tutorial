@@ -102,7 +102,7 @@ namespace/tailscale created
 secret/operator-oauth created
 ```
 
-> 💡 In Kapitel 14 wandert dieses Secret verschlüsselt ins Git-Repository. Bis dahin existiert es nur im Cluster.
+> 💡 In Kapitel 12 wandert dieses Secret verschlüsselt ins Git-Repository. Bis dahin existiert es nur im Cluster.
 
 ## 4. Den Operator installieren
 
@@ -135,7 +135,7 @@ REVISION: 1
 
 > 💡 Die Versionsnummer `1.102.4` entspricht der Tailscale-Version. Eine neuere Version darfst du gern nehmen
 > (`helm search repo tailscale`). Trage sie dann auch in [`kubernetes/katalog/tailscale-operator.yaml`](../kubernetes/katalog/tailscale-operator.yaml) ein,
-> denn dort übernimmt Argo CD in Kapitel 13 die Verwaltung.
+> denn dort übernimmt Argo CD in Kapitel 11 die Verwaltung.
 
 ## 5. Läuft der Operator?
 
@@ -283,4 +283,4 @@ kubectl logs -n tailscale deployment/operator
 
 ---
 
-⬅️ **Zurück:** [09 – Helm](09-helm.md) · ➡️ **Weiter:** [11 – Jellyfin](11-jellyfin.md)
+⬅️ **Zurück:** [09 – Helm](09-helm.md) · ➡️ **Weiter:** [11 – GitOps mit Argo CD](11-argocd.md)

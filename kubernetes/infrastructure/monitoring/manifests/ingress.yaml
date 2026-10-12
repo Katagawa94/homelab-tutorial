@@ -1,4 +1,4 @@
-# Kapitel 31: Grafana im Tailnet unter https://grafana.<tailnet>.ts.net
+# Kapitel 33: Grafana im Tailnet unter https://grafana.<tailnet>.ts.net
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

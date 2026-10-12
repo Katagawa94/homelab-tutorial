@@ -1,4 +1,4 @@
-# Kapitel 11: Jellyfin im Heimnetz unter http://<VM-IP>:8096 (für den Samsung-TV)
+# Kapitel 16: Jellyfin im Heimnetz unter http://<VM-IP>:8096 (für den Samsung-TV)
 # und im Cluster unter http://jellyfin.media:8096
 apiVersion: v1
 kind: Service

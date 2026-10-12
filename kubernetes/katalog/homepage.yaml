@@ -1,4 +1,4 @@
-# Kapitel 22: Homepage, das Dashboard.
+# Kapitel 25: Homepage, das Dashboard.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

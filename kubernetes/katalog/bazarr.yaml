@@ -1,4 +1,4 @@
-# Kapitel 21: Bazarr (Untertitel).
+# Kapitel 24: Bazarr (Untertitel).
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

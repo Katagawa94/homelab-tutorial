@@ -1,4 +1,4 @@
-# Kapitel 21: bazarr im Cluster unter http://bazarr:6767 (aus dem Namespace media)
+# Kapitel 24: bazarr im Cluster unter http://bazarr:6767 (aus dem Namespace media)
 apiVersion: v1
 kind: Service
 metadata:

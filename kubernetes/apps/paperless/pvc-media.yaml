@@ -1,4 +1,4 @@
-# Kapitel 25: Die Dokumente selbst (Originale + durchsuchbare PDFs). Wertvoll → Backup!
+# Kapitel 27: Die Dokumente selbst (Originale + durchsuchbare PDFs). Wertvoll → Backup!
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

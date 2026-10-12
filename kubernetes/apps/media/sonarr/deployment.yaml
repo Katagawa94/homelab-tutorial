@@ -1,4 +1,4 @@
-# Kapitel 20: Sonarr verwaltet Serien.
+# Kapitel 23: Sonarr verwaltet Serien.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

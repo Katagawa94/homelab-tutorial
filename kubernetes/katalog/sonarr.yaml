@@ -1,4 +1,4 @@
-# Kapitel 20: Sonarr (Serien).
+# Kapitel 23: Sonarr (Serien).
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

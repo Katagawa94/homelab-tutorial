@@ -12,7 +12,7 @@
 ## Warum Helm?
 
 Für linkding hast du in Kapitel 08 vier Dateien geschrieben: PVC, Deployment, Service und Secret. Größere Apps wie
-Immich (Kapitel 24) oder Argo CD (Kapitel 13) bestehen aus **Dutzenden** Objekten. Die will niemand von Hand schreiben.
+Immich (Kapitel 26) oder Argo CD (Kapitel 11) bestehen aus **Dutzenden** Objekten. Die will niemand von Hand schreiben.
 
 **Helm** ist der Paketmanager für Kubernetes, vergleichbar mit `apt` oder `nix`:
 
@@ -266,7 +266,7 @@ bewusst einspielen. Deshalb gibt man die Version mit an:
 helm upgrade --install podinfo podinfo/podinfo --version 6.15.0 -n lernen -f examples/09-helm/podinfo-values.yaml
 ```
 
-Ab Kapitel 13 steht die Version in einer Datei im Git-Repository, und in Kapitel 28 schlägt dir **Renovate**
+Ab Kapitel 11 steht die Version in einer Datei im Git-Repository, und in Kapitel 30 schlägt dir **Renovate**
 automatisch Updates vor.
 
 ## 8. Übrigens: k3s nutzt selbst Helm
@@ -351,7 +351,9 @@ Du kennst jetzt die Bausteine, aus denen jede App im Homelab besteht:
 | PVC / PV / StorageClass | Daten, die bleiben | 08 |
 | Helm | fertige Pakete aus all dem | 09 |
 
-In **Teil C** wird es ernst: Tailscale im Cluster, Jellyfin, der Samsung-TV, GitOps und die Grafikkarte.
+In **Teil C** wird es ernst: Du baust die Plattform für alle weiteren Apps, mit Tailscale im Cluster, GitOps mit
+Argo CD und verschlüsselten Secrets. Danach folgen in **Teil D** die wichtigsten Dienste: Vaultwarden, Nextcloud
+und Pi-hole.
 
 ---
 

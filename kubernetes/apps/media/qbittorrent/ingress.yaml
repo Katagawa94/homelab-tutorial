@@ -1,4 +1,4 @@
-# Kapitel 18: Weboberfläche im Tailnet unter https://qbittorrent.<tailnet>.ts.net
+# Kapitel 21: Weboberfläche im Tailnet unter https://qbittorrent.<tailnet>.ts.net
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
