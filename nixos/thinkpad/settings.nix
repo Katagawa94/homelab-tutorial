@@ -6,6 +6,9 @@
   # Dein Tailnet-Name: Tailscale-Admin-Konsole → DNS → "Tailnet name"
   tailnet = "tail1a2b3c.ts.net";
 
+  # Tag für den Server im Tailnet. Muss in der Tailscale-Policy unter "tagOwners" stehen (Kapitel 36, Schritt 3).
+  tailscaleTag = "tag:server";
+
   # Modell aus https://github.com/NixOS/nixos-hardware/blob/master/flake.nix,
   # z. B. "lenovo-thinkpad-t480" oder "lenovo-thinkpad-t14". Unsicher? "lenovo-thinkpad" passt immer.
   hardwareModule = "lenovo-thinkpad";
