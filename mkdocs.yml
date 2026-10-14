@@ -114,4 +114,6 @@ nav:
       - 33-monitoring.md
       - 34-mehr-nodes.md
       - 35-strom-sparen.md
+  - "Teil I – Ein anderer Weg":
+      - 36-nixos-thinkpad.md
   - Glossar: glossar.md

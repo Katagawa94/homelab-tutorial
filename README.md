@@ -24,7 +24,7 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Vaultwar
 
 ## Inhalt
 
-➡️ **Los geht's mit [00 – Einführung](docs/00-einfuehrung.md).** Alle 36 Kapitel (00–35) sind fertig.
+➡️ **Los geht's mit [00 – Einführung](docs/00-einfuehrung.md).** Alle 37 Kapitel (00–36) sind fertig.
 
 ### Teil A – Fundament ✅
 | # | Kapitel |
@@ -93,6 +93,11 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Vaultwar
 | 33 | [Monitoring mit Prometheus & Grafana](docs/33-monitoring.md) |
 | 34 | [Mehr Nodes](docs/34-mehr-nodes.md) |
 | 35 | [Strom sparen](docs/35-strom-sparen.md) |
+
+### Teil I – Ein anderer Weg (optional)
+| # | Kapitel |
+|---|---------|
+| 36 | [NixOS-Server auf dem ThinkPad](docs/36-nixos-thinkpad.md) |
 📖 [Glossar](docs/glossar.md) · 🗺️ [Gesamtplan](PLAN.md)
 
 ## Repository-Struktur
@@ -100,8 +105,9 @@ Alter Desktop-PC ─► Proxmox VE ─► VM (Ubuntu) ─► k3s ─► Vaultwar
 ```
 docs/          Tutorial-Kapitel
 kubernetes/    Die echte Cluster-Konfiguration, von Argo CD ausgerollt (ab Teil C)
+nixos/         NixOS-Server auf dem ThinkPad als Code (Kapitel 36)
 examples/      Lern- und Test-Manifeste
-scripts/       Hilfsskripte (validate.sh prüft alle Manifeste)
+scripts/       Hilfsskripte (validate.sh prüft alle Manifeste, validate-nixos.sh die NixOS-Konfiguration)
 flake.nix      Werkzeuge für deinen Rechner (nix develop)
 mkdocs.yml     Website (GitHub Pages): lokal ansehen mit `mkdocs serve`
 ```

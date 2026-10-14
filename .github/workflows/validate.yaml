@@ -25,3 +25,12 @@ jobs:
 
       - name: kubeconform
         run: scripts/validate.sh
+
+  nixos:
+    name: NixOS-Konfiguration (Kapitel 36)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+      - name: nix eval
+        run: scripts/validate-nixos.sh
