@@ -26,6 +26,7 @@
             nixos-anywhere   # NixOS per SSH installieren
             sops             # Secrets verschlüsseln
             age              # Schlüssel für sops
+            openssl          # Zufällige Schlüssel erzeugen (openssl rand)
 
             # Prüfen (scripts/validate.sh)
             kubeconform      # Manifeste gegen Kubernetes-Schemas prüfen

@@ -59,7 +59,7 @@ Dazu kommt: Der Akku überbrückt kurze Stromausfälle wie eine kleine USV.
 - Ein **ThinkPad** mit LAN-Anschluss (oder USB-LAN-Adapter). WLAN geht auch, ist hier aber nicht eingerichtet.
 - Einen **USB-Stick** (mind. 2 GB) für den Installer.
 - Auf deinem Rechner **Nix** und `nix develop` im Repository ([Kapitel 01](01-voraussetzungen.md)). Darin sind
-  `nixos-anywhere`, `sops` und `age` schon enthalten.
+  `nixos-anywhere`, `sops`, `age` und `openssl` schon enthalten.
 - Dein **Tailnet** mit aktiviertem **HTTPS** (Admin-Konsole → **DNS** → **HTTPS Certificates**, Kapitel 01).
 
 > ⚠️ Die Festplatte des ThinkPads wird **komplett gelöscht**.
@@ -178,6 +178,7 @@ schalte *Pre-approved* ein (falls angezeigt), wähle bei **Tags** `tag:server` u
 
 ```bash
 # 2. Zufälligen Schlüssel für Linkwarden erzeugen und anzeigen
+#    (openssl kommt mit nix develop; ohne: head -c 32 /dev/urandom | base64)
 openssl rand -base64 32
 
 # 3. Secrets-Datei anlegen. sops öffnet einen Editor, gespeichert wird verschlüsselt.
