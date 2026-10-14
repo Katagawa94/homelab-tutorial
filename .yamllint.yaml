@@ -1,5 +1,9 @@
 extends: default
 
+# Von sops verschlüsselt (Kapitel 36): sehr lange Zeilen, nicht von Hand bearbeiten
+ignore: |
+  nixos/**/secrets.yaml
+
 rules:
   document-start: disable
   line-length:
