@@ -385,7 +385,8 @@ Ganz ohne geht es nicht. Diese Schritte machst du einmal:
 | `path '…/secrets.yaml' does not exist` | `git add nixos/thinkpad/secrets.yaml`. Nix sieht nur Dateien, die Git kennt |
 | `nixos-anywhere`: Permission denied | `sudo passwd root` am ThinkPad vergessen? Oder falsche IP |
 | ThinkPad startet nach der Installation nicht | Secure Boot im BIOS aus? `disk` in `settings.nix` = die interne Platte aus `lsblk`? |
-| ThinkPad taucht nicht im Tailnet auf | Auth-Key abgelaufen oder schon benutzt: neuen erzeugen, mit `sops nixos/thinkpad/secrets.yaml` ersetzen, ausrollen |
+| ThinkPad taucht nicht im Tailnet auf | Per LAN-IP anmelden (`ssh homelab@192.168.178.50`) und `journalctl -u tailscaled-autoconnect -b` lesen. Auth-Key abgelaufen oder schon benutzt: neuen erzeugen, mit `sops nixos/thinkpad/secrets.yaml` ersetzen, ausrollen |
+| `requested tags [tag:server] are invalid or not permitted` | `tagOwners` mit `tag:server` fehlt in der Tailscale-Policy (Schritt 3). Ergänzen, dann `sudo systemctl restart tailscaled-autoconnect` |
 | `tailscale-serve-apps` schlägt fehl | `journalctl -u tailscale-serve-apps` zeigt den Grund. HTTPS in der Admin-Konsole aktiviert? |
 | `service hosts must be tagged nodes` | Der ThinkPad hat kein Tag: Auth-Key ohne `tag:server` erzeugt oder `tagOwners` fehlt. In der Admin-Konsole beim Gerät **Edit ACL tags** → `tag:server`, dann `sudo systemctl restart tailscale-serve-apps` |
 | Service-Name lädt nicht | Unter **Services** angelegt? Steht der ThinkPad dort als *approved*? Sonst `autoApprovers` prüfen oder von Hand freigeben |
