@@ -44,7 +44,8 @@
   services.tailscale = {
     enable = true;
     authKeyFile = config.sops.secrets.tailscale-authkey.path;
-    extraUpFlags = [ "--hostname=${settings.hostName}" ];
+    # Getaggt, denn nur getaggte Geräte dürfen Tailscale Services anbieten (apps.nix)
+    extraUpFlags = [ "--hostname=${settings.hostName}" "--advertise-tags=${settings.tailscaleTag}" ];
     openFirewall = true;
   };
 

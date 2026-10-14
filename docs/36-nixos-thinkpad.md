@@ -1,13 +1,14 @@
 # 36 – NixOS-Server auf dem ThinkPad
 
 > **Was du am Ende hast:** Ein alter ThinkPad läuft als sparsamer Server mit **NixOS**. Darauf laufen
-> **Vaultwarden**, **Linkwarden** und **Nextcloud**, erreichbar nur in deinem Tailnet und mit echtem HTTPS. Der ganze
+> **Vaultwarden**, **Linkwarden** und **Nextcloud**, jede unter ihrem eigenen Namen wie
+> `https://nextcloud.<tailnet>.ts.net`, erreichbar nur in deinem Tailnet und mit echtem HTTPS. Der ganze
 > Rechner, von den Partitionen bis zu den Apps, ist in ein paar Dateien in `nixos/` beschrieben und wird mit **einem
 > Befehl** installiert.
 >
 > ⏱️ **Zeit:** ca. 1–2 Stunden
 >
-> 🧠 **Neue Begriffe:** NixOS, deklarativ, Flake, `nixos-anywhere`, disko, sops/age, Generation, `tailscale serve`
+> 🧠 **Neue Begriffe:** NixOS, deklarativ, Flake, `nixos-anywhere`, disko, sops/age, Generation, Tailscale Services, Tags
 
 ---
 
@@ -103,7 +104,7 @@ nixos/
 Solange der Platzhalter-Schlüssel drinsteht, bricht die Installation absichtlich mit einer Meldung ab. Ohne deinen
 Schlüssel kämst du nicht mehr auf den Server, denn es gibt dort kein Passwort.
 
-## 3. Secrets anlegen
+## 3. Secrets und Tailscale vorbereiten
 
 Drei Dinge dürfen nicht im Klartext ins Git: der Tailscale-Auth-Key, das Nextcloud-Admin-Passwort und ein geheimer
 Schlüssel für Linkwarden. **sops** verschlüsselt sie mit einem **age**-Schlüssel, ähnlich wie Sealed Secrets in
@@ -125,9 +126,55 @@ age-keygen -o ~/.config/sops/age/keys.txt
 Trag den öffentlichen Schlüssel (`age1…`) in `.sops.yaml` im Hauptordner des Repositorys ein, anstelle des
 Platzhalters.
 
-Jetzt den Auth-Key für Tailscale holen: Admin-Konsole → **Settings** → **Keys** → **Generate auth key**. Lass
-*Reusable* aus, schalte *Pre-approved* ein (falls angezeigt) und kopiere den Schlüssel (`tskey-auth-…`). Er wird nur
-bei der allerersten Anmeldung gebraucht.
+### Tailscale vorbereiten: Tag und Services
+
+Jede App soll ihren eigenen Namen bekommen, z. B. `https://vaultwarden.<tailnet>.ts.net`. Das machen
+**Tailscale Services** möglich: Ein Service ist ein Name mit eigener Adresse im Tailnet, und der ThinkPad meldet sich
+als der Rechner, der ihn bereitstellt. Kein Reverse-Proxy, kein eigenes Zertifikat, keine eigene Domain.
+
+Dafür sind zwei Dinge in der Tailscale-Admin-Konsole nötig, beide einmalig:
+
+**1. Ein Tag für den Server.** Nur Geräte mit einem **Tag** dürfen Services anbieten. Ein Tag ist ein Etikett wie
+`tag:server`, das zum Gerät gehört statt zu deinem Konto. Öffne **Access controls** und ergänze in der Policy-Datei
+(neben den Einträgen, die schon da sind):
+
+```json
+"tagOwners": {
+  "tag:server": ["autogroup:admin"]
+},
+"autoApprovers": {
+  "services": {
+    "svc:nextcloud":   ["tag:server"],
+    "svc:vaultwarden": ["tag:server"],
+    "svc:linkwarden":  ["tag:server"]
+  }
+},
+```
+
+`autoApprovers` sorgt dafür, dass du den ThinkPad nicht für jeden Service einzeln freigeben musst. Ohne den Eintrag
+klickst du später unter **Services** bei jedem Service auf *Approve*.
+
+**2. Die drei Services anlegen.** Admin-Konsole → **Services** → **Define a service**, dreimal:
+
+| Name | Port |
+|------|------|
+| `nextcloud` | `tcp:443` |
+| `vaultwarden` | `tcp:443` |
+| `linkwarden` | `tcp:443` |
+
+Die Namen müssen genau so heißen wie in `nixos/thinkpad/apps.nix`. Willst du später eine vierte App, legst du dort
+einen Eintrag an und hier einen Service.
+
+> 💡 Hast du die Standard-Policy nie geändert, dürfen alle deine Geräte auf alles zugreifen, also auch auf die
+> Services. Hast du eigene Regeln, brauchst du einen Eintrag, der `svc:nextcloud` usw. als Ziel erlaubt.
+
+### Auth-Key
+
+Jetzt den Auth-Key holen: Admin-Konsole → **Settings** → **Keys** → **Generate auth key**. Lass *Reusable* aus,
+schalte *Pre-approved* ein (falls angezeigt), wähle bei **Tags** `tag:server` und kopiere den Schlüssel
+(`tskey-auth-…`). Er wird nur bei der allerersten Anmeldung gebraucht.
+
+### Secrets-Datei
 
 ```bash
 # 2. Zufälligen Schlüssel für Linkwarden erzeugen und anzeigen
@@ -219,26 +266,26 @@ ssh homelab@thinkpad
 ```bash
 tailscale status                  # thinkpad ist online
 systemctl --failed                # sollte "0 loaded units" zeigen
-tailscale serve status            # die drei Apps mit ihren Adressen
+tailscale serve status            # die drei Services mit ihren Adressen
 cat /sys/class/power_supply/BAT0/charge_control_end_threshold   # 80
 ```
 
 ## 7. Die Apps einrichten
 
-Alle drei laufen nur auf `127.0.0.1`. Ins Tailnet bringt sie `tailscale serve`, mit einem echten Zertifikat für
-`thinkpad.<tailnet>.ts.net`. Der erste Aufruf kann eine Minute dauern, weil das Zertifikat erst geholt wird.
+Alle drei laufen nur auf `127.0.0.1`. Ins Tailnet bringt sie `tailscale serve` als Tailscale Service, jede mit
+eigenem Namen und echtem Zertifikat. Der erste Aufruf kann eine Minute dauern, weil das Zertifikat erst geholt wird.
 
 | App | Adresse | Erste Anmeldung |
 |-----|---------|-----------------|
-| **Nextcloud** | `https://thinkpad.<tailnet>.ts.net` | Benutzer `admin`, Passwort aus `secrets.yaml` |
-| **Vaultwarden** | `https://thinkpad.<tailnet>.ts.net:8443` | **Create account**, Master-Passwort wie in [Kapitel 13](13-vaultwarden.md) |
-| **Linkwarden** | `https://thinkpad.<tailnet>.ts.net:8444` | **Sign Up**, dein Konto anlegen |
+| **Nextcloud** | `https://nextcloud.<tailnet>.ts.net` | Benutzer `admin`, Passwort aus `secrets.yaml` |
+| **Vaultwarden** | `https://vaultwarden.<tailnet>.ts.net` | **Create account**, Master-Passwort wie in [Kapitel 13](13-vaultwarden.md) |
+| **Linkwarden** | `https://linkwarden.<tailnet>.ts.net` | **Sign Up**, dein Konto anlegen |
 
-In den Bitwarden-Apps trägst du als Server-URL die Vaultwarden-Adresse **mit** `:8443` ein. Linkwarden hat eine
-Browser-Erweiterung, die du ebenso auf die Adresse mit `:8444` stellst.
+In den Bitwarden-Apps trägst du die Vaultwarden-Adresse als Server-URL ein, in der Linkwarden-Browser-Erweiterung die
+Linkwarden-Adresse.
 
-Warum Ports statt eigener Namen wie in Kapitel 10? Der ThinkPad ist **ein** Gerät im Tailnet und hat damit einen
-Namen. Nextcloud mag es nicht, in einem Unterordner (`/nextcloud`) zu laufen, deshalb trennen wir die Apps über Ports.
+Das ist dasselbe Ergebnis wie mit dem Tailscale Operator in [Kapitel 10](10-tailscale-operator.md), nur ohne
+Kubernetes: Dort legt der Operator für jede App ein eigenes Gerät an, hier stellt der ThinkPad alle Services bereit.
 
 ## 8. Registrierung schließen: deine erste Änderung
 
@@ -316,7 +363,7 @@ Ganz ohne geht es nicht. Diese Schritte machst du einmal:
 |---------|----------------------|
 | BIOS einstellen | Liegt außerhalb jedes Betriebssystems |
 | USB-Stick, `passwd`, IP ablesen | Der Installer muss erst per SSH erreichbar sein |
-| Tailscale-Auth-Key und HTTPS in der Admin-Konsole | Gehört zu deinem Tailscale-Konto, nicht zum Server |
+| Tailscale: HTTPS, Tag, Services, Auth-Key | Gehört zu deinem Tailscale-Konto, nicht zum Server |
 | age-Schlüssel erzeugen und sichern | Das Geheimnis, mit dem alles andere verschlüsselt ist |
 | Erste Konten in den Apps | Master-Passwörter gehören nur in deinen Kopf |
 
@@ -338,9 +385,11 @@ Ganz ohne geht es nicht. Diese Schritte machst du einmal:
 | `nixos-anywhere`: Permission denied | `sudo passwd root` am ThinkPad vergessen? Oder falsche IP |
 | ThinkPad startet nach der Installation nicht | Secure Boot im BIOS aus? `disk` in `settings.nix` = die interne Platte aus `lsblk`? |
 | ThinkPad taucht nicht im Tailnet auf | Auth-Key abgelaufen oder schon benutzt: neuen erzeugen, mit `sops nixos/thinkpad/secrets.yaml` ersetzen, ausrollen |
-| `tailscale-serve-apps` schlägt fehl | HTTPS in der Admin-Konsole aktiviert? `journalctl -u tailscale-serve-apps` zeigt den Grund |
+| `tailscale-serve-apps` schlägt fehl | `journalctl -u tailscale-serve-apps` zeigt den Grund. HTTPS in der Admin-Konsole aktiviert? |
+| `service hosts must be tagged nodes` | Der ThinkPad hat kein Tag: Auth-Key ohne `tag:server` erzeugt oder `tagOwners` fehlt. In der Admin-Konsole beim Gerät **Edit ACL tags** → `tag:server`, dann `sudo systemctl restart tailscale-serve-apps` |
+| Service-Name lädt nicht | Unter **Services** angelegt? Steht der ThinkPad dort als *approved*? Sonst `autoApprovers` prüfen oder von Hand freigeben |
 | Zertifikatsfehler im Browser | Beim ersten Aufruf eine Minute warten |
-| Nextcloud: "Zugriff über nicht vertrauenswürdige Domain" | Rufst du `thinkpad.<tailnet>.ts.net` auf, nicht die IP? Stimmt `tailnet` in `settings.nix`? |
+| Nextcloud: "Zugriff über nicht vertrauenswürdige Domain" | Rufst du `nextcloud.<tailnet>.ts.net` auf, nicht die IP? Stimmt `tailnet` in `settings.nix`? |
 | Ein Dienst startet nicht | `journalctl -u vaultwarden` (bzw. `linkwarden`, `phpfpm-nextcloud`, `nextcloud-setup`) |
 | Netzwerk weg, wenn der Deckel zu ist | `journalctl -b \| grep -i lid` prüfen, `HandleLidSwitch` in `configuration.nix` |
 
@@ -352,7 +401,8 @@ Ganz ohne geht es nicht. Diese Schritte machst du einmal:
 - **sops** verschlüsselt Secrets mit einem **age**-Schlüssel, damit sie gefahrlos im Git liegen.
 - Jede Änderung ist eine **Generation**. Rollback geht per Befehl oder im Startmenü, aber die App-Daten brauchen
   trotzdem ein Backup.
-- `tailscale serve` bringt lokale Dienste mit HTTPS ins Tailnet, ohne dass ein Port im Heimnetz offen ist.
+- **Tailscale Services** geben jeder App einen eigenen Namen mit HTTPS im Tailnet, ohne Reverse-Proxy und ohne dass ein
+  Port im Heimnetz offen ist. Nur getaggte Geräte dürfen Services anbieten.
 - Ein ThinkPad braucht im Leerlauf nur einen Bruchteil eines Desktop-PCs und hat seine USV schon eingebaut.
 
 ---
