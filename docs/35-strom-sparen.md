@@ -104,6 +104,28 @@ Ins BIOS kommst du wie in [Kapitel 01](01-voraussetzungen.md#5-bios-einstellen).
 | **Precision Boost Overdrive (PBO)** | `Disabled` | Übertaktung braucht ein Server nicht | Advanced → AMD Overclocking |
 | **Lüfterkurven** | leise Kurve | Lüfter laufen im Leerlauf langsamer | Hardware Monitor / Q-Fan / Smart Fan |
 
+### Beispiel: MSI B450M PRO-VDH PLUS
+
+> 🧪 Die Menüpfade sind nicht am echten Board geprüft und können sich je nach BIOS-Version etwas unterscheiden.
+
+Erst mit `F7` in den **Advanced Mode** wechseln. Findest du etwas nicht, hilft die **Suche** oben im BIOS (Lupe bzw.
+`Strg` + `F`): einfach den Namen der Einstellung eintippen.
+
+| Einstellung | Pfad im MSI-BIOS | Wert |
+|-------------|------------------|------|
+| Global C-State Control | **OC → Advanced CPU Configuration → Global C-state Control** | `Enabled` |
+| Cool'n'Quiet | **OC → Advanced CPU Configuration → AMD Cool'n'Quiet** | `Enabled` |
+| Power Supply Idle Control | **Settings → Advanced → AMD CBS → Zen Common Options → Power Supply Idle Control** | `Low Current Idle` |
+| PCIe ASPM | Suche nach `ASPM`. Meist unter **Settings → Advanced → PCI Subsystem Settings** oder in **AMD CBS → NBIO Common Options** | `Enabled` / `L1` |
+| Onboard-Audio | **Settings → Advanced → Integrated Peripherals → HD Audio Controller** | `Disabled` |
+| PBO / ECO Mode | **OC → AMD Overclocking** (mit Warnhinweis bestätigen) **→ Precision Boost Overdrive** bzw. **ECO Mode** | `Disabled` bzw. optional `45W` |
+| Lüfter | **Hardware Monitor** → Lüfter wählen → **Smart Fan Mode** | leise Kurve |
+| ErP (für die Nachtruhe, Abschnitt 6) | **Settings → Advanced → Power Management Setup → ErP Ready** | `Disabled` |
+| Wecken per Uhr / Netzwerk (Abschnitt 6) | **Settings → Advanced → Wake Up Event Setup → Resume By RTC Alarm** bzw. **Resume By PCI-E Device** | PCI-E: `Enabled`. RTC: erst `Disabled` lassen, `rtcwake` stellt den Wecker selbst. Nur wenn der PC nicht aufwacht, `Enabled` probieren |
+
+`SVM Mode` liegt übrigens ebenfalls unter **OC → Advanced CPU Configuration**, `IOMMU` unter **AMD CBS → NBIO Common
+Options**. Beide bleiben auf `Enabled`.
+
 Optional, für Fortgeschrittene: Viele Ryzen-Mainboards haben einen **ECO Mode** (unter *AMD Overclocking*), der die CPU
 z. B. auf 45 W statt 65 W begrenzt. Das senkt vor allem die **Spitzen** (beim Transkodieren ohne GPU oder beim
 Immich-Import), kaum den Leerlauf. Für ein Homelab ist der Leistungsverlust meist nicht spürbar.
@@ -207,6 +229,10 @@ systemctl enable powertop.service
 ## 4. Die Grafikkarte im Leerlauf
 
 > 🧪 Noch nicht auf echter Hardware ausprobiert.
+
+> 💡 **Erst nach Kapitel 18:** `nvidia-smi` gibt es erst, wenn die Grafikkarte an die VM durchgereicht und der
+> NVIDIA-Treiber installiert ist. Bist du noch nicht so weit, überspring diesen Abschnitt und die `nvidia-smi`-Messung
+> in Abschnitt 1. BIOS (Abschnitt 2) und Proxmox (Abschnitt 3) gehen schon vorher.
 
 Die RTX 2070 Super kann im Leerlauf mit unter 10 W auskommen (Zustand `P8`), oder dauerhaft deutlich mehr ziehen.
 Entscheidend ist, dass der **NVIDIA-Treiber in der VM** sie verwaltet.
