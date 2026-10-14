@@ -267,7 +267,9 @@ ssh homelab@thinkpad
 ```bash
 tailscale status                  # thinkpad ist online
 systemctl --failed                # sollte "0 loaded units" zeigen
-tailscale serve status            # die drei Services mit ihren Adressen
+systemctl status tailscale-serve-apps   # "active (exited)"
+tailscale serve status --json     # unter "Services": svc:nextcloud, svc:vaultwarden, svc:linkwarden
+                                  # (ohne --json zeigt es Services nicht an, dort steht "No serve config")
 cat /sys/class/power_supply/BAT0/charge_control_end_threshold   # 80
 ```
 
@@ -356,6 +358,43 @@ Updates der Pakete holst du so, dann wie gewohnt ausrollen oder pushen:
 nix flake update --flake ./nixos
 ```
 
+## 11. Eine weitere App hinzufügen
+
+Jede neue App braucht drei Dinge. Als Beispiel **Uptime Kuma** ([Kapitel 28](28-uptime-kuma.md)), später erreichbar
+unter `https://uptime.<tailnet>.ts.net`.
+
+**1. In der Tailscale-Admin-Konsole** (einmalig pro App):
+
+- **Services** → **Define a service**: Name `uptime`, Port `tcp:443`
+- In der Policy unter `autoApprovers` → `services` ergänzen: `"svc:uptime": ["tag:server"],`
+
+**2. In `nixos/thinkpad/apps.nix`** den Port eintragen. Der Name links ist zugleich der Name des Tailscale Service:
+
+```nix
+  ports = {
+    nextcloud = 8080;
+    vaultwarden = 8222;
+    linkwarden = 3000;
+    uptime = 3001; # neu
+  };
+```
+
+Und die App selbst einschalten, z. B. direkt vor dem Tailscale-Block:
+
+```nix
+  services.uptime-kuma.enable = true; # lauscht von sich aus auf 127.0.0.1:3001
+```
+
+**3. Ausrollen und committen** wie in Schritt 8. `tailscale-serve-apps` startet dabei von selbst neu und
+veröffentlicht den neuen Service.
+
+Worauf du bei anderen Apps achten musst:
+
+- Welche Einstellungen es gibt, zeigt <https://search.nixos.org/options> (nach `services.<app>` suchen).
+- Die App muss auf `127.0.0.1` lauschen, und ihr Port muss zu dem in `ports` passen.
+- Braucht sie ein Passwort oder einen geheimen Schlüssel, trägst du ihn mit `sops nixos/thinkpad/secrets.yaml` ein
+  und bindest ihn in `apps.nix` unter `sops.secrets` ein, genau wie `nextcloud-admin-password`.
+
 ## Was bleibt Handarbeit?
 
 Ganz ohne geht es nicht. Diese Schritte machst du einmal:
@@ -385,7 +424,8 @@ Ganz ohne geht es nicht. Diese Schritte machst du einmal:
 | `path '…/secrets.yaml' does not exist` | `git add nixos/thinkpad/secrets.yaml`. Nix sieht nur Dateien, die Git kennt |
 | `nixos-anywhere`: Permission denied | `sudo passwd root` am ThinkPad vergessen? Oder falsche IP |
 | ThinkPad startet nach der Installation nicht | Secure Boot im BIOS aus? `disk` in `settings.nix` = die interne Platte aus `lsblk`? |
-| ThinkPad taucht nicht im Tailnet auf | Auth-Key abgelaufen oder schon benutzt: neuen erzeugen, mit `sops nixos/thinkpad/secrets.yaml` ersetzen, ausrollen |
+| ThinkPad taucht nicht im Tailnet auf | Per LAN-IP anmelden (`ssh homelab@192.168.178.50`) und `journalctl -u tailscaled-autoconnect -b` lesen. Auth-Key abgelaufen oder schon benutzt: neuen erzeugen, mit `sops nixos/thinkpad/secrets.yaml` ersetzen, ausrollen |
+| `requested tags [tag:server] are invalid or not permitted` | `tagOwners` mit `tag:server` fehlt in der Tailscale-Policy (Schritt 3). Ergänzen, dann `sudo systemctl restart tailscaled-autoconnect` |
 | `tailscale-serve-apps` schlägt fehl | `journalctl -u tailscale-serve-apps` zeigt den Grund. HTTPS in der Admin-Konsole aktiviert? |
 | `service hosts must be tagged nodes` | Der ThinkPad hat kein Tag: Auth-Key ohne `tag:server` erzeugt oder `tagOwners` fehlt. In der Admin-Konsole beim Gerät **Edit ACL tags** → `tag:server`, dann `sudo systemctl restart tailscale-serve-apps` |
 | Service-Name lädt nicht | Unter **Services** angelegt? Steht der ThinkPad dort als *approved*? Sonst `autoApprovers` prüfen oder von Hand freigeben |
