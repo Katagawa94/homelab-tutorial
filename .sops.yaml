@@ -1,0 +1,9 @@
+# Wer darf welche Secrets entschlüsseln? (sops, Kapitel 36)
+# Ersetze den Schlüssel unten durch deinen öffentlichen age-Schlüssel ("age1…" aus age-keygen).
+keys:
+  - &thinkpad age1hierdeinenoeffentlichenschluesseleinfuegen000000000000000000000
+creation_rules:
+  - path_regex: nixos/.*secrets\.yaml$
+    key_groups:
+      - age:
+          - *thinkpad

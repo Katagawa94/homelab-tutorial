@@ -22,6 +22,11 @@
             kubeseal         # Sealed Secrets verschlüsseln (Kapitel 14)
             argocd           # Argo-CD-CLI (Kapitel 13)
 
+            # NixOS-Server auf dem ThinkPad (Kapitel 36)
+            nixos-anywhere   # NixOS per SSH installieren
+            sops             # Secrets verschlüsseln
+            age              # Schlüssel für sops
+
             # Prüfen (scripts/validate.sh)
             kubeconform      # Manifeste gegen Kubernetes-Schemas prüfen
             yamllint         # YAML-Stil prüfen
@@ -32,9 +37,12 @@
             # Allgemeine Helfer
             jq               # JSON lesen
             yq-go            # YAML lesen
+          ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+            nixos-rebuild    # Änderungen auf den NixOS-Server ausrollen (Kapitel 36)
           ];
 
           shellHook = ''
+            export SOPS_AGE_KEY_FILE="$HOME/.config/sops/age/keys.txt"
             echo "🏠 Homelab-Werkzeuge geladen: kubectl, helm, k9s, kubeseal, argocd, …"
           '';
         };

@@ -404,4 +404,4 @@ Das ist eine Menge. Viel Spaß mit deinem Homelab! 🏠
 
 ---
 
-⬅️ **Zurück:** [34 – Mehr Nodes](34-mehr-nodes.md) · 🏠 **Zum Anfang:** [00 – Einführung](00-einfuehrung.md)
+⬅️ **Zurück:** [34 – Mehr Nodes](34-mehr-nodes.md) · ➡️ **Weiter:** [36 – NixOS-Server auf dem ThinkPad](36-nixos-thinkpad.md) (ein anderer Weg, optional)
