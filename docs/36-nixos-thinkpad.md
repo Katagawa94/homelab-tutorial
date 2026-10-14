@@ -358,6 +358,43 @@ Updates der Pakete holst du so, dann wie gewohnt ausrollen oder pushen:
 nix flake update --flake ./nixos
 ```
 
+## 11. Eine weitere App hinzufügen
+
+Jede neue App braucht drei Dinge. Als Beispiel **Uptime Kuma** ([Kapitel 28](28-uptime-kuma.md)), später erreichbar
+unter `https://uptime.<tailnet>.ts.net`.
+
+**1. In der Tailscale-Admin-Konsole** (einmalig pro App):
+
+- **Services** → **Define a service**: Name `uptime`, Port `tcp:443`
+- In der Policy unter `autoApprovers` → `services` ergänzen: `"svc:uptime": ["tag:server"],`
+
+**2. In `nixos/thinkpad/apps.nix`** den Port eintragen. Der Name links ist zugleich der Name des Tailscale Service:
+
+```nix
+  ports = {
+    nextcloud = 8080;
+    vaultwarden = 8222;
+    linkwarden = 3000;
+    uptime = 3001; # neu
+  };
+```
+
+Und die App selbst einschalten, z. B. direkt vor dem Tailscale-Block:
+
+```nix
+  services.uptime-kuma.enable = true; # lauscht von sich aus auf 127.0.0.1:3001
+```
+
+**3. Ausrollen und committen** wie in Schritt 8. `tailscale-serve-apps` startet dabei von selbst neu und
+veröffentlicht den neuen Service.
+
+Worauf du bei anderen Apps achten musst:
+
+- Welche Einstellungen es gibt, zeigt <https://search.nixos.org/options> (nach `services.<app>` suchen).
+- Die App muss auf `127.0.0.1` lauschen, und ihr Port muss zu dem in `ports` passen.
+- Braucht sie ein Passwort oder einen geheimen Schlüssel, trägst du ihn mit `sops nixos/thinkpad/secrets.yaml` ein
+  und bindest ihn in `apps.nix` unter `sops.secrets` ein, genau wie `nextcloud-admin-password`.
+
 ## Was bleibt Handarbeit?
 
 Ganz ohne geht es nicht. Diese Schritte machst du einmal:
