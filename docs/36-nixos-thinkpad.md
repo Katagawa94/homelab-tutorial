@@ -267,7 +267,9 @@ ssh homelab@thinkpad
 ```bash
 tailscale status                  # thinkpad ist online
 systemctl --failed                # sollte "0 loaded units" zeigen
-tailscale serve status            # die drei Services mit ihren Adressen
+systemctl status tailscale-serve-apps   # "active (exited)"
+tailscale serve status --json     # unter "Services": svc:nextcloud, svc:vaultwarden, svc:linkwarden
+                                  # (ohne --json zeigt es Services nicht an, dort steht "No serve config")
 cat /sys/class/power_supply/BAT0/charge_control_end_threshold   # 80
 ```
 
