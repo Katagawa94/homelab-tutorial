@@ -4,14 +4,14 @@
   hostName = "thinkpad";
 
   # Dein Tailnet-Name: Tailscale-Admin-Konsole → DNS → "Tailnet name"
-  tailnet = "tail1a2b3c.ts.net";
+  tailnet = "taileb74cc.ts.net";
 
   # Tag für den Server im Tailnet. Muss in der Tailscale-Policy unter "tagOwners" stehen (Kapitel 36, Schritt 3).
   tailscaleTag = "tag:server";
 
   # Modell aus https://github.com/NixOS/nixos-hardware/blob/master/flake.nix,
   # z. B. "lenovo-thinkpad-t480" oder "lenovo-thinkpad-t14". Unsicher? "lenovo-thinkpad" passt immer.
-  hardwareModule = "lenovo-thinkpad";
+  hardwareModule = "lenovo-thinkpad-t480s";
 
   # Die Festplatte, auf die NixOS kommt. ⚠️ Sie wird komplett gelöscht!
   # Mit "lsblk" im Installer nachsehen: NVMe-SSD meist /dev/nvme0n1, SATA-SSD meist /dev/sda
@@ -22,7 +22,7 @@
 
   # Dein öffentlicher SSH-Schlüssel: Inhalt von ~/.ssh/id_ed25519.pub (Kapitel 01)
   sshKeys = [
-    "ssh-ed25519 AAAA-HIER-DEINEN-SCHLUESSEL-EINFUEGEN du@laptop"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIObZN6MmfAxNF3+9DTJtSiscrSIzbD6UyWly5ZEatBSX katagawa@nephthys"
   ];
 
   timeZone = "Europe/Berlin";
